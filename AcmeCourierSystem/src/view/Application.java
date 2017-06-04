@@ -7,9 +7,11 @@ import javax.swing.JFrame;
 public class Application {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+
+		// TODO load data
+
 		final JFrame window = new JFrame();
-		window.setContentPane(new LoginScreen());
+		window.setContentPane(new LogInScreen(window));
 		window.setIconImage(
 				Toolkit.getDefaultToolkit().getImage(Application.class.getResource("/view/courier logo.png")));
 		window.setTitle("ACME Delivery Management System");

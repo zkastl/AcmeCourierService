@@ -9,16 +9,17 @@ import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
 
-public class LoginScreen extends Container {
+public class LogInScreen extends Container {
 	private static JTextField txtUsername;
 	private static JTextField txtPassword;
 
-	public LoginScreen() {
+	public LogInScreen(JFrame window) {
 
 		setLayout(new MigLayout("", "[grow][][][grow]", "[grow][][][10][][][10][][grow]"));
 
@@ -61,17 +62,18 @@ public class LoginScreen extends Container {
 		add(btnLogin, "cell 1 7 2 1,alignx center,aligny top");
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblFailure.setVisible(!AttemptLogin(txtUsername.getText(), txtPassword.getText()));
+				lblFailure.setVisible(!AttemptLogin(window, txtUsername.getText(), txtPassword.getText()));
 			}
 		});
 	}
 
-	private boolean AttemptLogin(String username, String password) {
+	private boolean AttemptLogin(JFrame window, String username, String password) {
 		/*
 		 * TODO load main screen if valid
 		 */
-		if (username == null && password == null) {
-			// load main screen
+		if (true) {
+			window.setContentPane(new MainScreen(window));
+			window.validate();
 			return true;
 		}
 		return false;
