@@ -13,7 +13,7 @@ public class Application {
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 
 		// TODO load data
-		CourierSystem s = new CourierSystem();
+		CourierSystem s = new CourierSystem(null);
 
 		final JFrame window = new JFrame();
 		window.setContentPane(new LogInScreen(window));
