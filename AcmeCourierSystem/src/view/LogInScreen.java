@@ -21,6 +21,7 @@ public class LogInScreen extends Container {
 
 	public LogInScreen(JFrame window) {
 
+		window.setSize(600, 480);
 		setLayout(new MigLayout("", "[grow][][][grow]", "[grow][][][10][][][10][][grow]"));
 
 		JLabel logo = new JLabel("");
@@ -72,6 +73,7 @@ public class LogInScreen extends Container {
 		 * TODO load main screen if valid
 		 */
 		if (true) {
+			window.setSize(800, 800);
 			window.setContentPane(new MainScreen(window));
 			window.validate();
 			return true;

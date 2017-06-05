@@ -11,7 +11,7 @@ public class MainScreen extends Container {
 	public MainScreen(JFrame window) {
 		tabbedPane.setBounds(0, 0, window.getWidth(), window.getHeight());
 		add(tabbedPane);
-		tabbedPane.addTab("Ticket Management", null);
+		tabbedPane.addTab("Ticket Management", new LogOutScreen(window));
 		tabbedPane.addTab("Client Management", new LogOutScreen(window));
 		tabbedPane.addTab("Report Management", new LogOutScreen(window));
 		tabbedPane.addTab("Map Management", new LogOutScreen(window));

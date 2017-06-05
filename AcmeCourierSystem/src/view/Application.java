@@ -15,7 +15,6 @@ public class Application {
 		window.setIconImage(
 				Toolkit.getDefaultToolkit().getImage(Application.class.getResource("/view/courier logo.png")));
 		window.setTitle("ACME Delivery Management System");
-		window.setSize(600, 480);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		window.setVisible(true);

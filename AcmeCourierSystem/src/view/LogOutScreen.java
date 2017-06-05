@@ -20,7 +20,8 @@ public class LogOutScreen extends Container {
 		JButton btnLogOut = new JButton("Log Out");
 		btnLogOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				window.dispose();
+				window.setContentPane(new LogInScreen(window));
+				window.validate();
 			}
 		});
 		add(btnLogOut, "cell 0 2 2 1,alignx center,aligny center");
