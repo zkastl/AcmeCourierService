@@ -36,19 +36,6 @@ public class Employee implements Serializable {
 		setEmployeeID(0);
 		this.setRole("null");
 	}
-	
-	public void SaveEmployee() throws FileNotFoundException, IOException {
-		XMLEncoder e = new XMLEncoder(
-				new BufferedOutputStream(
-						new FileOutputStream("Test2.xml")));
-		e.writeObject(new Employee("Katie", 0002, "Sister"));
-		e.close();
-		
-		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("Test.xml"));
-		oos.writeObject(this);
-		oos.flush();
-		oos.close();
-	}
 
 	public String getName() {
 		return name;
