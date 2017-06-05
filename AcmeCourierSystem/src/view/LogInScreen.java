@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -18,10 +19,11 @@ import net.miginfocom.swing.MigLayout;
 public class LogInScreen extends Container {
 	private static JTextField txtUsername;
 	private static JTextField txtPassword;
+	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
 	public LogInScreen(JFrame window) {
-
-		window.setSize(600, 480);
+		window.setLocation(screenSize.width / 3, screenSize.height / 4);
+		window.setSize(screenSize.width / 3, screenSize.height / 2);
 		setLayout(new MigLayout("", "[grow][][][grow]", "[grow][][][10][][][10][][grow]"));
 
 		JLabel logo = new JLabel("");
@@ -73,7 +75,8 @@ public class LogInScreen extends Container {
 		 * TODO load main screen if valid
 		 */
 		if (true) {
-			window.setSize(800, 800);
+			window.setLocation(screenSize.width / 6, 0);
+			window.setSize(screenSize.width * 2 / 3, screenSize.height);
 			window.setContentPane(new MainScreen(window));
 			window.validate();
 			return true;
