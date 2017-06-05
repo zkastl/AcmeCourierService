@@ -6,18 +6,14 @@ import java.io.IOException;
 
 import javax.swing.JFrame;
 
-import model.Employee;
-import model.Serialize;
+import model.*;
 
 public class Application {
 
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 
 		// TODO load data
-		Employee e = new Employee("Zak", 0002, "King");
-		Serialize.SaveObject("test.xml", e);
-		Employee e2 = (Employee)Serialize.LoadObject("test.xml", Employee.class);
-		System.out.println(e2.getName());
+		CourierSystem s = new CourierSystem();
 
 		final JFrame window = new JFrame();
 		window.setContentPane(new LogInScreen(window));

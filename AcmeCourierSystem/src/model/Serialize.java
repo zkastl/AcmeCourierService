@@ -14,11 +14,14 @@ public class Serialize {
 		e.close();
 	}
 	
-	public static <T> Object LoadObject(String filename, Class<T> c) throws FileNotFoundException, IOException {
+	public static Object LoadObject(String filename) throws FileNotFoundException, IOException {
 		XMLDecoder d = new XMLDecoder(
                 new BufferedInputStream(
-                    new FileInputStream("Test.xml")), c);
+                    new FileInputStream(filename)));
+		
 		Object result = d.readObject();
+		
+		d.close();
 		return result;
 	}
 }
