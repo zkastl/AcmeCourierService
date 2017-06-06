@@ -8,11 +8,12 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import model.CourierSystem;
 import net.miginfocom.swing.MigLayout;
 
 public class LogOutScreen extends Container {
 
-	public LogOutScreen(JFrame window) {
+	public LogOutScreen(JFrame window, CourierSystem data) {
 		setLayout(new MigLayout("", "[grow][grow]", "[grow][][][grow]"));
 
 		JLabel lblAreYouSure = new JLabel("Are you sure you wish to logout?");
@@ -21,7 +22,7 @@ public class LogOutScreen extends Container {
 		JButton btnLogOut = new JButton("Log Out");
 		btnLogOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				window.setContentPane(new LogInScreen(window));
+				window.setContentPane(new LogInScreen(window, data));
 				window.validate();
 			}
 		});

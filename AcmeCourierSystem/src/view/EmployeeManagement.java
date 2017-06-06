@@ -4,24 +4,22 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import model.CourierSystem;
 import model.Employee;
 import net.miginfocom.swing.MigLayout;
 
 public class EmployeeManagement extends Container {
 	private JTable table;
-	private ArrayList<Employee> employees = new ArrayList<Employee>();
 
-	public EmployeeManagement() {
+	public EmployeeManagement(CourierSystem data) {
 
-		employees.add(new Employee("me", 1, "OrderTaker"));
-		EmployeeTableModel employeeTable = new EmployeeTableModel(employees);
+		EmployeeTableModel employeeTable = new EmployeeTableModel(data.Employees);
 		setLayout(new MigLayout("", "[grow][50%][grow][10]", "[25][40][5][grow][][20]"));
 
 		JLabel lblEmployeeManagement = new JLabel("Employee Management");
@@ -42,9 +40,8 @@ public class EmployeeManagement extends Container {
 
 		btnAddEmployee.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				((EmployeeTableModel) ((JTable) scrollPane.getViewport().getView()).getModel())
-						.addRow(new Employee("you", 2, "Courier"));
-				scrollPane.validate();
+				data.Employees.add(new Employee());
+				scrollPane.setViewportView(new JTable(new EmployeeTableModel(data.Employees)));
 			}
 		});
 	}

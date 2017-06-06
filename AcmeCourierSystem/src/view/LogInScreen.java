@@ -14,14 +14,18 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import model.CourierSystem;
 import net.miginfocom.swing.MigLayout;
 
 public class LogInScreen extends Container {
 	private static JTextField txtUsername;
 	private static JTextField txtPassword;
-	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	private CourierSystem data;
 
-	public LogInScreen(JFrame window) {
+	public LogInScreen(JFrame window, CourierSystem data) {
+		this.data = data;
+
 		window.setLocation(screenSize.width / 3, screenSize.height / 4);
 		window.setSize(screenSize.width / 3, screenSize.height / 2);
 		setLayout(new MigLayout("", "[grow][][][grow]", "[grow][][][10][][][10][][grow]"));
@@ -77,7 +81,7 @@ public class LogInScreen extends Container {
 		if (true) {
 			window.setLocation(screenSize.width / 6, 0);
 			window.setSize(screenSize.width * 2 / 3, screenSize.height);
-			window.setContentPane(new MainScreen(window));
+			window.setContentPane(new MainScreen(window, data));
 			window.validate();
 			return true;
 		}

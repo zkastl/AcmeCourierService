@@ -15,10 +15,6 @@ public class EmployeeTableModel implements TableModel {
 		this.employees = employees;
 	}
 
-	public void addRow(Employee employee) {
-		employees.add(employee);
-	}
-
 	@Override
 	public int getRowCount() {
 		return employees.size();
