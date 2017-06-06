@@ -15,23 +15,23 @@ public final class CourierSystem {
 	private static String settingsFile = "settings.xml";
 	
 	public CourierSystem() throws FileNotFoundException, IOException {
-		LoadEmployees(Settings.EmployeeFile);
+		LoadEmployees();
 		
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void LoadEmployees(String s) throws FileNotFoundException, IOException {
+	private void LoadEmployees() throws FileNotFoundException, IOException {
 		try {
-			Employees = (ArrayList<Employee>)Serialize.LoadObject(s);
+			Employees = (ArrayList<Employee>)Serialize.LoadObject(Settings.EmployeeFile);
 		}
 		catch (FileNotFoundException fnfe) {
 			Employees = new ArrayList<Employee>();
-			SaveEmployees(s);
+			SaveEmployees();
 		}
 	}
 	
-	private void SaveEmployees(String s) throws FileNotFoundException, IOException {
+	private void SaveEmployees() throws FileNotFoundException, IOException {
 		
-		Serialize.SaveObject(s, Employees);
+		Serialize.SaveObject(Settings.EmployeeFile, Employees);
 	}
 }
