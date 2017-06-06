@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import net.miginfocom.swing.MigLayout;
 
 public class LogOutScreen extends Container {
+
 	public LogOutScreen(JFrame window) {
 		setLayout(new MigLayout("", "[grow][grow]", "[grow][][][grow]"));
 

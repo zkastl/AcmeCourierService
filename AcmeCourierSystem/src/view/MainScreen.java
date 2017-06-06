@@ -23,7 +23,7 @@ public class MainScreen extends Container {
 		tabbedPane.addTab("Map Management", new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")),
 				new LogOutScreen(window));
 		tabbedPane.addTab("Employee Management", new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")),
-				new LogOutScreen(window));
+				new EmployeeManagement());
 		tabbedPane.addTab("System Settings", new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")),
 				new LogOutScreen(window));
 		tabbedPane.addTab("Change Password", new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")),
