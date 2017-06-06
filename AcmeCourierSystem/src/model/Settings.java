@@ -50,6 +50,7 @@ public class Settings {
 	
 	// Settings to point to the locations for the persistent data.
 	public static String EmployeeFile = "Employees.xml";
+	public static String CourierFile = "Couriers.xml";
 	public static String ClientFile = "Clients.xml";
 	public static String DeliveriesFile = "Deliveries.xml";
 }

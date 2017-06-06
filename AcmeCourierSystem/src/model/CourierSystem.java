@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public final class CourierSystem {
 	
 	public ArrayList<Employee> Employees;
+	public ArrayList<Courier> Couriers;
 	public ArrayList<Client> Clients;
 	public ArrayList<Delivery> Deliveries;
 	public Map CityMap;
@@ -19,19 +20,37 @@ public final class CourierSystem {
 		LoadDeliveries();
 	}
 	
-	public void LoadDeliveries() {
-		// TODO Auto-generated method stub
-		
+	@SuppressWarnings("unchecked")
+	public void LoadDeliveries() throws IOException {
+		try {
+			Deliveries = (ArrayList<Delivery>)Serialize.LoadObject(Settings.DeliveriesFile);
+		}
+		catch (FileNotFoundException fnfe) {
+			Deliveries = new ArrayList<Delivery>();
+			SaveDeliveries();
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void LoadClients() throws IOException {
+		try {
+			Clients = (ArrayList<Client>)Serialize.LoadObject(Settings.ClientFile);
+		}
+		catch (FileNotFoundException fnfe) {
+			Clients = new ArrayList<Client>();
+			SaveClients();
+		}
 	}
 
-	public void LoadClients() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void LoadCouriers() {
-		// TODO Auto-generated method stub
-		
+	@SuppressWarnings("unchecked")
+	public void LoadCouriers() throws IOException {
+		try {
+			Couriers = (ArrayList<Courier>)Serialize.LoadObject(Settings.CourierFile);
+		}
+		catch (FileNotFoundException fnfe) {
+			Couriers = new ArrayList<Courier>();
+			SaveCouriers();
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -43,6 +62,21 @@ public final class CourierSystem {
 			Employees = new ArrayList<Employee>();
 			SaveEmployees();
 		}
+	}
+	
+	public void SaveDeliveries() throws FileNotFoundException, IOException {
+		
+		Serialize.SaveObject(Settings.DeliveriesFile, Deliveries);
+	}
+	
+	public void SaveClients() throws FileNotFoundException, IOException {
+		
+		Serialize.SaveObject(Settings.ClientFile, Clients);
+	}
+	
+	public void SaveCouriers() throws FileNotFoundException, IOException {
+		
+		Serialize.SaveObject(Settings.CourierFile, Couriers);
 	}
 	
 	public void SaveEmployees() throws FileNotFoundException, IOException {
