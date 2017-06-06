@@ -12,6 +12,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import model.CourierSystem;
@@ -53,7 +54,7 @@ public class LogInScreen extends Container {
 		lblPassword.setAlignmentX(Component.CENTER_ALIGNMENT);
 		add(lblPassword, "cell 1 5,alignx left,aligny center");
 
-		txtPassword = new JTextField();
+		txtPassword = new JPasswordField();
 		txtPassword.setSize(new Dimension(200, 20));
 		add(txtPassword, "cell 2 5,growx,aligny center");
 		txtPassword.setColumns(10);
