@@ -14,10 +14,10 @@ public class Application {
 
 		// TODO load data
 		@SuppressWarnings("unused")
-		CourierSystem s = new CourierSystem();
+		CourierSystem data = new CourierSystem();
 
 		final JFrame window = new JFrame();
-		window.setContentPane(new LogInScreen(window));
+		window.setContentPane(new LogInScreen(window, data));
 		window.setIconImage(
 				Toolkit.getDefaultToolkit().getImage(Application.class.getResource("/view/courier logo.png")));
 		window.setTitle("ACME Delivery Management System");
