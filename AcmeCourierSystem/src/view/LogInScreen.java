@@ -16,6 +16,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import model.CourierSystem;
+import model.Employee;
 import net.miginfocom.swing.MigLayout;
 
 public class LogInScreen extends Container {
@@ -76,15 +77,15 @@ public class LogInScreen extends Container {
 	}
 
 	private boolean AttemptLogin(JFrame window, String username, String password) {
-		/*
-		 * TODO load main screen if valid
-		 */
-		if (true) {
-			window.setLocation(screenSize.width / 6, 0);
-			window.setSize(screenSize.width * 2 / 3, screenSize.height);
-			window.setContentPane(new MainScreen(window, data));
-			window.validate();
-			return true;
+
+		for (Employee employee : data.Employees) {
+			if (employee.userName == username && employee.password == password) {
+				window.setLocation(screenSize.width / 6, 0);
+				window.setSize(screenSize.width * 2 / 3, screenSize.height);
+				window.setContentPane(new MainScreen(window, data));
+				window.validate();
+				return true;
+			}
 		}
 		return false;
 	}

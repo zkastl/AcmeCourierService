@@ -9,7 +9,7 @@ import model.Employee;
 
 public class EmployeeTableModel implements TableModel {
 
-	public ArrayList<Employee> employees;
+	private ArrayList<Employee> employees;
 
 	public EmployeeTableModel(ArrayList<Employee> employees) {
 		this.employees = employees;
