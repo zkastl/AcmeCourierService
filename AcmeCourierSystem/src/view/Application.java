@@ -12,8 +12,6 @@ public class Application {
 
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 
-		// TODO load data
-		@SuppressWarnings("unused")
 		CourierSystem data = new CourierSystem();
 
 		final JFrame window = new JFrame();
