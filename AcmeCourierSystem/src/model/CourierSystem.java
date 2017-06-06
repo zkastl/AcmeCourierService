@@ -11,17 +11,25 @@ public final class CourierSystem {
 	public ArrayList<Delivery> Deliveries;
 	public Settings SystemSettings;
 	
-	public CourierSystem(String settingsFile) throws FileNotFoundException, IOException {
-		SaveEmployees("test2.xml");
-		Employees = LoadEmployees("test2.xml");
+	@SuppressWarnings("unused")
+	private static String settingsFile = "settings.xml";
+	
+	public CourierSystem() throws FileNotFoundException, IOException {
+		Employees = LoadEmployees(Settings.EmployeeFile);
+		
 	}
 	
 	@SuppressWarnings("unchecked")
 	private ArrayList<Employee> LoadEmployees(String s) throws FileNotFoundException, IOException {
-		
-		return (ArrayList<Employee>) Serialize.LoadObject(s);
+		try {
+			return (ArrayList<Employee>)Serialize.LoadObject(s);
+		}
+		catch (FileNotFoundException fnfe) {
+			return new ArrayList<Employee>();
+		}
 	}
 	
+	@SuppressWarnings("unused")
 	private void SaveEmployees(String s) throws FileNotFoundException, IOException {
 		
 		Serialize.SaveObject(s, Employees);

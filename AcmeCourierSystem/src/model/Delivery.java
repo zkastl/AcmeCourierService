@@ -11,76 +11,76 @@ public class Delivery {
 	/**
 	 * The time the delivery was created.
 	 */
-	private Date creationTime;
+	public Date creationTime;
 	/**
 	 * The OrderTaker who created the delivery.
 	 */
-	private OrderTaker orderTaker;
+	public Employee orderTaker;
 	/**
 	 * The client who the package will be picked up from
 	 */
-	private Client pickupClient;
+	public Client pickupClient;
 	/**
 	 * The client the package will be delivered to
 	 */
-	private Client deliveryClient;
+	public Client deliveryClient;
 	/**
 	 * The time the package is supposed to be picked up.
 	 */
-	private Date requestedPickupTime;
+	public Date requestedPickupTime;
 	/**
 	 * The estimated time at which the package will be delivered to the client
 	 */
-	private Date estimatedDeliveryTime;
+	public Date estimatedDeliveryTime;
 	/**
 	 * The time at which the courier should leave in order to pick up the
 	 * package at the requested time.
 	 */
-	private Date calculatedDepartureTime;
+	public Date calculatedDepartureTime;
 	/**
 	 * The time the courier actually left to go pick up the package
 	 */
-	private Date actualDepartureTime;
+	public Date actualDepartureTime;
 	/**
 	 * The time at which the courier actually picked up the package
 	 */
-	private Date actualPickupTime;
+	public Date actualPickupTime;
 	/**
 	 * The time at which the courier actually delivered the package
 	 */
-	private Date actualDeliveryTime;
+	public Date actualDeliveryTime;
 	/**
 	 * The time at which the courier returned to the company
 	 */
-	private Date actualReturnTime;
+	public Date actualReturnTime;
 	/**
 	 * True if the client sending the package should be billed. False if the
 	 * client receiving the package should be billed.
 	 */
-	private boolean billToSender;
+	public boolean billToSender;
 	/**
 	 * Unique ID written on the package to ensure the courier picks up the
 	 * correct one.
 	 */
-	private int packageID;
+	public int packageID;
 	/**
 	 * Estimation of the total distance traveled during the delivery. Used to
 	 * calculate price.
 	 */
-	private double estimatedDistanceTraveled;
+	public double estimatedDistanceTraveled;
 	/**
 	 * The price that will be billed to a client.
 	 */
-	private double totalDeliveryCost;
+	public double totalDeliveryCost;
 	/**
 	 * The courier who will make the delivery
 	 */
-	private Courier assignedCourier;
+	public Courier assignedCourier;
 	/**
 	 * True if the courier earned a bonus. False if the courier did not earn a
 	 * bonus.
 	 */
-	private boolean bonusEarned;
+	public boolean bonusEarned;
 
 	/**
 	 * Calculate if the delivery was on time

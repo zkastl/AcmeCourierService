@@ -8,17 +8,14 @@ import java.util.Date;
 public class Courier extends Employee {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5875114390978027755L;
+	/**
 	 * the name of the courier
 	 */
-	private String name;
-	/**
-	 * a unique id assigned to the courier by the system
-	 */
-	private int employeeID;
-	/**
-	 * All deliveries that the courier has made.
-	 */
-	private Delivery[] deliveryHistory;
+	
+	public Delivery[] deliveryHistory;
 
 	/**
 	 * returns the percent the courier made on time deliveries during a
@@ -42,6 +39,10 @@ public class Courier extends Employee {
 	public int getBonuses(Date start, Date end) {
 		// TODO - implement Courier.getBonuses
 		throw new UnsupportedOperationException();
+	}
+	
+	public Courier(String s) {
+		super.name = s;
 	}
 
 }

@@ -9,36 +9,47 @@ public class Settings {
 	/**
 	 * The base price for a delivery
 	 */
-	private double baseCost;
+	public double baseCost;
+	
 	/**
 	 * The price per block traveled that is added to the base price for a
 	 * delivery
 	 */
-	private double pricePerBlock;
+	public double pricePerBlock;
+	
 	/**
 	 * The amount of non-travel time for pickup and delivery that is planned
 	 * into a delivery
 	 */
-	private double plannedNonTravelTime;
+	public double plannedNonTravelTime;
+	
 	/**
 	 * The intersection of the company that couriers depart from and return to.
 	 */
-	private Intersection courierStartAddress;
+	public Intersection courierStartAddress;
+	
 	/**
 	 * The average speed at which a courier travels. Used in delivery time
 	 * calculations
 	 */
-	private double averageCourierSpeed;
+	public double averageCourierSpeed;
+	
 	/**
 	 * The time in minutes before and after the requested pickup and estimated
 	 * delivery times during which a delivery is considered on time. Default is
 	 * 5minutes.
 	 */
-	private int bonusLeeway;
-	private double bonusAmount;
+	public int bonusLeeway;
+	
+	public double bonusAmount;
+	
 	/**
 	 * the id that will be assigned to the next employee, client, or package
 	 */
-	private int nextID;
-
+	public int nextID;
+	
+	// Settings to point to the locations for the persistent data.
+	public static String EmployeeFile = "Employees.xml";
+	public static String ClientFile = "Clients.xml";
+	public static String DeliveriesFile = "Deliveries.xml";
 }

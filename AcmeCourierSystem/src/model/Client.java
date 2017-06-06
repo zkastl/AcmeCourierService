@@ -8,32 +8,32 @@ public class Client {
 	/**
 	 * The name of the client
 	 */
-	private String name;
+	public String name;
 	/**
 	 * The phone number of the client
 	 */
-	private String phoneNumber;
+	public String phoneNumber;
 	/**
 	 * The unique ID number assigned to the client
 	 */
-	private int clientID;
+	public int clientID;
 	/**
 	 * The email address of the client
 	 */
-	private String emailAddress;
+	public String emailAddress;
 	/**
 	 * Special instructions couriers are to follow when picking up or dropping
 	 * off a package.
 	 */
-	private String dropoffInstructions;
+	public String dropoffInstructions;
 	/**
 	 * deliveries associated with the client
 	 */
-	private Delivery[] deliveryHistory;
+	public Delivery[] deliveryHistory;
 	/**
 	 * The intersection the client is located at where packages are picked up
 	 * from and delivered to
 	 */
-	private Intersection address;
+	public Intersection address;
 
 }
