@@ -22,21 +22,21 @@ public class Employee implements Serializable {
 	/**
 	 * whether the employee is a Courier or an OrderTaker
 	 */
-	public String role;
+	public EmployeeRole role;
 	public String userName;
 	public String password;
 
-	public Employee(String name, int id, String role) {
+	public Employee(String name, int id, EmployeeRole role) {
 		this.name = name;
 		employeeID = id;
 		this.role = role;
 	}
 
 	public Employee() {
-		this.name = "Null";
-		employeeID = -1;
-		this.role = "Nobody";
-		this.userName = "Employee";
+		this.name = "Administrator";
+		employeeID = 1;
+		this.role = EmployeeRole.Administrator;
+		this.userName = "Admin";
 		this.password = "password";
 	}
 }

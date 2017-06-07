@@ -6,6 +6,7 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 import model.Employee;
+import model.EmployeeRole;
 
 public class EmployeeTableModel implements TableModel {
 
@@ -80,7 +81,7 @@ public class EmployeeTableModel implements TableModel {
 		case 1:
 			employees.get(rowIndex).name = aValue.toString();
 		case 2:
-			employees.get(rowIndex).role = aValue.toString();
+			employees.get(rowIndex).role = (EmployeeRole) aValue;
 		default:
 			break;
 		}
