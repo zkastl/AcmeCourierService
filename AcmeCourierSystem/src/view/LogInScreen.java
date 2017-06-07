@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import controller.EnterKeyListenerForButtons;
 import model.CourierSystem;
 import model.Employee;
 import net.miginfocom.swing.MigLayout;
@@ -24,7 +25,7 @@ public class LogInScreen extends Container {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private static JTextField txtUsername;
 	private static JTextField txtPassword;
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -79,6 +80,9 @@ public class LogInScreen extends Container {
 				lblFailure.setVisible(!AttemptLogin(window, txtUsername.getText(), txtPassword.getText()));
 			}
 		});
+
+		btnLogin.addKeyListener(new EnterKeyListenerForButtons(btnLogin));
+		txtPassword.addKeyListener(new EnterKeyListenerForButtons(btnLogin));
 	}
 
 	private boolean AttemptLogin(JFrame window, String username, String password) {
@@ -88,7 +92,7 @@ public class LogInScreen extends Container {
 			window.setContentPane(new MainScreen(window, data));
 			window.validate();
 			return true;
-			
+
 		}
 		for (Employee employee : data.Employees) {
 			if (employee.userName.equals(username) && employee.password.equals(password)) {
@@ -97,8 +101,7 @@ public class LogInScreen extends Container {
 				window.setContentPane(new MainScreen(window, data));
 				window.validate();
 				return true;
-			}
-			else {
+			} else {
 				System.out.println(employee.userName + " " + username);
 				System.out.println(employee.password + " " + password);
 			}
