@@ -55,11 +55,11 @@ public final class CourierSystem {
 
 	@SuppressWarnings("unchecked")
 	public void LoadEmployees() throws FileNotFoundException, IOException {
-		try {
-			Employees = (ArrayList<Employee>)Serialize.LoadObject(Settings.EmployeeFile);
-		}
-		catch (FileNotFoundException fnfe) {
+
+		Employees = (ArrayList<Employee>)Serialize.LoadObject(Settings.EmployeeFile);
+		if(Employees.size() == 0) {
 			Employees = new ArrayList<Employee>();
+			Employees.add(new Employee());
 			SaveEmployees();
 		}
 	}

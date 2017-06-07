@@ -15,6 +15,10 @@ import model.Employee;
 import net.miginfocom.swing.MigLayout;
 
 public class EmployeeManagement extends Container {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JTable table;
 
 	public EmployeeManagement(CourierSystem data) {

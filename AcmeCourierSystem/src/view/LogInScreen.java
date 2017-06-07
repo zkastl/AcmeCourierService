@@ -20,6 +20,11 @@ import model.Employee;
 import net.miginfocom.swing.MigLayout;
 
 public class LogInScreen extends Container {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private static JTextField txtUsername;
 	private static JTextField txtPassword;
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -77,14 +82,25 @@ public class LogInScreen extends Container {
 	}
 
 	private boolean AttemptLogin(JFrame window, String username, String password) {
-
+		if (data.Employees.size() == 0) {
+			window.setLocation(screenSize.width / 6, 0);
+			window.setSize(screenSize.width * 2 / 3, screenSize.height);
+			window.setContentPane(new MainScreen(window, data));
+			window.validate();
+			return true;
+			
+		}
 		for (Employee employee : data.Employees) {
-			if (employee.userName == username && employee.password == password) {
+			if (employee.userName.equals(username) && employee.password.equals(password)) {
 				window.setLocation(screenSize.width / 6, 0);
 				window.setSize(screenSize.width * 2 / 3, screenSize.height);
 				window.setContentPane(new MainScreen(window, data));
 				window.validate();
 				return true;
+			}
+			else {
+				System.out.println(employee.userName + " " + username);
+				System.out.println(employee.password + " " + password);
 			}
 		}
 		return false;

@@ -23,9 +23,7 @@ public class Employee implements Serializable {
 	 * whether the employee is a Courier or an OrderTaker
 	 */
 	public String role;
-
 	public String userName;
-
 	public String password;
 
 	public Employee(String name, int id, String role) {
@@ -38,5 +36,7 @@ public class Employee implements Serializable {
 		this.name = "Null";
 		employeeID = -1;
 		this.role = "Nobody";
+		this.userName = "Employee";
+		this.password = "password";
 	}
 }
