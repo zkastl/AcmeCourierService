@@ -2,12 +2,14 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.Objects;
 
 /**
  * a node in the map graph. represents the intersection of two streets
  */
-public class Intersection {
+// is not consistent with equals
+// only designed to work for streets that only intersect once
+public class Intersection implements Comparable<Intersection>{
 
 	/**
 	 * The name of the east-west street of an intersection
@@ -106,8 +108,45 @@ public class Intersection {
 		}
 	}
 	
-	// TODO
-	// may need to implement equals operator
-	// may need to implement comparison operator
+
+	// allows intersections to be used in data structures that require the comparable interface such as a priority queue
+	// is not consistent with equals
+	@Override
+	public int compareTo(Intersection rhs) {
+		if(rhs == null) {
+			throw new NullPointerException();
+		}
+		
+		if(getName().compareTo(rhs.getName()) == 0) {	// they are the same intersection
+		  return 0;
+		} else if(distance < rhs.distance) {	// arg0 currently has a shorter path length
+			return -1;
+		} else if(distance > rhs.distance) { 	// arg1 currently has a shorter path length
+			return 1;
+		}
+		return 0;								// they have the same path length, but are not the same intersection
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if(this == o) {
+			return true; // they are the same object
+		}
+		if(o == null) {
+			return false;
+		}
+		if(getClass() != o.getClass()) {
+			return false; // o is not an Intersection
+		}
+		Intersection rhs = (Intersection) o;
+		return Objects.equals(street1, rhs.street1) &&
+				Objects.equals(street2, rhs.street2)/* &&
+				Objects.equals(roads, rhs.roads)*/;
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(street1, street2, roads);
+	}
 
 }
