@@ -43,11 +43,6 @@ public final class Settings {
 	
 	public static double bonusAmount;
 	
-	/**
-	 * the id that will be assigned to the next employee, client, or package
-	 */
-	public static int nextID;
-	
 	// Settings to point to the locations for the persistent data.
 	public static String EmployeeFile = "Employees.xml";
 	public static String CourierFile = "Couriers.xml";

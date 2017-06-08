@@ -100,6 +100,8 @@ public final class CourierSystem {
 	public void SaveEmployees() throws Exception {
 		EntityTransaction trans = em.getTransaction();
 		
+		List<Employee> savedEmployees = em.createQuery("SELECT e FROM Employee e", Employee.class).getResultList();
+		
 		trans.begin();
 		for(Employee e : Employees) {
 			em.persist(e);
@@ -109,15 +111,6 @@ public final class CourierSystem {
 	
 	public CourierSystem() throws Exception {
 		InitializeCourierSystem();
-		Test();
 	};
-	
-	private void Test() {
-		EntityTransaction trans = em.getTransaction();
-		trans.begin();
-		em.createQuery("drop table Employee");
-		em.persist(new Employee("TEST", EmployeeRole.Administrator, "TEST", "password"));
-		trans.commit();
-	}
 }
 

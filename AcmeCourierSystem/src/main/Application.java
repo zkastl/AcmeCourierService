@@ -3,6 +3,7 @@ package main;
 import java.awt.Toolkit;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -243,7 +244,10 @@ public class Application {
 		map.addIntersection(g6);
 		map.addIntersection(g7);
 		map.getRoute(a1, f1).print();
-		b2.changeClosure(Calendar.getInstance(), Calendar.getInstance()); //close it just for today
+		
+		Calendar c = Calendar.getInstance();
+		c.setTime(Date.valueOf("6/9/2017"));
+		b2.changeClosure(Calendar.getInstance(), c); //close it just for today
 		map.getRoute(a1, f1).print();
 		
 		/*for(Character a = 'A'; a < 'H'; a++){

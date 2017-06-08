@@ -23,6 +23,7 @@ public class Employee implements Serializable {
 	public EmployeeRole role;
 	
 	@NotNull
+	@Column(unique=true)
 	public String userName;
 	
 	@NotNull
