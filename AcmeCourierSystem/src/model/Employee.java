@@ -27,6 +27,9 @@ public class Employee implements Serializable {
 	
 	@NotNull
 	public String password;
+	
+	@NotNull
+	private boolean isArchived = false;
 
 	public Employee(String name, EmployeeRole role, String userName, String password) {
 		this.name = name;
@@ -40,6 +43,10 @@ public class Employee implements Serializable {
 		this.role = EmployeeRole.Administrator;
 		this.userName = "Admin";
 		this.password = "password";
+	}
+	
+	public void ArchiveEmployee() {
+		isArchived = true;
 	}
 	
 	
