@@ -86,17 +86,18 @@ public class LogInScreen extends Container {
 	}
 
 	private boolean AttemptLogin(JFrame window, String username, String password) {
-		
-		for (Employee employee : data.Employees) {
-			if (employee.userName.equals(username) && employee.password.equals(password)) {
+		for (Employee e : data.Employees) {
+			if (e.userName.equals(username) && e.password.equals(password)) {
+				data.currentUser = e;
+				
 				window.setLocation(screenSize.width / 6, 0);
 				window.setSize(screenSize.width * 2 / 3, screenSize.height);
 				window.setContentPane(new MainScreen(window, data));
 				window.validate();
 				return true;
 			} else {
-				System.out.println(employee.userName + " " + username);
-				System.out.println(employee.password + " " + password);
+				System.out.println(e.userName + " " + username);
+				System.out.println(e.password + " " + password);
 			}
 		}
 		return false;

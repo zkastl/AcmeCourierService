@@ -1,3 +1,6 @@
-/persistance.xml
-/persistence.xml
+/controller/
 /main/
+/model/
+/persistence.xml
+/tests/
+/view/
