@@ -4,7 +4,7 @@ package model;
  * Global variables used in calculations, some of which may be changed by an
  * administrator
  */
-public class Settings {
+public final class Settings {
 
 	/**
 	 * The base price for a delivery
