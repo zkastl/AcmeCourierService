@@ -38,6 +38,10 @@ public class EmployeeManagement extends Container {
 		add(btnAddEmployee, "cell 0 1,alignx center,aligny bottom");
 		btnAddEmployee.addKeyListener(new EnterKeyListenerForButtons(btnAddEmployee));
 
+		JButton btnRemoveEmployee = new JButton("Remove Employee");
+		add(btnRemoveEmployee, "cell 1 1,alignx center");
+		btnRemoveEmployee.addKeyListener(new EnterKeyListenerForButtons(btnAddEmployee));
+
 		JButton btnSaveChanges = new JButton("Save Changes");
 		add(btnSaveChanges, "cell 2 1");
 		btnSaveChanges.addKeyListener(new EnterKeyListenerForButtons(btnSaveChanges));
@@ -61,6 +65,13 @@ public class EmployeeManagement extends Container {
 		btnAddEmployee.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				employeeTable.addRow(new Employee());
+			}
+		});
+
+		btnRemoveEmployee.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				employeeTable.removeRow(table.getSelectedRow());
+				data.Employees.remove(table.getSelectedRow());
 			}
 		});
 

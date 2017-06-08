@@ -1,7 +1,5 @@
 package model;
 
 public enum EmployeeRole {
-	Courier,
-	OrderTaker,
-	Administrator
+	Courier, OrderTaker, Administrator
 }
