@@ -246,8 +246,9 @@ public class Application {
 		map.getRoute(a1, f1).print();
 		
 		Calendar c = Calendar.getInstance();
-		c.setTime(Date.valueOf("6/9/2017"));
-		b2.changeClosure(Calendar.getInstance(), c); //close it just for today
+		c.set(2017, 6, 7);
+		
+		b2.changeClosure(c, Calendar.getInstance()); //close it just for today
 		map.getRoute(a1, f1).print();
 		
 		/*for(Character a = 'A'; a < 'H'; a++){
