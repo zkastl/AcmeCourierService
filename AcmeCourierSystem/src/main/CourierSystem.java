@@ -23,7 +23,7 @@ public final class CourierSystem {
 		LoadClients();
 		LoadDeliveries();
 		
-		test();
+		//test();
 	}
 	
 	private void test() {
