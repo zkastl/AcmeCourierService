@@ -1,6 +1,6 @@
 /controller/
 /main/
-/model/
 /persistence.xml
-/tests/
 /view/
+/model/
+/META-INF/

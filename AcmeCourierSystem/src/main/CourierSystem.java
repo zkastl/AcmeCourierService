@@ -29,10 +29,10 @@ public final class CourierSystem {
 			Employees.add(new Employee());
 		}
 		
-		//test();
+		test();
 	}
 	
-	@SuppressWarnings("unused")
+	
 	private void test() {
 		
 		javax.persistence.EntityManagerFactory factory = Persistence.createEntityManagerFactory("example");
