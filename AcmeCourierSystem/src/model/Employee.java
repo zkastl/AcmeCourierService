@@ -33,14 +33,12 @@ public class Employee implements Serializable {
 		this.password = password;
 	}
 
-	/*public Employee() {
+	public Employee() {
 		this.name = "Administrator";
 		this.role = EmployeeRole.Administrator;
 		this.userName = "Admin";
 		this.password = "password";
-	}*/
-	
-	public Employee() {}
+	}
 	
 	
 }

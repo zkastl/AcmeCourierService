@@ -23,9 +23,16 @@ public final class CourierSystem {
 		LoadClients();
 		LoadDeliveries();
 		
+		// Test code so that we always have an admin
+		if (Employees == null) {
+			Employees = new ArrayList<Employee>();
+			Employees.add(new Employee());
+		}
+		
 		//test();
 	}
 	
+	@SuppressWarnings("unused")
 	private void test() {
 		
 		javax.persistence.EntityManagerFactory factory = Persistence.createEntityManagerFactory("example");
