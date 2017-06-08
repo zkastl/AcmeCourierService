@@ -6,7 +6,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
+import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -14,6 +16,7 @@ import javax.swing.JTable;
 import main.CourierSystem;
 import controller.EnterKeyListenerForButtons;
 import model.Employee;
+import model.EmployeeRole;
 import net.miginfocom.swing.MigLayout;
 
 public class EmployeeManagement extends Container {
@@ -22,10 +25,9 @@ public class EmployeeManagement extends Container {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JTable table;
-	EmployeeTableModel employeeTable;
 
 	public EmployeeManagement(CourierSystem data) {
-		employeeTable = new EmployeeTableModel(data.Employees);
+		EmployeeTableModel employeeTable = new EmployeeTableModel(data.Employees);
 		setLayout(new MigLayout("", "[grow][50%][grow][10]", "[25][40][5][grow][][20]"));
 
 		JLabel lblEmployeeManagement = new JLabel("Employee Management");
@@ -35,6 +37,10 @@ public class EmployeeManagement extends Container {
 		JButton btnAddEmployee = new JButton("Add Employee");
 		add(btnAddEmployee, "cell 0 1,alignx center,aligny bottom");
 		btnAddEmployee.addKeyListener(new EnterKeyListenerForButtons(btnAddEmployee));
+
+		JButton btnRemoveEmployee = new JButton("Remove Employee");
+		add(btnRemoveEmployee, "cell 1 1,alignx center");
+		btnRemoveEmployee.addKeyListener(new EnterKeyListenerForButtons(btnAddEmployee));
 
 		JButton btnSaveChanges = new JButton("Save Changes");
 		add(btnSaveChanges, "cell 2 1");
@@ -47,12 +53,25 @@ public class EmployeeManagement extends Container {
 		scrollPane.setViewportView(table);
 		table.setColumnSelectionAllowed(true);
 
+		JComboBox<EmployeeRole> roleComboBox = new JComboBox<EmployeeRole>();
+		roleComboBox.addItem(EmployeeRole.Administrator);
+		roleComboBox.addItem(EmployeeRole.Courier);
+		roleComboBox.addItem(EmployeeRole.OrderTaker);
+		table.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(roleComboBox));
+
 		JLabel lblNewLabel = new JLabel(" ");
 		add(lblNewLabel, "cell 0 4");
 
 		btnAddEmployee.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				employeeTable.addRow(new Employee());
+			}
+		});
+
+		btnRemoveEmployee.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				employeeTable.removeRow(table.getSelectedRow());
+				data.Employees.remove(table.getSelectedRow());
 			}
 		});
 
