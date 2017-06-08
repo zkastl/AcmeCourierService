@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import model.CourierSystem;
+import main.CourierSystem;
 import model.Employee;
 import net.miginfocom.swing.MigLayout;
 

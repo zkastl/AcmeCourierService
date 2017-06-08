@@ -55,7 +55,7 @@ public class EmployeeTableModel implements TableModel {
 		case 0:
 			return false;
 		default:
-			return true;
+			return employees.get(rowIndex).role == EmployeeRole.Administrator;
 		}
 	}
 
@@ -64,7 +64,7 @@ public class EmployeeTableModel implements TableModel {
 		// TODO Auto-generated method stub
 		switch (columnIndex) {
 		case 0:
-			return employees.get(rowIndex).employeeID;
+			return employees.get(rowIndex).id;
 		case 1:
 			return employees.get(rowIndex).name;
 		case 2:
@@ -81,7 +81,7 @@ public class EmployeeTableModel implements TableModel {
 		case 1:
 			employees.get(rowIndex).name = aValue.toString();
 		case 2:
-			employees.get(rowIndex).role = (EmployeeRole) aValue;
+			employees.get(rowIndex).role = EmployeeRole.valueOf(aValue.toString());
 		default:
 			break;
 		}

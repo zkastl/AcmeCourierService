@@ -1,13 +1,13 @@
-package view;
+package main;
 
 import java.awt.Toolkit;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
 import javax.swing.JFrame;
-
+import view.*;
 import model.*;
 
+@SuppressWarnings("unused")
 public class Application {
 
 	public static void main(String[] args) throws FileNotFoundException, IOException {

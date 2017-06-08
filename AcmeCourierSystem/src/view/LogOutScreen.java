@@ -8,7 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import model.CourierSystem;
+import main.CourierSystem;
 import net.miginfocom.swing.MigLayout;
 
 public class LogOutScreen extends Container {

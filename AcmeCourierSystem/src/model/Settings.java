@@ -49,8 +49,8 @@ public class Settings {
 	public int nextID;
 	
 	// Settings to point to the locations for the persistent data.
-	public static String EmployeeFile = "Employees.xml";
-	public static String CourierFile = "Couriers.xml";
-	public static String ClientFile = "Clients.xml";
-	public static String DeliveriesFile = "Deliveries.xml";
+	public static String EmployeeFile = "..\\data\\Employees.xml";
+	public static String CourierFile = "..\\data\\Couriers.xml";
+	public static String ClientFile = "..\\data\\Clients.xml";
+	public static String DeliveriesFile = "..\\data\\Deliveries.xml";
 }

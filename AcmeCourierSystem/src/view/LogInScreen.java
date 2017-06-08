@@ -16,7 +16,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import controller.EnterKeyListenerForButtons;
-import model.CourierSystem;
+import main.CourierSystem;
 import model.Employee;
 import net.miginfocom.swing.MigLayout;
 
@@ -41,7 +41,7 @@ public class LogInScreen extends Container {
 		JLabel logo = new JLabel("");
 		logo.setAlignmentY(Component.BOTTOM_ALIGNMENT);
 		logo.setAlignmentX(Component.CENTER_ALIGNMENT);
-		logo.setIcon(new ImageIcon(Application.class.getResource("/view/courier logo.png")));
+		logo.setIcon(new ImageIcon(main.Application.class.getResource("/view/courier logo.png")));
 		add(logo, "cell 1 1 2 1,alignx center,aligny bottom");
 
 		JLabel lblAcmeCourierService = new JLabel("ACME Courier Service");
@@ -86,14 +86,7 @@ public class LogInScreen extends Container {
 	}
 
 	private boolean AttemptLogin(JFrame window, String username, String password) {
-		if (data.Employees.size() == 0) {
-			window.setLocation(screenSize.width / 6, 0);
-			window.setSize(screenSize.width * 2 / 3, screenSize.height);
-			window.setContentPane(new MainScreen(window, data));
-			window.validate();
-			return true;
-
-		}
+		
 		for (Employee employee : data.Employees) {
 			if (employee.userName.equals(username) && employee.password.equals(password)) {
 				window.setLocation(screenSize.width / 6, 0);

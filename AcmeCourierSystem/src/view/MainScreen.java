@@ -6,7 +6,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
-import model.CourierSystem;
+import main.CourierSystem;
 
 public class MainScreen extends Container {
 	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
