@@ -1,5 +1,8 @@
 package model;
 
+import java.util.PriorityQueue;
+import java.util.Stack;
+
 /**
  * an object that calculates the shortest path between two intersections and
  * stores the steps to take to follow that path
@@ -10,7 +13,7 @@ public class Route {
 	 * the roads that compose the shortest path from the start intersection to
 	 * the end intersection
 	 */
-	private Road[] steps;
+	private Stack<Road> steps;
 	/**
 	 * the intersection the route starts at
 	 */
@@ -32,18 +35,75 @@ public class Route {
 	/**
 	 * calculate the steps that compose the shortest path from start to end
 	 */
-	public void calculateSteps() {
-		// TODO - implement Route.calculateSteps
-		throw new UnsupportedOperationException();
+	public Intersection getStart() {
+		return start;
+	}
+	public Intersection getEnd() {
+		return end;
+	}
+	public int getDistance() {
+		return distance;
+	}
+	public double getTime() {
+		return time;
+	}
+	Route(Map map, Intersection start, Intersection end) {
+		this.start =start;
+		this.end = end;
+		calculateSteps(map);
+		calculateDistance();
+		calculateTime();
+	}
+	public void calculateSteps(Map map) {
+		PriorityQueue<Intersection> unvisited = new PriorityQueue<Intersection>();
+		
+		// sanitize open nodes to make sure they are not affected by previous paths and add them to the unvisited set
+		for(Intersection intersection : map.getIntersections()) {
+			if(intersection.isOpen()) {
+				intersection.setDistance(Integer.MAX_VALUE);
+				intersection.setPrevious(null);
+				intersection.setVisited(false);
+				if( intersection == start ) {
+					intersection.setDistance(0);
+				}
+				unvisited.add(intersection);
+			}
+		}
+		
+		// find the shortest distance from start to end
+		while(!end.getVisited()) {
+			Intersection current = unvisited.poll();
+			for(Road edge : current.getRoads()) {
+				if(edge.getEnd().getDistance() > current.getDistance() + edge.getLength()) {
+					edge.getEnd().setDistance(current.getDistance() + edge.getLength());
+					edge.getEnd().setPrevious(current);
+				}
+			}
+			current.setVisited(true);
+		}
+		
+		// build stack of steps to take
+		Intersection node = end;
+		while(node.getPrevious() != null) {
+			for(Road road : node.getPrevious().getRoads()) {
+				if(road.getEnd() == node) {
+					steps.push(road);
+					//insert stop for loop here
+				}
+			}
+			node = node.getPrevious();
+		}
 	}
 
 	/**
 	 * calculate the total distance of the route in blocks (essentially
-	 * steps.size)
+	 * steps.size for non-weighted edges)
 	 */
 	public void calculateDistance() {
-		// TODO - implement Route.calculateDistance
-		throw new UnsupportedOperationException();
+		distance = 0;
+		for(Road step : steps) {
+			distance = distance + step.getLength();
+		}
 	}
 
 	/**
@@ -51,8 +111,7 @@ public class Route {
 	 * calculated first (distance / averageCourierSpeed)
 	 */
 	public void calculateTime() {
-		// TODO - implement Route.calculateTime
-		throw new UnsupportedOperationException();
+		time = distance / Settings.averageCourierSpeed;
 	}
 
 	/**
@@ -60,8 +119,25 @@ public class Route {
 	 * route
 	 */
 	public void print() {
-		// TODO - implement Route.print
-		throw new UnsupportedOperationException();
+		String directions = "";
+		int distance = 0;
+		Road prevStep = steps.peek();
+		
+		for(Road step : steps) {
+			System.out.println(step.getDirection() + " " + step.getLength() + " on " + step.getName());
+			
+			if(step.getDirection().compareTo(prevStep.getDirection()) == 0) {
+				distance = distance + step.getLength();
+			} else {
+				if(distance == 0) {
+					distance = prevStep.getLength();
+				}
+				directions = directions + "go " + prevStep.getDirection() + " " + distance + " on " + prevStep.getName();
+				distance = 0;
+			}
+			
+			prevStep = step;
+		}
 	}
 
 }

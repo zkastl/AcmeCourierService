@@ -21,5 +21,63 @@ public class Road {
 	 * the name of the road
 	 */
 	private String name;
+	
+	// the distance between start and end
+	private Integer length;
+	
+	public Road(Intersection start, Intersection end, String dir, String name, Integer len) {
+		this.start = start;
+		this.end = end;
+		this.direction = dir;
+		this.name = name;
+		this.length = len;
+	}
+	
+	public Road(Intersection start, Intersection end, String dir, String name) {
+		this.start = start;
+		this.end = end;
+		this.direction = dir;
+		this.name = name;
+		this.length = 1;
+	}
+	
+	public Road(Intersection start, Intersection end, String dir) {
+		this.start = start;
+		this.end = end;
+		this.direction = dir;
+		this.name = start.getName() + "to" + end.getName();
+		this.length = 1;
+	}
+	
+	public Intersection getStart() {
+		return start;
+	}
+	public void setStart(Intersection intersection) {
+		this.start = intersection;
+	}
+	public Intersection getEnd() {
+		return end;
+	}
+	public void setEnd(Intersection intersection) {
+		this.end = intersection;
+	}
+	public String getDirection() {
+		return direction;
+	}
+	public void setDirection(String dir) {
+		direction = dir;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public Integer getLength() {
+		return length;
+	}
+	public void setLength(Integer len) {
+		length = len;
+	}
 
 }
