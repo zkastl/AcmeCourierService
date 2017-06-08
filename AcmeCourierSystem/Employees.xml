@@ -1,8 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<java version="1.8.0_131" class="java.beans.XMLDecoder">
+<java version="1.8.0_112" class="java.beans.XMLDecoder">
  <object class="java.util.ArrayList">
   <void method="add">
    <object class="model.Employee"/>
+  </void>
+  <void method="add">
+   <object class="model.Employee" id="Employee0">
+    <void class="model.Employee" method="getField">
+     <string>name</string>
+     <void method="set">
+      <object idref="Employee0"/>
+      <string>Order taker</string>
+     </void>
+    </void>
+    <void class="model.Employee" method="getField">
+     <string>role</string>
+     <void method="set">
+      <object idref="Employee0"/>
+      <object class="java.lang.Enum" method="valueOf">
+       <class>model.EmployeeRole</class>
+       <string>OrderTaker</string>
+      </object>
+     </void>
+    </void>
+    <void class="model.Employee" method="getField">
+     <string>userName</string>
+     <void method="set">
+      <object idref="Employee0"/>
+      <string>order taker</string>
+     </void>
+    </void>
+   </object>
   </void>
  </object>
 </java>
