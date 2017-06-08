@@ -47,9 +47,10 @@ public class Route {
 	public double getTime() {
 		return time;
 	}
-	Route(Map map, Intersection start, Intersection end) {
+	public Route(Map map, Intersection start, Intersection end) {
 		this.start =start;
 		this.end = end;
+		steps = new Stack<Road>();
 		calculateSteps(map);
 		calculateDistance();
 		calculateTime();
@@ -58,12 +59,19 @@ public class Route {
 		PriorityQueue<Intersection> unvisited = new PriorityQueue<Intersection>();
 		
 		// sanitize open nodes to make sure they are not affected by previous paths and add them to the unvisited set
+		Intersection prevFiller = new Intersection("-1", "stupid");
 		for(Intersection intersection : map.getIntersections()) {
 			if(intersection.isOpen()) {
-				intersection.setDistance(Integer.MAX_VALUE);
-				intersection.setPrevious(null);
+				int maxLength = 0;
+				for(Road road : intersection.getRoads()){
+					if(maxLength < road.getLength()) {
+						maxLength = road.getLength();
+					}
+				}
+				intersection.setDistance(Integer.MAX_VALUE - maxLength); // don't accidently roll over if something goes wrong and shove huge negative numbers to the front
+				intersection.setPrevious(prevFiller);
 				intersection.setVisited(false);
-				if( intersection == start ) {
+				if( intersection.equals(start) ) {
 					intersection.setDistance(0);
 				}
 				unvisited.add(intersection);
@@ -73,25 +81,30 @@ public class Route {
 		// find the shortest distance from start to end
 		while(!end.getVisited()) {
 			Intersection current = unvisited.poll();
-			for(Road edge : current.getRoads()) {
-				if(edge.getEnd().getDistance() > current.getDistance() + edge.getLength()) {
-					edge.getEnd().setDistance(current.getDistance() + edge.getLength());
-					edge.getEnd().setPrevious(current);
+			if(!current.getVisited()) {
+				for(Road edge : current.getRoads()) {
+					if(edge.getEnd().getDistance() > current.getDistance() + edge.getLength()) {
+						edge.getEnd().setDistance(current.getDistance() + edge.getLength());
+						edge.getEnd().setPrevious(current);
+						unvisited.add(edge.getEnd()); // help get around priority queues not resorting all the time
+					}
 				}
+				current.setVisited(true);
 			}
-			current.setVisited(true);
 		}
 		
 		// build stack of steps to take
 		Intersection node = end;
-		while(node.getPrevious() != null) {
-			for(Road road : node.getPrevious().getRoads()) {
-				if(road.getEnd() == node) {
-					steps.push(road);
-					//insert stop for loop here
+		while(!node.getPrevious().equals(prevFiller)) {
+			if(!node.getPrevious().getRoads().isEmpty()) {
+				for(Road road : node.getPrevious().getRoads()) {
+					if(road.getEnd().equals(node)) {
+						steps.push(road);								// null pointer exception
+						//insert stop for for loop here
+					}
 				}
+				node = node.getPrevious();
 			}
-			node = node.getPrevious();
 		}
 	}
 
@@ -132,12 +145,13 @@ public class Route {
 				if(distance == 0) {
 					distance = prevStep.getLength();
 				}
-				directions = directions + "go " + prevStep.getDirection() + " " + distance + " on " + prevStep.getName();
+				directions = directions + "go " + prevStep.getDirection() + " " + distance + " on " + prevStep.getName() + "\n";
 				distance = 0;
 			}
 			
 			prevStep = step;
 		}
+		System.out.println(directions);
 	}
 
 }

@@ -40,8 +40,46 @@ public class Intersection implements Comparable<Intersection>{
 	
 	// previous intersection in the calculated path
 	private Intersection previous;
-	 // whether or not the node has been visited yet in the calculation
+	 
+	// whether or not the node has been visited yet in the calculation
 	private boolean visited;
+	
+	public Intersection(String s1, String s2) {
+		street1 = s1;
+		street2 = s2;
+		closeStart = Calendar.getInstance();
+		closeStart.set(2017, 1, 1);
+		closeEnd = Calendar.getInstance();
+		closeEnd.set(2017, 1, 1);
+		roads = new ArrayList<Road>();
+		distance = 0;
+		previous = null;
+		visited = false;
+	}
+	
+	public Intersection(String s1, String s2, ArrayList<Road> roads) {
+		street1 = s1;
+		street2 = s2;
+		closeStart = Calendar.getInstance();
+		closeStart.set(2017, 1, 1);
+		closeEnd = Calendar.getInstance();
+		closeEnd.set(2017, 1, 1);
+		this.roads = roads;
+		distance = 0;
+		previous = null;
+		visited = false;
+	}
+	
+	public Intersection(String s1, String s2, ArrayList<Road> roads, Calendar closeStart, Calendar closeEnd) {
+		street1 = s1;
+		street2 = s2;
+		this.closeStart = closeStart;
+		this.closeEnd = closeEnd;
+		this.roads = roads;
+		distance = 0;
+		previous = null;
+		visited = false;
+	}
 	
 	public String getStreet1() {
 		return street1;
@@ -60,6 +98,9 @@ public class Intersection implements Comparable<Intersection>{
 	}
 	public ArrayList<Road> getRoads() {
 		return roads;
+	}
+	public void addRoad(Road road) {
+		roads.add(road);
 	}
 	public Integer getDistance() {
 		return distance;
@@ -117,11 +158,11 @@ public class Intersection implements Comparable<Intersection>{
 			throw new NullPointerException();
 		}
 		
-		if(getName().compareTo(rhs.getName()) == 0) {	// they are the same intersection
+		if(equals(rhs)) {						// they are the same intersection
 		  return 0;
-		} else if(distance < rhs.distance) {	// arg0 currently has a shorter path length
+		} else if(distance < rhs.distance) {	// this intersection currently has a shorter path length
 			return -1;
-		} else if(distance > rhs.distance) { 	// arg1 currently has a shorter path length
+		} else if(distance > rhs.distance) { 	// the rhs intersection currently has a shorter path length
 			return 1;
 		}
 		return 0;								// they have the same path length, but are not the same intersection
@@ -141,7 +182,7 @@ public class Intersection implements Comparable<Intersection>{
 		Intersection rhs = (Intersection) o;
 		return Objects.equals(street1, rhs.street1) &&
 				Objects.equals(street2, rhs.street2)/* &&
-				Objects.equals(roads, rhs.roads)*/;
+				Objects.equals(roads, rhs.roads)*/; // don't want road and intersection equals functions to loop
 	}
 	
 	@Override

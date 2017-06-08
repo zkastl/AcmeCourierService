@@ -14,7 +14,7 @@ public class Map {
 	/**
 	 * The array of roads that exist between the intersections on the map
 	 */
-	private ArrayList<Road> roads;
+	private ArrayList<Road> roads; // TODO probably get rid of this since each Intersection tracks its own roads
 
 	/**
 	 * returns the route from the specified start intersection to the specified
@@ -23,6 +23,17 @@ public class Map {
 	 * @param start
 	 * @param end
 	 */
+	
+	public Map() {
+		intersections = new ArrayList<Intersection>();
+		roads = new ArrayList<Road>();
+	}
+	
+	public Map(ArrayList<Intersection> intersections, ArrayList<Road> roads) {
+		this.intersections = intersections;
+		this.roads = roads;
+	}
+	
 	public Route getRoute(Intersection start, Intersection end) {
 		return new Route(this, start, end);
 	}
