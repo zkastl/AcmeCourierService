@@ -13,6 +13,8 @@ import net.miginfocom.swing.MigLayout;
 
 public class LogOutScreen extends Container {
 
+	private static final long serialVersionUID = 1L;
+
 	public LogOutScreen(JFrame window, CourierSystem data) {
 		setLayout(new MigLayout("", "[grow][grow]", "[grow][][][grow]"));
 

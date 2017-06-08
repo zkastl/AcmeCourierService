@@ -4,7 +4,6 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
@@ -20,9 +19,7 @@ import model.EmployeeRole;
 import net.miginfocom.swing.MigLayout;
 
 public class EmployeeManagement extends Container {
-	/**
-	 * 
-	 */
+		
 	private static final long serialVersionUID = 1L;
 	private JTable table;
 
@@ -79,7 +76,7 @@ public class EmployeeManagement extends Container {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					data.SaveEmployees();
-				} catch (IOException e1) {
+				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
 			}

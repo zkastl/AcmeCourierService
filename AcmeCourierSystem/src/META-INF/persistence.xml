@@ -3,14 +3,18 @@
              xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
              version="2.0">
 
-    <persistence-unit name="example" transaction-type="RESOURCE_LOCAL">
+    <persistence-unit name="entities" transaction-type="RESOURCE_LOCAL">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
         <class>model.Employee</class>
+        <class>model.Courier</class>
+        <class>model.Client</class>
+        <class>model.Delivery</class>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC" />
-            <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:employees.db" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:data/CourierSystem.db" />
 			<property name="eclipselink.logging.level" value="ALL" />
 			<property name="eclipselink.ddl-generation" value="create-tables" />
+			<property name="clipselink.ddl-generation.output-mode" value="database" />
         </properties>
     </persistence-unit>
 </persistence>

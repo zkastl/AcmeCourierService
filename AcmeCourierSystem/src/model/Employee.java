@@ -6,12 +6,14 @@ import javax.persistence.*;
 import com.sun.istack.internal.NotNull;
 
 @Entity
-@Table(name="employees")
+@Table(name="Employee")
 public class Employee implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	@Id @GeneratedValue (strategy = GenerationType.IDENTITY)
+	@Id
+	@Column(name="ID")
+	@GeneratedValue (strategy = GenerationType.IDENTITY)
 	public long id;
 	
 	@NotNull

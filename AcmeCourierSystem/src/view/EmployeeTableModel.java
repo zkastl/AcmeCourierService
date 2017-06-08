@@ -1,6 +1,6 @@
 package view;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.table.DefaultTableModel;
 
@@ -9,9 +9,10 @@ import model.EmployeeRole;
 
 public class EmployeeTableModel extends DefaultTableModel {
 
-	private ArrayList<Employee> employees;
+	private static final long serialVersionUID = 1L;
+	private List<Employee> employees;
 
-	public EmployeeTableModel(ArrayList<Employee> employees) {
+	public EmployeeTableModel(List<Employee> employees) {
 		super(new Object[] { "ID", "Name", "Role", "User Name" }, 0);
 		this.employees = employees;
 		for (Employee e : employees) {
