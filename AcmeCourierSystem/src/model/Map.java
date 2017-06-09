@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * a directed graph that holds the geographical area serviced by the company
@@ -10,7 +11,7 @@ public class Map {
 	/**
 	 * The array of intersections that are on the map
 	 */
-	private ArrayList<Intersection> intersections;
+	private HashMap<String, Intersection> intersections;
 	/**
 	 * The array of roads that exist between the intersections on the map
 	 */
@@ -25,11 +26,11 @@ public class Map {
 	 */
 	
 	public Map() {
-		intersections = new ArrayList<Intersection>();
+		intersections = new HashMap<String, Intersection>();
 		roads = new ArrayList<Road>();
 	}
 	
-	public Map(ArrayList<Intersection> intersections, ArrayList<Road> roads) {
+	public Map(HashMap<String, Intersection> intersections, ArrayList<Road> roads) {
 		this.intersections = intersections;
 		this.roads = roads;
 	}
@@ -38,11 +39,14 @@ public class Map {
 		return new Route(this, start, end);
 	}
 	
-	public ArrayList<Intersection> getIntersections() {
+	public HashMap<String, Intersection> getIntersections() {
 		return intersections;
 	}
+	public Intersection getIntersection(String name) {
+		return intersections.get(name);
+	}
 	public void addIntersection(Intersection intersection) {
-		intersections.add(intersection);
+		intersections.put(intersection.getName(), intersection);
 	}
 	public void removeIntersection(Intersection intersection) {
 		intersections.remove(intersection);

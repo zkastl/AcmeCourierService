@@ -1,7 +1,7 @@
 package model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Objects;
 
 /**
@@ -12,23 +12,23 @@ import java.util.Objects;
 public class Intersection implements Comparable<Intersection>{
 
 	/**
-	 * The name of the east-west street of an intersection
+	 * The name of the north-south street of an intersection
 	 */
 	private String street1;
 	/**
-	 * The name of the north-south street of an intersection
+	 * The name of the east-west street of an intersection
 	 */
 	private String street2;
 	/**
 	 * The first day of the most recent closure of the intersection, must be <=
 	 * closeEnd, initialize to 1/1/17
 	 */
-	private Calendar closeStart;
+	private LocalDate closeStart;
 	/**
 	 * the last day of the most recent closure of the intersection, must be >=
 	 * closeStart, initialize to 1/1/17
 	 */
-	private Calendar closeEnd;
+	private LocalDate closeEnd;
 	/**
 	 * an array of the roads that start at the intersection (the edges that
 	 * leave the node)
@@ -47,10 +47,8 @@ public class Intersection implements Comparable<Intersection>{
 	public Intersection(String s1, String s2) {
 		street1 = s1;
 		street2 = s2;
-		closeStart = Calendar.getInstance();
-		closeStart.set(2017, 1, 1);
-		closeEnd = Calendar.getInstance();
-		closeEnd.set(2017, 1, 1);
+		closeStart = LocalDate.of(2017, 1, 1);
+		closeEnd = LocalDate.of(2017, 1, 1);
 		roads = new ArrayList<Road>();
 		distance = 0;
 		previous = null;
@@ -60,17 +58,15 @@ public class Intersection implements Comparable<Intersection>{
 	public Intersection(String s1, String s2, ArrayList<Road> roads) {
 		street1 = s1;
 		street2 = s2;
-		closeStart = Calendar.getInstance();
-		closeStart.set(2017, 1, 1);
-		closeEnd = Calendar.getInstance();
-		closeEnd.set(2017, 1, 1);
+		closeStart = LocalDate.of(2017, 1, 1);
+		closeEnd = LocalDate.of(2017, 1, 1);
 		this.roads = roads;
 		distance = 0;
 		previous = null;
 		visited = false;
 	}
 	
-	public Intersection(String s1, String s2, ArrayList<Road> roads, Calendar closeStart, Calendar closeEnd) {
+	public Intersection(String s1, String s2, ArrayList<Road> roads, LocalDate closeStart, LocalDate closeEnd) {
 		street1 = s1;
 		street2 = s2;
 		this.closeStart = closeStart;
@@ -90,10 +86,10 @@ public class Intersection implements Comparable<Intersection>{
 	public String getName() {
 		return street1+street2;
 	}
-	public Calendar getCloseStart() {
+	public LocalDate getCloseStart() {
 		return closeStart;
 	}
-	public Calendar getCloseEnd() {
+	public LocalDate getCloseEnd() {
 		return closeEnd;
 	}
 	public ArrayList<Road> getRoads() {
@@ -125,9 +121,9 @@ public class Intersection implements Comparable<Intersection>{
 	 * returns true if closeEnd is in the past, or closeStart is in the future
 	 */
 	public boolean isOpen() {
-		Calendar today = Calendar.getInstance();
+		LocalDate today = LocalDate.now();
 		//today.setTime(new Date()); //shouldn't be necessary
-		if(today.before(closeStart) || today.after(closeEnd)) {
+		if(today.isBefore(closeStart) || today.isAfter(closeEnd)) {
 			return true;
 		}
 		return false;
@@ -140,9 +136,10 @@ public class Intersection implements Comparable<Intersection>{
 	 * @param start
 	 * @param end
 	 */
-	public void changeClosure(Calendar start, Calendar end) {
-		if(end.before(start)) {
+	public void changeClosure(LocalDate start, LocalDate end) {
+		if(end.isBefore(start)) {
 			//error message
+			System.out.println("closeEnd cannot be before closeStart");
 		} else {
 			closeStart = start;
 			closeEnd = end;

@@ -4,6 +4,7 @@ import java.awt.Toolkit;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -245,10 +246,7 @@ public class Application {
 		map.addIntersection(g7);
 		map.getRoute(a1, f1).print();
 		
-		Calendar c = Calendar.getInstance();
-		c.set(2017, 6, 7);
-		
-		b2.changeClosure(c, Calendar.getInstance()); //close it just for today
+		map.getIntersection(b2.getName()).changeClosure(LocalDate.of(2017, 6, 7), LocalDate.of(2017, 6, 9)); //must make changes to the intersection in the map, it is separate from the original lone intersection
 		map.getRoute(a1, f1).print();
 		
 		/*for(Character a = 'A'; a < 'H'; a++){

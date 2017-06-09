@@ -60,7 +60,7 @@ public class Route {
 		
 		// sanitize open nodes to make sure they are not affected by previous paths and add them to the unvisited set
 		Intersection prevFiller = new Intersection("-1", "stupid");
-		for(Intersection intersection : map.getIntersections()) {
+		for(Intersection intersection : map.getIntersections().values()) {
 			if(intersection.isOpen()) {
 				int maxLength = 0;
 				for(Road road : intersection.getRoads()){
@@ -80,17 +80,29 @@ public class Route {
 		
 		// find the shortest distance from start to end
 		while(!end.getVisited()) {
+			/*int count = 0; //output first 20 elements of the priority queue
+			for(Intersection i : unvisited) {
+				System.out.println(i.getName() + " " + i.getDistance());
+				count++;
+				if(count > 19) {
+					break;
+				}
+			}*/
 			Intersection current = unvisited.poll();
 			if(!current.getVisited()) {
 				for(Road edge : current.getRoads()) {
-					if(edge.getEnd().getDistance() > current.getDistance() + edge.getLength()) {
+					//System.out.println("checking " + edge.getName()); //output the current node being inspected
+					if(!edge.getEnd().getVisited() && (edge.getEnd().getDistance() > (current.getDistance() + edge.getLength()))) {
+						//System.out.println("old distance " + edge.getEnd().getDistance()); //output the old distance to the other node
 						edge.getEnd().setDistance(current.getDistance() + edge.getLength());
+						//System.out.println("new distance " + edge.getEnd().getDistance()); //output the new distance to the other node
 						edge.getEnd().setPrevious(current);
 						unvisited.add(edge.getEnd()); // help get around priority queues not resorting all the time
 					}
 				}
 				current.setVisited(true);
 			}
+			//System.out.println();  // put a line break between loops
 		}
 		
 		// build stack of steps to take
@@ -128,7 +140,7 @@ public class Route {
 	}
 
 	/**
-	 * outputs an easily to follow set of instructions on how to traverse the
+	 * outputs an easy to follow set of instructions on how to traverse the
 	 * route
 	 */
 	public void print() {
@@ -136,17 +148,24 @@ public class Route {
 		int distance = 0;
 		Road prevStep = steps.peek();
 		
-		for(Road step : steps) {
-			System.out.println(step.getDirection() + " " + step.getLength() + " on " + step.getName());
+		while(!steps.isEmpty()) {
+			Road step = steps.pop();
+			System.out.println(step.getDirection() + " " + step.getLength() + " blocks on " + step.getName()); //
 			
 			if(step.getDirection().compareTo(prevStep.getDirection()) == 0) {
 				distance = distance + step.getLength();
+				if(steps.isEmpty()) {
+					directions = directions + "go " + prevStep.getDirection() + " " + distance + " blocks on " + prevStep.getName() + "\n";
+				}
 			} else {
 				if(distance == 0) {
 					distance = prevStep.getLength();
 				}
-				directions = directions + "go " + prevStep.getDirection() + " " + distance + " on " + prevStep.getName() + "\n";
-				distance = 0;
+				directions = directions + "go " + prevStep.getDirection() + " " + distance + " blocks on " + prevStep.getName() + "\n";
+				distance = step.getLength();
+				if(steps.isEmpty()) {
+					directions = directions + "go " + step.getDirection() + " " + step.getLength() + " blocks on " + step.getName() + "\n";
+				}
 			}
 			
 			prevStep = step;
