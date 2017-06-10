@@ -10,7 +10,7 @@ import main.CourierSystem;
 import model.EmployeeRole;
 
 public class MainScreen extends Container {
-	
+
 	private static final long serialVersionUID = 1L;
 	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
 	private JFrame window;
@@ -22,7 +22,7 @@ public class MainScreen extends Container {
 		tabbedPane.addTab("Ticket Management", new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")),
 				new LogOutScreen(window, data));
 		tabbedPane.addTab("Client Management", new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")),
-				new LogOutScreen(window, data));
+				new ClientManagement(data));
 		tabbedPane.addTab("Report Management", new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")),
 				new LogOutScreen(window, data));
 		tabbedPane.addTab("Map Management", new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")),

@@ -7,7 +7,7 @@ import javax.swing.table.DefaultTableModel;
 import model.Employee;
 import model.EmployeeRole;
 
-public class EmployeeTableModel extends DefaultTableModel {
+public final class EmployeeTableModel extends DefaultTableModel {
 
 	private static final long serialVersionUID = 1L;
 	private List<Employee> employees;
@@ -42,7 +42,7 @@ public class EmployeeTableModel extends DefaultTableModel {
 		case 0:
 			return false;
 		default:
-			return employees.get(rowIndex).role == EmployeeRole.Administrator;
+			return true;
 		}
 	}
 

@@ -15,7 +15,8 @@ public class Map {
 	/**
 	 * The array of roads that exist between the intersections on the map
 	 */
-	private ArrayList<Road> roads; // TODO probably get rid of this since each Intersection tracks its own roads
+	private ArrayList<Road> roads; // TODO probably get rid of this since each
+									// Intersection tracks its own roads
 
 	/**
 	 * returns the route from the specified start intersection to the specified
@@ -24,44 +25,49 @@ public class Map {
 	 * @param start
 	 * @param end
 	 */
-	
+
 	public Map() {
 		intersections = new HashMap<String, Intersection>();
 		roads = new ArrayList<Road>();
 	}
-	
+
 	public Map(HashMap<String, Intersection> intersections, ArrayList<Road> roads) {
 		this.intersections = intersections;
 		this.roads = roads;
 	}
-	
+
 	public Route getRoute(Intersection start, Intersection end) {
 		return new Route(this, start, end);
 	}
-	
+
 	public HashMap<String, Intersection> getIntersections() {
 		return intersections;
 	}
+
 	public Intersection getIntersection(String name) {
 		return intersections.get(name);
 	}
+
 	public void addIntersection(Intersection intersection) {
-		intersections.put(intersection.getName(), intersection);
+		intersections.put(intersection.toString(), intersection);
 	}
+
 	public void removeIntersection(Intersection intersection) {
 		intersections.remove(intersection);
 	}
-	
+
 	public ArrayList<Road> getRoads() {
 		return roads;
 	}
+
 	public void addRoad(Road road) {
 		roads.add(road);
 	}
+
 	public void removeRoad(Road road) {
 		roads.remove(road);
 	}
-	
+
 	public void clear() {
 		intersections.clear();
 		roads.clear();

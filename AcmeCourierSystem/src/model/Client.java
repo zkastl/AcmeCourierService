@@ -5,6 +5,14 @@ package model;
  */
 public class Client {
 
+	public Client() {
+		address = new Intersection("", "");
+		name = "";
+		phoneNumber = "";
+		emailAddress = "";
+		dropoffInstructions = "";
+	}
+
 	/**
 	 * The name of the client
 	 */

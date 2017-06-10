@@ -1,16 +1,14 @@
 package main;
 
 import java.awt.Toolkit;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Calendar;
 
 import javax.swing.JFrame;
-import view.*;
-import model.*;
+
+import model.Intersection;
+import model.Map;
+import model.Road;
+import view.LogInScreen;
 
 @SuppressWarnings("unused")
 public class Application {
@@ -27,7 +25,7 @@ public class Application {
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		window.setVisible(true);
-		
+
 		// test map stuff
 		Map map = new Map();
 		Intersection a1 = new Intersection("A", "1");
@@ -37,7 +35,7 @@ public class Application {
 		Intersection a5 = new Intersection("A", "5");
 		Intersection a6 = new Intersection("A", "6");
 		Intersection a7 = new Intersection("A", "7");
-		
+
 		Intersection b1 = new Intersection("B", "1");
 		Intersection b2 = new Intersection("B", "2");
 		Intersection b3 = new Intersection("B", "3");
@@ -45,7 +43,7 @@ public class Application {
 		Intersection b5 = new Intersection("B", "5");
 		Intersection b6 = new Intersection("B", "6");
 		Intersection b7 = new Intersection("B", "7");
-		
+
 		Intersection c1 = new Intersection("C", "1");
 		Intersection c2 = new Intersection("C", "2");
 		Intersection c3 = new Intersection("C", "3");
@@ -53,7 +51,7 @@ public class Application {
 		Intersection c5 = new Intersection("C", "5");
 		Intersection c6 = new Intersection("C", "6");
 		Intersection c7 = new Intersection("C", "7");
-		
+
 		Intersection d1 = new Intersection("D", "1");
 		Intersection d2 = new Intersection("D", "2");
 		Intersection d3 = new Intersection("D", "3");
@@ -61,7 +59,7 @@ public class Application {
 		Intersection d5 = new Intersection("D", "5");
 		Intersection d6 = new Intersection("D", "6");
 		Intersection d7 = new Intersection("D", "7");
-		
+
 		Intersection e1 = new Intersection("E", "1");
 		Intersection e2 = new Intersection("E", "2");
 		Intersection e3 = new Intersection("E", "3");
@@ -69,7 +67,7 @@ public class Application {
 		Intersection e5 = new Intersection("E", "5");
 		Intersection e6 = new Intersection("E", "6");
 		Intersection e7 = new Intersection("E", "7");
-		
+
 		Intersection f1 = new Intersection("F", "1");
 		Intersection f2 = new Intersection("F", "2");
 		Intersection f3 = new Intersection("F", "3");
@@ -77,7 +75,7 @@ public class Application {
 		Intersection f5 = new Intersection("F", "5");
 		Intersection f6 = new Intersection("F", "6");
 		Intersection f7 = new Intersection("F", "7");
-		
+
 		Intersection g1 = new Intersection("G", "1");
 		Intersection g2 = new Intersection("G", "2");
 		Intersection g3 = new Intersection("G", "3");
@@ -85,7 +83,7 @@ public class Application {
 		Intersection g5 = new Intersection("G", "5");
 		Intersection g6 = new Intersection("G", "6");
 		Intersection g7 = new Intersection("G", "7");
-		
+
 		a1.addRoad(new Road(a1, a2, "South"));
 		a2.addRoad(new Road(a2, b2, "East"));
 		a2.addRoad(new Road(a2, a3, "South"));
@@ -95,7 +93,7 @@ public class Application {
 		a5.addRoad(new Road(a5, a6, "South"));
 		a6.addRoad(new Road(a6, b6, "East"));
 		a6.addRoad(new Road(a6, a7, "South"));
-		
+
 		b1.addRoad(new Road(b1, a1, "West"));
 		b2.addRoad(new Road(b2, b1, "North"));
 		b2.addRoad(new Road(b2, c2, "East"));
@@ -111,7 +109,7 @@ public class Application {
 		b6.addRoad(new Road(b6, a6, "West"));
 		b7.addRoad(new Road(b7, b6, "North"));
 		b7.addRoad(new Road(b7, a7, "West"));
-		
+
 		c1.addRoad(new Road(c1, c2, "South"));
 		c1.addRoad(new Road(c1, b1, "West"));
 		c2.addRoad(new Road(c2, d2, "East"));
@@ -127,7 +125,7 @@ public class Application {
 		c6.addRoad(new Road(c6, c7, "South"));
 		c6.addRoad(new Road(c6, b6, "West"));
 		c7.addRoad(new Road(c7, b7, "West"));
-		
+
 		d1.addRoad(new Road(d1, d2, "South"));
 		d1.addRoad(new Road(d1, c1, "West"));
 		d2.addRoad(new Road(d2, d1, "North"));
@@ -149,7 +147,7 @@ public class Application {
 		d6.addRoad(new Road(d6, c6, "West"));
 		d7.addRoad(new Road(d7, d6, "North"));
 		d7.addRoad(new Road(d7, c7, "West"));
-		
+
 		e1.addRoad(new Road(e1, e2, "South"));
 		e1.addRoad(new Road(e1, d1, "West"));
 		e2.addRoad(new Road(e2, f2, "East"));
@@ -165,7 +163,7 @@ public class Application {
 		e6.addRoad(new Road(e6, e7, "South"));
 		e6.addRoad(new Road(e6, d6, "West"));
 		e7.addRoad(new Road(e7, d7, "West"));
-		
+
 		f1.addRoad(new Road(f1, e1, "West"));
 		f2.addRoad(new Road(f2, f1, "North"));
 		f2.addRoad(new Road(f2, g2, "East"));
@@ -181,7 +179,7 @@ public class Application {
 		f6.addRoad(new Road(f6, e6, "West"));
 		f7.addRoad(new Road(f7, f6, "North"));
 		f7.addRoad(new Road(f7, e7, "West"));
-		
+
 		g1.addRoad(new Road(g1, g2, "South"));
 		g1.addRoad(new Road(g1, f1, "West"));
 		g2.addRoad(new Road(g2, g3, "South"));
@@ -194,7 +192,7 @@ public class Application {
 		g6.addRoad(new Road(g6, g7, "South"));
 		g6.addRoad(new Road(g6, f6, "West"));
 		g7.addRoad(new Road(g7, f7, "West"));
-		
+
 		map.addIntersection(a1);
 		map.addIntersection(a2);
 		map.addIntersection(a3);
@@ -245,17 +243,17 @@ public class Application {
 		map.addIntersection(g6);
 		map.addIntersection(g7);
 		map.getRoute(a1, f1).print();
-		
-		map.getIntersection(b2.getName()).changeClosure(LocalDate.of(2017, 6, 7), LocalDate.of(2017, 6, 9)); //must make changes to the intersection in the map, it is separate from the original lone intersection
+
+		// must make changes to the intersection in the map, it is separate from
+		// the original lone intersection
+		map.getIntersection(b2.toString()).changeClosure(LocalDate.of(2017, 6, 7), LocalDate.of(2017, 6, 9));
 		map.getRoute(a1, f1).print();
-		
-		/*for(Character a = 'A'; a < 'H'; a++){
-			for(Integer i = 1; i < 8; i++) {
-				Intersection intersection = new Intersection(a.toString(), i.toString());
-				map.addIntersection(intersection);
-				System.out.print(intersection.getName());
-			}
-			System.out.println();
-		}*/
+
+		/*
+		 * for(Character a = 'A'; a < 'H'; a++){ for(Integer i = 1; i < 8; i++)
+		 * { Intersection intersection = new Intersection(a.toString(),
+		 * i.toString()); map.addIntersection(intersection);
+		 * System.out.print(intersection.getName()); } System.out.println(); }
+		 */
 	}
 }
