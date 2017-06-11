@@ -12,10 +12,10 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.table.TableCellEditor;
 
 import controller.EnterKeyListenerForButtons;
 import controller.MandatoryStringCellEditor;
+import controller.TableValidator;
 import controller.UsernameCellEditor;
 import main.CourierSystem;
 import model.Employee;
@@ -67,7 +67,7 @@ public class EmployeeManagement extends Container {
 
 		btnAddEmployee.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (!isValid(table))
+				if (!TableValidator.isValid(table))
 					return;
 
 				employeeTable.addRow(new Employee());
@@ -91,7 +91,7 @@ public class EmployeeManagement extends Container {
 
 		btnSaveChanges.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (!isValid(table))
+				if (!TableValidator.isValid(table))
 					return;
 
 				try {
@@ -105,25 +105,5 @@ public class EmployeeManagement extends Container {
 				}
 			}
 		});
-	}
-
-	private static boolean isValid(JTable table) {
-		TableCellEditor editor = table.getCellEditor();
-		// check currently selected cell (if any) is valid
-		if (editor != null && !table.getCellEditor().stopCellEditing()) {
-			return false;
-		}
-
-		// check lastRow is valid
-		int lastRow = table.getRowCount() - 1;
-		for (int i = 0; i < table.getColumnCount(); i++) {
-			table.changeSelection(lastRow, i, false, false);
-			if (table.editCellAt(lastRow, i))
-				editor = table.getCellEditor(lastRow, i);
-			if (editor != null && !editor.stopCellEditing())
-				return false;
-		}
-
-		return true;
 	}
 }

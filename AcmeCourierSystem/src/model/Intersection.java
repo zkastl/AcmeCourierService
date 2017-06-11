@@ -204,4 +204,12 @@ public class Intersection implements Comparable<Intersection> {
 		return Objects.hash(street, avenue, roads);
 	}
 
+	public void setAve(String ave) {
+		avenue = ave;
+	}
+
+	public void setStreet(String st) {
+		street = st;
+	}
+
 }
