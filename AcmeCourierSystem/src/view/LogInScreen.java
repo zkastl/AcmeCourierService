@@ -87,9 +87,9 @@ public class LogInScreen extends Container {
 
 	private boolean AttemptLogin(JFrame window, String username, String password) {
 		for (Employee e : data.Employees) {
-			if (e.userName.equals(username) && e.password.equals(password)) {
+			if (e.userName.equalsIgnoreCase(username) && e.password.equals(password)) {
 				data.currentUser = e;
-				
+
 				window.setLocation(screenSize.width / 6, 0);
 				window.setSize(screenSize.width * 2 / 3, screenSize.height);
 				window.setContentPane(new MainScreen(window, data));

@@ -1,23 +1,27 @@
 package view;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.table.DefaultTableModel;
 
+import main.CourierSystem;
 import model.Employee;
 import model.EmployeeRole;
 
 public final class EmployeeTableModel extends DefaultTableModel {
 
 	private static final long serialVersionUID = 1L;
-	public List<Employee> employees;
+	public List<Employee> employees = new ArrayList<Employee>();
 
-	public EmployeeTableModel(List<Employee> employees) {
+	public EmployeeTableModel() {
 		super(new Object[] { "ID", "Name", "Role", "User Name" }, 0);
-		this.employees = employees;
-		for (Employee e : employees) {
-			if (!e.getIsArchived())
+
+		for (Employee e : CourierSystem.Employees) {
+			if (!e.getIsArchived()) {
 				super.addRow(new Object[] { e.id, e.name, e.role, e.userName });
+				employees.add(e);
+			}
 		}
 	}
 
@@ -42,8 +46,20 @@ public final class EmployeeTableModel extends DefaultTableModel {
 		switch (columnIndex) {
 		case 0:
 			return false;
+		case 3:
+			return employees.get(rowIndex).role != EmployeeRole.Courier;
 		default:
 			return true;
+		}
+	}
+
+	@Override
+	public Object getValueAt(int row, int column) {
+		switch (column) {
+		case 0:
+			return employees.get(row).id;
+		default:
+			return super.getValueAt(row, column);
 		}
 	}
 
@@ -69,7 +85,7 @@ public final class EmployeeTableModel extends DefaultTableModel {
 		super.addRow(new Object[] { employee.id, employee.name, employee.role, employee.userName });
 		employees.add(employee);
 	}
-	
+
 	public void removeRow(int rowNumber) {
 		super.removeRow(rowNumber);
 		employees.remove(rowNumber);

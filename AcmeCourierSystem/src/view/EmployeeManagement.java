@@ -11,20 +11,23 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.TableCellEditor;
 
-import main.CourierSystem;
 import controller.EnterKeyListenerForButtons;
+import controller.UsernameCellEditor;
+import main.CourierSystem;
 import model.Employee;
 import model.EmployeeRole;
 import net.miginfocom.swing.MigLayout;
 
 public class EmployeeManagement extends Container {
-		
+
 	private static final long serialVersionUID = 1L;
 	private JTable table;
 
 	public EmployeeManagement() {
-		EmployeeTableModel employeeTable = new EmployeeTableModel(CourierSystem.Employees);
+		EmployeeTableModel employeeTable = new EmployeeTableModel();
 		setLayout(new MigLayout("", "[grow][50%][grow][10]", "[25][40][5][grow][][20]"));
 
 		JLabel lblEmployeeManagement = new JLabel("Employee Management");
@@ -49,6 +52,8 @@ public class EmployeeManagement extends Container {
 		table.setCellSelectionEnabled(true);
 		scrollPane.setViewportView(table);
 		table.setColumnSelectionAllowed(true);
+		table.getColumnModel().getColumn(3)
+				.setCellEditor(new UsernameCellEditor(new JTextField(), employeeTable.employees));
 
 		JComboBox<EmployeeRole> roleComboBox = new JComboBox<EmployeeRole>();
 		roleComboBox.addItem(EmployeeRole.Administrator);
@@ -61,33 +66,63 @@ public class EmployeeManagement extends Container {
 
 		btnAddEmployee.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (!isValid(table))
+					return;
+
 				employeeTable.addRow(new Employee());
 			}
 		});
 
 		btnRemoveEmployee.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (table.getCellEditor() != null)
+					table.getCellEditor().cancelCellEditing();
+
 				int selectedRow = table.getSelectedRow();
 				System.out.println("Selected Row: " + selectedRow);
-				employeeTable.employees.get(selectedRow).ArchiveEmployee();
+				Employee employee = employeeTable.employees.get(selectedRow);
+				if (employee.id != 0) {
+					employee.ArchiveEmployee();
+				}
 				employeeTable.removeRow(selectedRow);
 			}
 		});
 
 		btnSaveChanges.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (!isValid(table))
+					return;
+
 				try {
 					CourierSystem.Employees = employeeTable.employees;
 					CourierSystem.UpdateEmployees();
-				} 
-				catch (Exception e1) {
+				} catch (Exception e1) {
 					e1.printStackTrace();
-				}
-				finally {
+				} finally {
 					employeeTable.employees = CourierSystem.Employees;
 					employeeTable.fireTableRowsUpdated(0, table.getRowCount());
 				}
 			}
 		});
+	}
+
+	private static boolean isValid(JTable table) {
+		TableCellEditor editor = table.getCellEditor();
+		// check currently selected cell (if any) is valid
+		if (editor != null && !table.getCellEditor().stopCellEditing()) {
+			return false;
+		}
+
+		// check lastRow is valid
+		int lastRow = table.getRowCount() - 1;
+		for (int i = 0; i < table.getColumnCount(); i++) {
+			table.changeSelection(lastRow, i, false, false);
+			if (table.editCellAt(lastRow, i))
+				editor = table.getCellEditor(lastRow, i);
+			if (editor != null && !editor.stopCellEditing())
+				return false;
+		}
+
+		return true;
 	}
 }
