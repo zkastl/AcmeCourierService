@@ -15,6 +15,7 @@ import javax.swing.JTextField;
 import javax.swing.table.TableCellEditor;
 
 import controller.EnterKeyListenerForButtons;
+import controller.MandatoryStringCellEditor;
 import controller.UsernameCellEditor;
 import main.CourierSystem;
 import model.Employee;
@@ -52,8 +53,8 @@ public class EmployeeManagement extends Container {
 		table.setCellSelectionEnabled(true);
 		scrollPane.setViewportView(table);
 		table.setColumnSelectionAllowed(true);
-		table.getColumnModel().getColumn(3)
-				.setCellEditor(new UsernameCellEditor(new JTextField(), employeeTable.employees));
+		table.getColumnModel().getColumn(1).setCellEditor(new MandatoryStringCellEditor(new JTextField()));
+		table.getColumnModel().getColumn(3).setCellEditor(new UsernameCellEditor(new JTextField()));
 
 		JComboBox<EmployeeRole> roleComboBox = new JComboBox<EmployeeRole>();
 		roleComboBox.addItem(EmployeeRole.Administrator);

@@ -1,7 +1,5 @@
 package controller;
 
-import java.util.List;
-
 import javax.swing.DefaultCellEditor;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -9,22 +7,20 @@ import javax.swing.JTextField;
 
 import main.CourierSystem;
 import model.Employee;
+import view.EmployeeTableModel;
 
 public class UsernameCellEditor extends DefaultCellEditor {
 
-	List<Employee> employees;
-
-	public UsernameCellEditor(JTextField textField, List<Employee> employees) {
+	public UsernameCellEditor(JTextField textField) {
 		super(textField);
-
-		this.employees = employees;
 	}
 
 	@Override
 	public boolean stopCellEditing() {
 
-		int employeeIndex = ((JTable) getComponent().getParent()).getSelectedRow();
-		Employee selectedEmployee = employees.get(employeeIndex);
+		JTable table = (JTable) getComponent().getParent();
+		int employeeIndex = table.getSelectedRow();
+		Employee selectedEmployee = ((EmployeeTableModel) table.getModel()).employees.get(employeeIndex);
 
 		if (getCellEditorValue().equals("")) {
 			JOptionPane.showMessageDialog(getComponent(), "Invalid entry in row " + (employeeIndex + 1) + ". "
