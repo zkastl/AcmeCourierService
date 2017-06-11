@@ -41,7 +41,7 @@ public class EmployeeManagement extends Container {
 
 		JButton btnRemoveEmployee = new JButton("Remove Employee");
 		add(btnRemoveEmployee, "cell 1 1,alignx center");
-		btnRemoveEmployee.addKeyListener(new EnterKeyListenerForButtons(btnAddEmployee));
+		btnRemoveEmployee.addKeyListener(new EnterKeyListenerForButtons(btnRemoveEmployee));
 
 		JButton btnSaveChanges = new JButton("Save Changes");
 		add(btnSaveChanges, "cell 2 1");
@@ -100,8 +100,7 @@ public class EmployeeManagement extends Container {
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				} finally {
-					employeeTable.employees = CourierSystem.Employees;
-					employeeTable.fireTableRowsUpdated(0, table.getRowCount());
+					employeeTable.refresh();
 				}
 			}
 		});

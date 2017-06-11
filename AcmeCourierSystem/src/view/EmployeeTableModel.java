@@ -91,4 +91,13 @@ public final class EmployeeTableModel extends DefaultTableModel {
 		employees.remove(rowNumber);
 	}
 
+	public void refresh() {
+		employees.clear();
+		for (Employee e : CourierSystem.Employees) {
+			if (!e.getIsArchived())
+				employees.add(e);
+		}
+		fireTableRowsUpdated(0, employees.size() - 1);
+	}
+
 }
