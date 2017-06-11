@@ -16,10 +16,10 @@ public final class ClientTableModel extends DefaultTableModel {
 	private List<Client> clients;
 	private Map map;
 
-	public ClientTableModel(CourierSystem data) {
+	public ClientTableModel() {
 		super(new Object[] { "ID", "Name", "Phone #", "Street", "Ave", "Instructions", "Email Address" }, 0);
-		this.clients = data.Clients;
-		this.map = data.CityMap;
+		this.clients = CourierSystem.Clients;
+		this.map = CourierSystem.CityMap;
 
 		if (clients == null)
 			clients = new ArrayList<Client>();

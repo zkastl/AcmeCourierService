@@ -29,10 +29,8 @@ public class LogInScreen extends Container {
 	private static JTextField txtUsername;
 	private static JTextField txtPassword;
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	private CourierSystem data;
 
-	public LogInScreen(JFrame window, CourierSystem data) {
-		this.data = data;
+	public LogInScreen(JFrame window) {
 
 		window.setLocation(screenSize.width / 3, screenSize.height / 4);
 		window.setSize(screenSize.width / 3, screenSize.height / 2);
@@ -86,13 +84,13 @@ public class LogInScreen extends Container {
 	}
 
 	private boolean AttemptLogin(JFrame window, String username, String password) {
-		for (Employee e : data.Employees) {
+		for (Employee e : CourierSystem.Employees) {
 			if (e.userName.equalsIgnoreCase(username) && e.password.equals(password)) {
-				data.currentUser = e;
+				CourierSystem.currentUser = e;
 
 				window.setLocation(screenSize.width / 6, 0);
 				window.setSize(screenSize.width * 2 / 3, screenSize.height);
-				window.setContentPane(new MainScreen(window, data));
+				window.setContentPane(new MainScreen(window));
 				window.validate();
 				return true;
 			} else {

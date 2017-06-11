@@ -13,28 +13,28 @@ public class MainScreen extends Container {
 	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
 	private JFrame window;
 
-	public MainScreen(JFrame window, CourierSystem data) {
+	public MainScreen(JFrame window) {
 		this.window = window;
 		tabbedPane.setBounds(0, 0, window.getWidth(), window.getHeight());
 		add(tabbedPane);
 		tabbedPane.addTab("Ticket Management", new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")),
-				new LogOutScreen(window, data));
+				new LogOutScreen(window));
 		tabbedPane.addTab("Client Management", new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")),
-				new ClientManagement(data));
+				new ClientManagement());
 		tabbedPane.addTab("Report Management", new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")),
-				new LogOutScreen(window, data));
+				new LogOutScreen(window));
 		tabbedPane.addTab("Map Management", new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")),
-				new LogOutScreen(window, data));
-		if (data.currentUser.role == EmployeeRole.Administrator)
+				new LogOutScreen(window));
+		if (CourierSystem.currentUser.role == EmployeeRole.Administrator)
 			tabbedPane.addTab("Employee Management",
 					new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")), new EmployeeManagement());
-		if (data.currentUser.role == EmployeeRole.Administrator)
+		if (CourierSystem.currentUser.role == EmployeeRole.Administrator)
 			tabbedPane.addTab("System Settings", new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")),
-					new LogOutScreen(window, data));
+					new LogOutScreen(window));
 		tabbedPane.addTab("Change Password", new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")),
-				new LogOutScreen(window, data));
+				new LogOutScreen(window));
 		tabbedPane.addTab("Logout", new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")),
-				new LogOutScreen(window, data));
+				new LogOutScreen(window));
 		
 		/*tabbedPane.addChangeListener(new ChangeListener() {
 			@Override

@@ -19,38 +19,40 @@ package main;
 import model.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 
-public final class CourierSystem {
+public final class CourierSystem implements Serializable {
 	
+		
 	public static List<Employee> Employees;
-	public List<Courier> Couriers;
-	public List<Client> Clients;
-	public List<Delivery> Deliveries;
-	public Map CityMap;
-	public Settings SystemSettings;
-	public Employee currentUser;
+	public static List<Courier> Couriers;
+	public static List<Client> Clients;
+	public static List<Delivery> Deliveries;
+	public static Map CityMap;
+	public static Settings SystemSettings;
+	public static Employee currentUser;
 	
+	private static final long serialVersionUID = -3114878375152548283L;
 	private static EntityManagerFactory factory;
 	private static EntityManager em;
 	
-	public void InitializeCourierSystem() throws Exception {
+	public static void InitializeCourierSystem() throws Exception {
 		
 		// Load the database.
 		factory = Persistence.createEntityManagerFactory("entities");
 		em = factory.createEntityManager();
 		
 		LoadEmployees();
-		LoadCouriers();
+		//LoadCouriers();
 		LoadClients();
-		LoadDeliveries();
+		//LoadDeliveries();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -59,7 +61,7 @@ public final class CourierSystem {
 		// Load the employee table
 		// If tables is empty, create default employee.
 		try {
-			Query eQuery = em.createQuery("SELECT e FROM Employee e", Employee.class);
+			Query eQuery = em.createQuery("SELECT e FROM Employees e", Employee.class);
 			Employees = eQuery.getResultList();
 		}
 		catch(Exception ex) {
@@ -99,13 +101,30 @@ public final class CourierSystem {
 		trans.commit();
 	}
 	
+	@SuppressWarnings("unchecked")
+	public static void LoadClients() throws Exception {
+		try {
+			Query eQuery = em.createQuery("SELECT c FROM Clients c", Client.class);
+			Employees = eQuery.getResultList();
+		}
+		catch(Exception ex) {
+			System.out.println(ex.getStackTrace());
+		}
+		if (Clients == null) {
+			Clients = new ArrayList<Client>();
+		}
+	}
+	
+	public static void UpdateClients() throws Exception {		
+	}
+	
+	public static void SaveClient(Client c) throws Exception {		
+	}
+	
+	public static void RemoveClient(Client c) throws Exception {		
+	}
+	
 	public void SaveDeliveries() throws FileNotFoundException, IOException {
-	}
-	
-	public void SaveClients() throws FileNotFoundException, IOException {
-	}
-	
-	public void SaveCouriers() throws FileNotFoundException, IOException {
 	}
 
 	public void LoadDeliveries() throws IOException {
@@ -113,14 +132,14 @@ public final class CourierSystem {
 			Deliveries = new ArrayList<Delivery>();
 		}
 	}
-	
-	public void LoadClients() throws IOException {
-	}
 
 	public void LoadCouriers() throws IOException {
-	}	
+	}
 	
-	public CourierSystem() throws Exception {
+	public void SaveCouriers() throws FileNotFoundException, IOException {
+	}
+	
+	private CourierSystem() throws Exception {
 		InitializeCourierSystem();
 	};
 }

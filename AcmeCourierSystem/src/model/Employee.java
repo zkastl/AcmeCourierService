@@ -2,21 +2,11 @@ package model;
 
 import java.io.Serializable;
 import java.util.Random;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
+import javax.persistence.*;
 import com.sun.istack.internal.NotNull;
 
 @Entity
-@Table(name = "Employee")
+@Table(name="Employees")
 public class Employee implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -25,8 +15,8 @@ public class Employee implements Serializable {
 	private static Random rnd = new Random();;
 
 	@Id
-	@Column(name = "ID")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="ID")
+	@GeneratedValue (strategy = GenerationType.IDENTITY)
 	public long id;
 
 	@NotNull

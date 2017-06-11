@@ -1,13 +1,18 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * All the information associated with delivering a package from one client to
  * another.
  */
-public class Delivery {
+public class Delivery implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	/**
 	 * The time the delivery was created.
 	 */
