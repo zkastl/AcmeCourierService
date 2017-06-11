@@ -10,7 +10,6 @@ import model.Map;
 import model.Road;
 import view.LogInScreen;
 
-@SuppressWarnings("unused")
 public class Application {
 
 	public static void main(String[] args) throws Exception {

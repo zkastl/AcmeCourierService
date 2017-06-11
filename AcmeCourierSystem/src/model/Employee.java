@@ -1,7 +1,7 @@
 package model;
 
 import java.io.Serializable;
-
+import java.util.Random;
 import javax.persistence.*;
 import com.sun.istack.internal.NotNull;
 
@@ -10,6 +10,9 @@ import com.sun.istack.internal.NotNull;
 public class Employee implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
+	
+	@Transient
+	private static Random rnd = new Random();;
 	
 	@Id
 	@Column(name="ID")
@@ -40,6 +43,13 @@ public class Employee implements Serializable {
 	}
 
 	public Employee() {
+		this.name = "";
+		this.role = EmployeeRole.OrderTaker;
+		this.userName = String.valueOf(rnd.nextLong());
+		this.password = "password";
+	}
+	
+	public Employee(String userName) {
 		this.name = "Administrator";
 		this.role = EmployeeRole.Administrator;
 		this.userName = "Admin";
@@ -48,6 +58,10 @@ public class Employee implements Serializable {
 	
 	public void ArchiveEmployee() {
 		isArchived = true;
+	}
+	
+	public boolean getIsArchived() {
+		return isArchived;
 	}
 	
 	

@@ -30,7 +30,7 @@ import javax.persistence.Persistence;
 
 public final class CourierSystem {
 	
-	public List<Employee> Employees;
+	public static List<Employee> Employees;
 	public List<Courier> Couriers;
 	public List<Client> Clients;
 	public List<Delivery> Deliveries;
@@ -53,20 +53,8 @@ public final class CourierSystem {
 		LoadDeliveries();
 	}
 
-	public void LoadDeliveries() throws IOException {
-		if(Deliveries == null) {
-			Deliveries = new ArrayList<Delivery>();
-		}
-	}
-	
-	public void LoadClients() throws IOException {
-	}
-
-	public void LoadCouriers() throws IOException {
-	}
-
 	@SuppressWarnings("unchecked")
-	public void LoadEmployees() throws Exception {
+	public static void LoadEmployees() throws Exception {
 		
 		// Load the employee table
 		// If tables is empty, create default employee.
@@ -81,11 +69,34 @@ public final class CourierSystem {
 			Employees = new ArrayList<Employee>();
 		}
 		if (Employees.size() == 0) {
-			Employees.add(new Employee());
+			Employees.add(new Employee("Admin"));
 		}
-		
-		// Save employees to database before application operations.
-		SaveEmployees();
+	}
+	
+	public static void UpdateEmployees() throws Exception {
+		EntityTransaction trans = em.getTransaction();
+		trans.begin();
+		for (Employee e : Employees) {
+			em.persist(e);
+		}
+		trans.commit();
+		LoadEmployees();
+	}
+	
+	public static void SaveEmployee(Employee e) throws Exception {
+		EntityTransaction trans = em.getTransaction();		
+		trans.begin();		
+		em.merge(e);
+		trans.commit();
+		LoadEmployees();
+	}
+	
+	public static void RemoveEmployee(Employee e) throws Exception {
+		EntityTransaction trans = em.getTransaction();
+		trans.begin();
+		em.remove(e);
+		Employees.remove(e);
+		trans.commit();
 	}
 	
 	public void SaveDeliveries() throws FileNotFoundException, IOException {
@@ -96,18 +107,18 @@ public final class CourierSystem {
 	
 	public void SaveCouriers() throws FileNotFoundException, IOException {
 	}
-	
-	public void SaveEmployees() throws Exception {
-		EntityTransaction trans = em.getTransaction();
-		
-		List<Employee> savedEmployees = em.createQuery("SELECT e FROM Employee e", Employee.class).getResultList();
-		
-		trans.begin();
-		for(Employee e : Employees) {
-			em.persist(e);
+
+	public void LoadDeliveries() throws IOException {
+		if(Deliveries == null) {
+			Deliveries = new ArrayList<Delivery>();
 		}
-		trans.commit();
 	}
+	
+	public void LoadClients() throws IOException {
+	}
+
+	public void LoadCouriers() throws IOException {
+	}	
 	
 	public CourierSystem() throws Exception {
 		InitializeCourierSystem();

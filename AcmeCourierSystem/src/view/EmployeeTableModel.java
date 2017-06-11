@@ -10,13 +10,14 @@ import model.EmployeeRole;
 public final class EmployeeTableModel extends DefaultTableModel {
 
 	private static final long serialVersionUID = 1L;
-	private List<Employee> employees;
+	public List<Employee> employees;
 
 	public EmployeeTableModel(List<Employee> employees) {
 		super(new Object[] { "ID", "Name", "Role", "User Name" }, 0);
 		this.employees = employees;
 		for (Employee e : employees) {
-			super.addRow(new Object[] { e.id, e.name, e.role, e.userName });
+			if (!e.getIsArchived())
+				super.addRow(new Object[] { e.id, e.name, e.role, e.userName });
 		}
 	}
 
@@ -67,6 +68,11 @@ public final class EmployeeTableModel extends DefaultTableModel {
 	public void addRow(Employee employee) {
 		super.addRow(new Object[] { employee.id, employee.name, employee.role, employee.userName });
 		employees.add(employee);
+	}
+	
+	public void removeRow(int rowNumber) {
+		super.removeRow(rowNumber);
+		employees.remove(rowNumber);
 	}
 
 }

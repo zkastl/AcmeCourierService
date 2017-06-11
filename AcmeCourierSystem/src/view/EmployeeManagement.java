@@ -23,8 +23,8 @@ public class EmployeeManagement extends Container {
 	private static final long serialVersionUID = 1L;
 	private JTable table;
 
-	public EmployeeManagement(CourierSystem data) {
-		EmployeeTableModel employeeTable = new EmployeeTableModel(data.Employees);
+	public EmployeeManagement() {
+		EmployeeTableModel employeeTable = new EmployeeTableModel(CourierSystem.Employees);
 		setLayout(new MigLayout("", "[grow][50%][grow][10]", "[25][40][5][grow][][20]"));
 
 		JLabel lblEmployeeManagement = new JLabel("Employee Management");
@@ -67,17 +67,25 @@ public class EmployeeManagement extends Container {
 
 		btnRemoveEmployee.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				employeeTable.removeRow(table.getSelectedRow());
-				data.Employees.remove(table.getSelectedRow());
+				int selectedRow = table.getSelectedRow();
+				System.out.println("Selected Row: " + selectedRow);
+				employeeTable.employees.get(selectedRow).ArchiveEmployee();
+				employeeTable.removeRow(selectedRow);
 			}
 		});
 
 		btnSaveChanges.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					data.SaveEmployees();
-				} catch (Exception e1) {
+					CourierSystem.Employees = employeeTable.employees;
+					CourierSystem.UpdateEmployees();
+				} 
+				catch (Exception e1) {
 					e1.printStackTrace();
+				}
+				finally {
+					employeeTable.employees = CourierSystem.Employees;
+					employeeTable.fireTableRowsUpdated(0, table.getRowCount());
 				}
 			}
 		});

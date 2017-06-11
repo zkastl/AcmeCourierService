@@ -1,11 +1,9 @@
 package view;
 
 import java.awt.Container;
-
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
-
 import main.CourierSystem;
 import model.EmployeeRole;
 
@@ -29,7 +27,7 @@ public class MainScreen extends Container {
 				new LogOutScreen(window, data));
 		if (data.currentUser.role == EmployeeRole.Administrator)
 			tabbedPane.addTab("Employee Management",
-					new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")), new EmployeeManagement(data));
+					new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")), new EmployeeManagement());
 		if (data.currentUser.role == EmployeeRole.Administrator)
 			tabbedPane.addTab("System Settings", new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")),
 					new LogOutScreen(window, data));
@@ -37,6 +35,20 @@ public class MainScreen extends Container {
 				new LogOutScreen(window, data));
 		tabbedPane.addTab("Logout", new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")),
 				new LogOutScreen(window, data));
+		
+		/*tabbedPane.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				if (e.getSource() instanceof JTabbedPane) {
+					JTabbedPane pane = (JTabbedPane)e.getSource();
+					switch(pane.getTitleAt(pane.getSelectedIndex())){
+					case "Employee":
+						
+					}
+				}
+			}
+		});*/
+		
 	}
 
 	@Override
