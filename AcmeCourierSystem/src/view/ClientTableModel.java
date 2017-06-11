@@ -18,9 +18,11 @@ public final class ClientTableModel extends DefaultTableModel {
 		clients = new ArrayList<Client>();
 
 		for (Client c : CourierSystem.Clients) {
-			super.addRow(new Object[] { c.clientID, c.name, c.phoneNumber, c.address.getStreet(), c.address.getAve(),
-					c.dropoffInstructions, c.emailAddress });
-			clients.add(c);
+			if (!c.getIsArchived()) {
+				super.addRow(new Object[] { c.clientID, c.name, c.phoneNumber, c.address.getStreet(),
+						c.address.getAve(), c.dropoffInstructions, c.emailAddress });
+				clients.add(c);
+			}
 		}
 	}
 
@@ -76,6 +78,15 @@ public final class ClientTableModel extends DefaultTableModel {
 		super.addRow(new Object[] { client.clientID, client.name, client.phoneNumber, client.address.getStreet(),
 				client.address.getAve(), client.dropoffInstructions, client.emailAddress });
 		clients.add(client);
+	}
+
+	public void refresh() {
+		clients.clear();
+		for (Client c : CourierSystem.Clients) {
+			if (!c.getIsArchived())
+				clients.add(c);
+		}
+		fireTableRowsUpdated(0, clients.size() - 1);
 	}
 
 }

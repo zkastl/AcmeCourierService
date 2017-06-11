@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -32,32 +33,32 @@ public class Delivery implements Serializable {
 	/**
 	 * The time the package is supposed to be picked up.
 	 */
-	public Date requestedPickupTime;
+	public LocalDate requestedPickupTime;
 	/**
 	 * The estimated time at which the package will be delivered to the client
 	 */
-	public Date estimatedDeliveryTime;
+	public LocalDate estimatedDeliveryTime;
 	/**
 	 * The time at which the courier should leave in order to pick up the
 	 * package at the requested time.
 	 */
-	public Date calculatedDepartureTime;
+	public LocalDate calculatedDepartureTime;
 	/**
 	 * The time the courier actually left to go pick up the package
 	 */
-	public Date actualDepartureTime;
+	public LocalDate actualDepartureTime;
 	/**
 	 * The time at which the courier actually picked up the package
 	 */
-	public Date actualPickupTime;
+	public LocalDate actualPickupTime;
 	/**
 	 * The time at which the courier actually delivered the package
 	 */
-	public Date actualDeliveryTime;
+	public LocalDate actualDeliveryTime;
 	/**
 	 * The time at which the courier returned to the company
 	 */
-	public Date actualReturnTime;
+	public LocalDate actualReturnTime;
 	/**
 	 * True if the client sending the package should be billed. False if the
 	 * client receiving the package should be billed.
@@ -86,6 +87,8 @@ public class Delivery implements Serializable {
 	 * bonus.
 	 */
 	public boolean bonusEarned;
+
+	public DeliveryStatus status;
 
 	/**
 	 * Calculate if the delivery was on time

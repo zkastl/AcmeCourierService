@@ -39,7 +39,7 @@ public class ClientManagement extends Container {
 
 		JButton btnRemoveClient = new JButton("Remove Client");
 		add(btnRemoveClient, "cell 1 1,alignx center");
-		btnRemoveClient.addKeyListener(new EnterKeyListenerForButtons(btnAddClient));
+		btnRemoveClient.addKeyListener(new EnterKeyListenerForButtons(btnRemoveClient));
 
 		JButton btnSaveChanges = new JButton("Save Changes");
 		add(btnSaveChanges, "cell 2 1");
@@ -102,8 +102,7 @@ public class ClientManagement extends Container {
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				} finally {
-					clientTable.clients = CourierSystem.Clients;
-					clientTable.fireTableRowsUpdated(0, table.getRowCount());
+					clientTable.refresh();
 				}
 			}
 		});
