@@ -1,11 +1,12 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * An Employee of the company who delivers packages.
  */
-public class Courier extends Employee {
+public class Courier extends Employee implements Serializable {
 
 	/**
 	 * 

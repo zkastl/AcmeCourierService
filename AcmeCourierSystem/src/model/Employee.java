@@ -6,7 +6,7 @@ import javax.persistence.*;
 import com.sun.istack.internal.NotNull;
 
 @Entity
-@Table(name="Employee")
+@Table(name="Employees")
 public class Employee implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

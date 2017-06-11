@@ -6,8 +6,8 @@
     <persistence-unit name="entities" transaction-type="RESOURCE_LOCAL">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
         <class>model.Employee</class>
-        <class>model.Courier</class>
         <class>model.Client</class>
+        <class>model.Courier</class>
         <class>model.Delivery</class>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC" />

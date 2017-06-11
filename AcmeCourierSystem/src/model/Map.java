@@ -1,13 +1,18 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
  * a directed graph that holds the geographical area serviced by the company
  */
-public class Map {
+public class Map implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	/**
 	 * The array of intersections that are on the map
 	 */
