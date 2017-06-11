@@ -21,7 +21,7 @@ public class ClientManagement extends Container {
 	private JTable table;
 
 	public ClientManagement(CourierSystem data) {
-		ClientTableModel clientTable = new ClientTableModel(data.Clients);
+		ClientTableModel clientTable = new ClientTableModel(data);
 		setLayout(new MigLayout("", "[grow][50%][grow][10]", "[25][40][5][grow][][20]"));
 
 		JLabel lblEmployeeManagement = new JLabel("Client Management");

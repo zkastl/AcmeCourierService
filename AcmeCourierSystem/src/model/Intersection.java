@@ -14,11 +14,11 @@ public class Intersection implements Comparable<Intersection> {
 	/**
 	 * The name of the north-south street of an intersection
 	 */
-	private String street1;
+	private String street;
 	/**
 	 * The name of the east-west street of an intersection
 	 */
-	private String street2;
+	private String avenue;
 	/**
 	 * The first day of the most recent closure of the intersection, must be <=
 	 * closeEnd, initialize to 1/1/17
@@ -44,9 +44,9 @@ public class Intersection implements Comparable<Intersection> {
 	// whether or not the node has been visited yet in the calculation
 	private boolean visited;
 
-	public Intersection(String s1, String s2) {
-		street1 = s1;
-		street2 = s2;
+	public Intersection(String st, String ave) {
+		street = st;
+		avenue = ave;
 		closeStart = LocalDate.of(2017, 1, 1);
 		closeEnd = LocalDate.of(2017, 1, 1);
 		roads = new ArrayList<Road>();
@@ -55,9 +55,9 @@ public class Intersection implements Comparable<Intersection> {
 		visited = false;
 	}
 
-	public Intersection(String s1, String s2, ArrayList<Road> roads) {
-		street1 = s1;
-		street2 = s2;
+	public Intersection(String st, String ave, ArrayList<Road> roads) {
+		street = st;
+		avenue = ave;
 		closeStart = LocalDate.of(2017, 1, 1);
 		closeEnd = LocalDate.of(2017, 1, 1);
 		this.roads = roads;
@@ -66,9 +66,9 @@ public class Intersection implements Comparable<Intersection> {
 		visited = false;
 	}
 
-	public Intersection(String s1, String s2, ArrayList<Road> roads, LocalDate closeStart, LocalDate closeEnd) {
-		street1 = s1;
-		street2 = s2;
+	public Intersection(String st, String ave, ArrayList<Road> roads, LocalDate closeStart, LocalDate closeEnd) {
+		street = st;
+		avenue = ave;
 		this.closeStart = closeStart;
 		this.closeEnd = closeEnd;
 		this.roads = roads;
@@ -77,17 +77,16 @@ public class Intersection implements Comparable<Intersection> {
 		visited = false;
 	}
 
-	public String getStreet1() {
-		return street1;
+	public String getStreet() {
+		return street;
 	}
 
-	public String getStreet2() {
-		return street2;
+	public String getAve() {
+		return avenue;
 	}
 
-	@Override
-	public String toString() {
-		return street1 + street2;
+	public String getName() {
+		return street + avenue;
 	}
 
 	public LocalDate getCloseStart() {
@@ -193,8 +192,8 @@ public class Intersection implements Comparable<Intersection> {
 			return false; // o is not an Intersection
 		}
 		Intersection rhs = (Intersection) o;
-		return Objects.equals(street1, rhs.street1) && Objects.equals(street2,
-				rhs.street2)/*
+		return Objects.equals(street, rhs.street) && Objects.equals(avenue,
+				rhs.avenue)/*
 							 * && Objects.equals(roads, rhs.roads)
 							 */; // don't want road and intersection equals
 								// functions to loop
@@ -202,7 +201,7 @@ public class Intersection implements Comparable<Intersection> {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(street1, street2, roads);
+		return Objects.hash(street, avenue, roads);
 	}
 
 }

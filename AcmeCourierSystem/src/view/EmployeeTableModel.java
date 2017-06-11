@@ -47,23 +47,9 @@ public final class EmployeeTableModel extends DefaultTableModel {
 	}
 
 	@Override
-	public Object getValueAt(int rowIndex, int columnIndex) {
-		switch (columnIndex) {
-		case 0:
-			return employees.get(rowIndex).id;
-		case 1:
-			return employees.get(rowIndex).name;
-		case 2:
-			return employees.get(rowIndex).role;
-		case 3:
-			return employees.get(rowIndex).userName;
-		default:
-			return null;
-		}
-	}
-
-	@Override
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+		super.setValueAt(aValue, rowIndex, columnIndex);
+
 		switch (columnIndex) {
 		case 1:
 			employees.get(rowIndex).name = aValue.toString();

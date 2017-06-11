@@ -5,22 +5,27 @@ import java.util.List;
 
 import javax.swing.table.DefaultTableModel;
 
+import main.CourierSystem;
 import model.Client;
 import model.Intersection;
+import model.Map;
 
 public final class ClientTableModel extends DefaultTableModel {
 
 	private static final long serialVersionUID = 1L;
 	private List<Client> clients;
+	private Map map;
 
-	public ClientTableModel(List<Client> clients) {
-		super(new Object[] { "ID", "Name", "Phone #", "Address", "Instructions", "Email Address" }, 0);
-		this.clients = clients;
+	public ClientTableModel(CourierSystem data) {
+		super(new Object[] { "ID", "Name", "Phone #", "Street", "Ave", "Instructions", "Email Address" }, 0);
+		this.clients = data.Clients;
+		this.map = data.CityMap;
+
 		if (clients == null)
 			clients = new ArrayList<Client>();
 		for (Client c : clients) {
-			super.addRow(new Object[] { c.clientID, c.name, c.phoneNumber, c.address, c.dropoffInstructions,
-					c.emailAddress });
+			super.addRow(new Object[] { c.clientID, c.name, c.phoneNumber, c.address.getStreet(), c.address.getAve(),
+					c.dropoffInstructions, c.emailAddress });
 		}
 	}
 
@@ -58,7 +63,7 @@ public final class ClientTableModel extends DefaultTableModel {
 			clients.get(rowIndex).phoneNumber = aValue.toString();
 			break;
 		case 3:
-			clients.get(rowIndex).address = ((Intersection) aValue);
+			clients.get(rowIndex).address = map.getIntersection(aValue.toString());
 			break;
 		case 4:
 			clients.get(rowIndex).dropoffInstructions = aValue.toString();

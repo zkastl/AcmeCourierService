@@ -49,7 +49,7 @@ public class Map {
 	}
 
 	public void addIntersection(Intersection intersection) {
-		intersections.put(intersection.toString(), intersection);
+		intersections.put(intersection.getName(), intersection);
 	}
 
 	public void removeIntersection(Intersection intersection) {

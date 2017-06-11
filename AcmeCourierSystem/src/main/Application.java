@@ -246,7 +246,7 @@ public class Application {
 
 		// must make changes to the intersection in the map, it is separate from
 		// the original lone intersection
-		map.getIntersection(b2.toString()).changeClosure(LocalDate.of(2017, 6, 7), LocalDate.of(2017, 6, 9));
+		map.getIntersection(b2.getName()).changeClosure(LocalDate.of(2017, 6, 7), LocalDate.of(2017, 6, 9));
 		map.getRoute(a1, f1).print();
 
 		/*

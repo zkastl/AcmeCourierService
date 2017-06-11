@@ -45,7 +45,7 @@ public class Road {
 		this.start = start;
 		this.end = end;
 		this.direction = dir;
-		this.name = ((dir.compareTo("North") == 0 || dir.compareTo("South") == 0) ? start.getStreet1() : start.getStreet2()) /*start.getName() + "to" + end.getName()*/;
+		this.name = ((dir.compareTo("North") == 0 || dir.compareTo("South") == 0) ? start.getStreet() : start.getAve()) /*start.getName() + "to" + end.getName()*/;
 		this.length = 1;
 	}
 	
