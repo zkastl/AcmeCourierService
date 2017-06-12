@@ -5,11 +5,14 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import javax.persistence.Entity;
+
 /**
  * a node in the map graph. represents the intersection of two streets
  */
 // is not consistent with equals
 // only designed to work for streets that only intersect once
+@Entity(name="Intersection")
 public class Intersection implements Comparable<Intersection>, Serializable {
 
 	
