@@ -7,8 +7,7 @@ import com.sun.istack.internal.NotNull;
 /**
  * an entity that is served by the courier company
  */
-//@Entity
-//@Table(name="Clients")
+@Entity(name="Clients")
 public class Client implements Serializable {
 	
 	/**
@@ -43,12 +42,14 @@ public class Client implements Serializable {
 	/**
 	 * deliveries associated with the client
 	 */
+	
 	public Delivery[] deliveryHistory;
 	
 	/**
 	 * The intersection the client is located at where packages are picked up
 	 * from and delivered to
 	 */
+	
 	public Intersection address;
 	
 	@NotNull
@@ -62,6 +63,10 @@ public class Client implements Serializable {
 		phoneNumber = "";
 		emailAddress = "";
 		dropoffInstructions = "";
+	}
+	
+	public Intersection getAddress() {
+		return new Intersection("", "");
 	}
 
 	public void ArchiveClient() {

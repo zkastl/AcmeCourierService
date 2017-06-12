@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data-sources>
+	<data-source id="sqlite_jdbc-15c9c7e80b3-200ea85eabfd2d72" provider="generic" driver="sqlite_jdbc" name="SQLite - CourierSystem.db" save-password="true" show-system-objects="true" read-only="false">
+		<connection server="" database="C:\Users\zkast\git\AcmeCourierService\AcmeCourierSystem\data\CourierSystem.db" url="jdbc:sqlite:C:\Users\zkast\git\AcmeCourierService\AcmeCourierSystem\data\CourierSystem.db" type="dev"/>
+	</data-source>
+</data-sources>

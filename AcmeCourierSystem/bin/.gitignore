@@ -1,7 +1,6 @@
+/META-INF/
 /controller/
 /main/
-/persistence.xml
-/view/
 /model/
-/META-INF/
 /tests/
+/view/

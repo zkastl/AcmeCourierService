@@ -19,8 +19,8 @@ public final class ClientTableModel extends DefaultTableModel {
 
 		for (Client c : CourierSystem.Clients) {
 			if (!c.getIsArchived()) {
-				super.addRow(new Object[] { c.clientID, c.name, c.phoneNumber, c.address.getStreet(),
-						c.address.getAve(), c.dropoffInstructions, c.emailAddress });
+				super.addRow(new Object[] { c.clientID, c.name, c.phoneNumber, c.getAddress().getStreet(),
+						c.getAddress().getAve(), c.dropoffInstructions, c.emailAddress });
 				clients.add(c);
 			}
 		}
@@ -58,10 +58,10 @@ public final class ClientTableModel extends DefaultTableModel {
 			clients.get(rowIndex).phoneNumber = aValue.toString();
 			break;
 		case 3:
-			clients.get(rowIndex).address.setStreet(aValue.toString().substring(0, 1));
+			clients.get(rowIndex).getAddress().setStreet(aValue.toString().substring(0, 1));
 			break;
 		case 4:
-			clients.get(rowIndex).address.setAve(aValue.toString().substring(0, 1));
+			clients.get(rowIndex).getAddress().setAve(aValue.toString().substring(0, 1));
 			break;
 		case 5:
 			clients.get(rowIndex).dropoffInstructions = aValue.toString();
@@ -75,9 +75,14 @@ public final class ClientTableModel extends DefaultTableModel {
 	}
 
 	public void addRow(Client client) {
-		super.addRow(new Object[] { client.clientID, client.name, client.phoneNumber, client.address.getStreet(),
-				client.address.getAve(), client.dropoffInstructions, client.emailAddress });
+		super.addRow(new Object[] { client.clientID, client.name, client.phoneNumber, client.getAddress().getStreet(),
+				client.getAddress().getAve(), client.dropoffInstructions, client.emailAddress });
 		clients.add(client);
+	}
+	
+	public void removeRow(int rowNumber) {
+		super.removeRow(rowNumber);
+		clients.remove(rowNumber);
 	}
 
 	public void refresh() {

@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -9,8 +10,10 @@ import java.util.Objects;
  */
 // is not consistent with equals
 // only designed to work for streets that only intersect once
-public class Intersection implements Comparable<Intersection> {
+public class Intersection implements Comparable<Intersection>, Serializable {
 
+	
+	private static final long serialVersionUID = 1L;
 	/**
 	 * The name of the north-south street of an intersection
 	 */

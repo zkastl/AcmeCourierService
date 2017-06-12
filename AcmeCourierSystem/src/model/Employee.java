@@ -5,8 +5,7 @@ import java.util.Random;
 import javax.persistence.*;
 import com.sun.istack.internal.NotNull;
 
-@Entity
-@Table(name="Employees")
+@Entity(name="Employees")
 public class Employee implements Serializable {
 
 	private static final long serialVersionUID = 1L;
