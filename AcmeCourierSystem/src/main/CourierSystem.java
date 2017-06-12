@@ -126,9 +126,19 @@ public final class CourierSystem  {
 	}
 
 	public static void SaveClient(Client c) throws Exception {
+		EntityTransaction trans = em.getTransaction();
+		trans.begin();
+		em.merge(c);
+		trans.commit();
+		LoadClients();
 	}
 
 	public static void RemoveClient(Client c) throws Exception {
+		EntityTransaction trans = em.getTransaction();
+		trans.begin();
+		em.remove(c);
+		Clients.remove(c);
+		trans.commit();
 	}
 
 	public static void SaveDeliveries() throws FileNotFoundException, IOException {
