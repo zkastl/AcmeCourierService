@@ -11,6 +11,8 @@ import view.EmployeeTableModel;
 
 public class UsernameCellEditor extends DefaultCellEditor {
 
+	private static final long serialVersionUID = 1L;
+	
 	public UsernameCellEditor(JTextField textField) {
 		super(textField);
 	}

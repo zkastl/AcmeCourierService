@@ -6,7 +6,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 
 public class MandatoryStringCellEditor extends DefaultCellEditor {
-
+	private static final long serialVersionUID = 1L;
+	
 	public MandatoryStringCellEditor(JTextField textField) {
 		super(textField);
 	}
