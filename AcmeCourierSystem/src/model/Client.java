@@ -64,10 +64,6 @@ public class Client implements Serializable {
 		emailAddress = "";
 		dropoffInstructions = "";
 	}
-	
-	public Intersection getAddress() {
-		return new Intersection("", "");
-	}
 
 	public void ArchiveClient() {
 		isArchived = true;
