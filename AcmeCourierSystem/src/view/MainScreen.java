@@ -34,7 +34,7 @@ public class MainScreen extends Container {
 			tabbedPane.addTab("System Settings", new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")),
 					new LogOutScreen(window));
 		tabbedPane.addTab("Change Password", new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")),
-				new LogOutScreen(window));
+				new ChangePasswordScreen(window));
 		tabbedPane.addTab("Logout", new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")),
 				new LogOutScreen(window));
 

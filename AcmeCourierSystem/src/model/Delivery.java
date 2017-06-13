@@ -4,16 +4,22 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Date;
 
+import javax.persistence.*;
+
 /**
  * All the information associated with delivering a package from one client to
  * another.
  */
+@Entity(name="Deliveries")
 public class Delivery implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	@Id
+	@Column(name="ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	/**
 	 * The time the delivery was created.
 	 */
