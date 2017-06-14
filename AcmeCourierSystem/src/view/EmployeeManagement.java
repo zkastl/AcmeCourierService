@@ -4,6 +4,7 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
@@ -67,9 +68,6 @@ public class EmployeeManagement extends Container {
 
 		btnAddEmployee.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (!TableValidator.isValid(table))
-					return;
-
 				employeeTable.addRow(new Employee());
 			}
 		});
@@ -93,9 +91,11 @@ public class EmployeeManagement extends Container {
 			public void actionPerformed(ActionEvent e) {
 				if (!TableValidator.isValid(table))
 					return;
-
 				try {
-					CourierSystem.Employees = employeeTable.employees;
+					CourierSystem.Employees = new HashMap<String, Employee>();
+					for (Employee emp : employeeTable.employees) {
+						CourierSystem.Employees.put(emp.name, emp);
+					}
 					CourierSystem.UpdateEmployees();
 				} catch (Exception e1) {
 					e1.printStackTrace();

@@ -30,7 +30,7 @@ public class UsernameCellEditor extends DefaultCellEditor {
 			return false;
 		}
 
-		for (Employee e : CourierSystem.Employees) {
+		for (Employee e : CourierSystem.Employees.values()) {
 			if (e != selectedEmployee && e.userName.equalsIgnoreCase(getCellEditorValue().toString())) {
 				JOptionPane.showMessageDialog(getComponent(),
 						"Invalid entry in row " + (employeeIndex + 1) + ". Employee user name is already in use.");

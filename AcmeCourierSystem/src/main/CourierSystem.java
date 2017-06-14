@@ -19,8 +19,9 @@ package main;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -35,10 +36,10 @@ import model.Settings;
 
 public final class CourierSystem  {
 
-	public static List<Employee> Employees;
+	public static HashMap<String, Employee> Employees;
 	public static List<Courier> Couriers;
-	public static List<Client> Clients;
-	public static List<Delivery> Deliveries;
+	public static HashMap<String, Client> Clients;
+	public static HashMap<String, Delivery> Deliveries;
 	public static Map CityMap;
 	public static Settings SystemSettings;
 	public static Employee currentUser;
@@ -51,6 +52,7 @@ public final class CourierSystem  {
 		// Load the database.
 		factory = Persistence.createEntityManagerFactory("entities");
 		em = factory.createEntityManager();
+		Clients = new HashMap<String, Client>();
 
 		LoadEmployees();
 		// LoadCouriers();
@@ -62,24 +64,29 @@ public final class CourierSystem  {
 	public static void LoadEmployees() throws Exception {
 		// Load the employee table
 		// If tables is empty, create default employee.
+		if (Employees == null) {
+			Employees = new HashMap<String, Employee>();
+		}
 		try {
 			Query eQuery = em.createQuery("SELECT e FROM Employees e", Employee.class);
-			Employees = eQuery.getResultList();
-		} catch (Exception ex) {
+			List<Employee> emp = eQuery.getResultList();
+			for(Employee e : emp) {
+				Employees.put(e.name, e);
+			}
+		} 
+		catch (Exception ex) {
 			System.out.println(ex.getStackTrace());
 		}
-		if (Employees == null) {
-			Employees = new ArrayList<Employee>();
-		}
+		
 		if (Employees.size() == 0) {
-			Employees.add(new Employee("Admin"));
+			Employees.put("Admin", new Employee());
 		}
 	}
 
 	public static void UpdateEmployees() throws Exception {
 		EntityTransaction trans = em.getTransaction();
 		trans.begin();
-		for (Employee e : Employees) {
+		for (Employee e : Employees.values()) {
 			em.persist(e);
 		}
 		trans.commit();
@@ -98,7 +105,7 @@ public final class CourierSystem  {
 		EntityTransaction trans = em.getTransaction();
 		trans.begin();
 		em.remove(e);
-		Employees.remove(e);
+		Employees.remove(e.name);
 		trans.commit();
 	}
 
@@ -106,19 +113,19 @@ public final class CourierSystem  {
 	public static void LoadClients() throws Exception {
 		try {
 			Query eQuery = em.createQuery("SELECT c FROM Clients c", Client.class);
-			Clients = eQuery.getResultList();
+			List<Client> cli = eQuery.getResultList();
+			for(Client c : cli) {
+				Clients.put(c.name, c);
+			}
 		} catch (Exception ex) {
 			System.out.println(ex.getStackTrace());
-		}
-		if (Clients == null) {
-			Clients = new ArrayList<Client>();
 		}
 	}
 
 	public static void UpdateClients() throws Exception {
 		EntityTransaction trans = em.getTransaction();
 		trans.begin();
-		for (Client c : Clients) {
+		for (Client c : Clients.values()) {
 			em.persist(c);
 		}
 		trans.commit();
@@ -137,23 +144,51 @@ public final class CourierSystem  {
 		EntityTransaction trans = em.getTransaction();
 		trans.begin();
 		em.remove(c);
-		Clients.remove(c);
+		Clients.remove(c.name);
 		trans.commit();
-	}
-
-	public static void SaveDeliveries() throws FileNotFoundException, IOException {
 	}
 
 	public static void LoadDeliveries() throws IOException {
 		if (Deliveries == null) {
-			Deliveries = new ArrayList<Delivery>();
+			Deliveries = new HashMap<String, Delivery>();
+		}
+		try {
+			Query eQuery = em.createQuery("SELECT d from Deliveries d", Delivery.class);
+			@SuppressWarnings("unchecked")
+			List<Delivery> del = eQuery.getResultList();
+			for (Delivery d : del) {
+				Deliveries.put(String.valueOf(d.packageID), d);
+			}
+		} 
+		catch(Exception ex) {
+			System.out.println(ex.getStackTrace());
 		}
 	}
-
-	public void LoadCouriers() throws IOException {
+	
+	public static void UpdateDeliveries() throws Exception {
+		EntityTransaction trans = em.getTransaction();
+		trans.begin();
+		for (Delivery d : Deliveries.values()) {
+			em.persist(d);
+		}
+		trans.commit();
+		LoadClients();
 	}
 
-	public void SaveCouriers() throws FileNotFoundException, IOException {
+	public static void SaveDelivery(Delivery d) throws FileNotFoundException, IOException {
+		EntityTransaction trans = em.getTransaction();
+		trans.begin();
+		em.merge(d);
+		trans.commit();
+		LoadDeliveries();		
+	}
+	
+	public static void RemoveDelivery(Delivery d) throws Exception {
+		EntityTransaction trans = em.getTransaction();
+		trans.begin();
+		em.remove(d);
+		Deliveries.remove(String.valueOf(d.packageID));
+		trans.commit();
 	}
 
 	private CourierSystem() throws Exception {

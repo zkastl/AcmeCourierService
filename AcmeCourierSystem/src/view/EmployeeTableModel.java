@@ -2,6 +2,7 @@ package view;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.*;
 
 import javax.swing.table.DefaultTableModel;
 
@@ -12,12 +13,13 @@ import model.EmployeeRole;
 public final class EmployeeTableModel extends DefaultTableModel {
 
 	private static final long serialVersionUID = 1L;
-	public List<Employee> employees = new ArrayList<Employee>();
+	public List<Employee> employees;
 
 	public EmployeeTableModel() {
 		super(new Object[] { "ID", "Name", "Role", "User Name" }, 0);
+		employees = new ArrayList<Employee>();
 
-		for (Employee e : CourierSystem.Employees) {
+		for (Employee e : CourierSystem.Employees.values()) {
 			if (!e.getIsArchived()) {
 				super.addRow(new Object[] { e.id, e.name, e.role, e.userName });
 				employees.add(e);
@@ -93,7 +95,7 @@ public final class EmployeeTableModel extends DefaultTableModel {
 
 	public void refresh() {
 		employees.clear();
-		for (Employee e : CourierSystem.Employees) {
+		for (Employee e : CourierSystem.Employees.values()) {
 			if (!e.getIsArchived())
 				employees.add(e);
 		}

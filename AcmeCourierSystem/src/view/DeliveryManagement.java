@@ -4,6 +4,7 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
@@ -15,6 +16,7 @@ import javax.swing.JTable;
 import controller.EnterKeyListenerForButtons;
 import controller.TableValidator;
 import main.CourierSystem;
+import model.Client;
 import model.Delivery;
 import model.DeliveryStatus;
 import net.miginfocom.swing.MigLayout;
@@ -51,14 +53,24 @@ public class DeliveryManagement extends Container {
 		scrollPane.setViewportView(table);
 		table.setColumnSelectionAllowed(true);
 
+		JComboBox<String> fromComboBox = new JComboBox<String>();
+		JComboBox<String> toComboBox = new JComboBox<String>();
+		for(Client c : CourierSystem.Clients.values()) {
+			fromComboBox.addItem(c.name);
+			toComboBox.addItem(c.name);
+		}
+		table.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(fromComboBox));
+		table.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(toComboBox));
+		
+
+		JLabel lblNewLabel = new JLabel(" ");
+		add(lblNewLabel, "cell 0 4");
+		
 		JComboBox<DeliveryStatus> statusComboBox = new JComboBox<DeliveryStatus>();
 		statusComboBox.addItem(DeliveryStatus.Requested);
 		statusComboBox.addItem(DeliveryStatus.Completed);
 		statusComboBox.addItem(DeliveryStatus.Canceled);
-		table.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(statusComboBox));
-
-		JLabel lblNewLabel = new JLabel(" ");
-		add(lblNewLabel, "cell 0 4");
+		table.getColumnModel().getColumn(8).setCellEditor(new DefaultCellEditor(statusComboBox));
 
 		btnCreateDelivery.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -66,6 +78,7 @@ public class DeliveryManagement extends Container {
 					return;
 
 				// open delivery creator
+				deliveryTable.addRow(new Delivery());
 			}
 		});
 
@@ -89,8 +102,11 @@ public class DeliveryManagement extends Container {
 					return;
 
 				try {
-					CourierSystem.Deliveries = deliveryTable.deliveries;
-					CourierSystem.SaveDeliveries();
+					CourierSystem.Deliveries = new HashMap<String, Delivery>();
+					for(Delivery del : deliveryTable.deliveries) {
+						CourierSystem.Deliveries.put(String.valueOf(del.packageID), del);
+					}
+					CourierSystem.UpdateDeliveries();
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				} finally {

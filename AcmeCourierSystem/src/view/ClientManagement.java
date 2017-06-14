@@ -4,6 +4,7 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
@@ -95,9 +96,11 @@ public class ClientManagement extends Container {
 			public void actionPerformed(ActionEvent e) {
 				if (!TableValidator.isValid(table))
 					return;
-
 				try {
-					CourierSystem.Clients = clientTable.clients;
+					CourierSystem.Clients = new HashMap<String, Client>();
+					for(Client cli : clientTable.clients) {
+						CourierSystem.Clients.put(cli.name, cli);
+					}
 					CourierSystem.UpdateClients();
 				} catch (Exception e1) {
 					e1.printStackTrace();

@@ -17,7 +17,7 @@ public final class ClientTableModel extends DefaultTableModel {
 		super(new Object[] { "ID", "Name", "Phone #", "Street", "Ave", "Instructions", "Email Address" }, 0);
 		clients = new ArrayList<Client>();
 
-		for (Client c : CourierSystem.Clients) {
+		for (Client c : CourierSystem.Clients.values()) {
 			if (!c.getIsArchived()) {
 				super.addRow(new Object[] { c.clientID, c.name, c.phoneNumber, c.address.getStreet(),
 						c.address.getAve(), c.dropoffInstructions, c.emailAddress });
@@ -87,7 +87,7 @@ public final class ClientTableModel extends DefaultTableModel {
 
 	public void refresh() {
 		clients.clear();
-		for (Client c : CourierSystem.Clients) {
+		for (Client c : CourierSystem.Clients.values()) {
 			if (!c.getIsArchived()) {
 				clients.add(c);
 			}

@@ -7,6 +7,7 @@ import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
 import main.CourierSystem;
+import model.Client;
 import model.Delivery;
 import model.DeliveryStatus;
 
@@ -20,7 +21,7 @@ public class DeliveryTableModel extends DefaultTableModel {
 				"Delivery Time", "Return Time", "Status" }, 0);
 		deliveries = new ArrayList<Delivery>();
 
-		for (Delivery d : CourierSystem.Deliveries) {
+		for (Delivery d : CourierSystem.Deliveries.values()) {
 			if (d.status == DeliveryStatus.Requested) {
 				super.addRow(new Object[] { d.packageID, d.pickupClient, d.deliveryClient, d.calculatedDepartureTime,
 						d.actualDepartureTime, d.actualPickupTime, d.actualDeliveryTime, d.actualReturnTime,
@@ -35,6 +36,10 @@ public class DeliveryTableModel extends DefaultTableModel {
 		switch (columnIndex) {
 		case 0:
 			return int.class;
+		case 1:
+			return Client.class;
+		case 2:
+			return Client.class;
 		case 8:
 			return DeliveryStatus.class;
 		default:
@@ -46,9 +51,6 @@ public class DeliveryTableModel extends DefaultTableModel {
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
 		switch (columnIndex) {
 		case 0:
-		case 1:
-		case 2:
-		case 3:
 			return false;
 		default:
 			return true;
@@ -60,6 +62,16 @@ public class DeliveryTableModel extends DefaultTableModel {
 		super.setValueAt(aValue, rowIndex, columnIndex);
 
 		switch (columnIndex) {
+		case 1:
+			deliveries.get(rowIndex).deliveryClient = CourierSystem.Clients.size() > 1 ?
+					CourierSystem.Clients.get("aValue") : new Client();
+			break;
+		case 2:
+			deliveries.get(rowIndex).deliveryClient = CourierSystem.Clients.size() > 1 ?
+					CourierSystem.Clients.get("aValue") : new Client();
+			break;
+		case 3:
+			break;
 		case 4:
 			deliveries.get(rowIndex).actualDepartureTime = (LocalDate) aValue;
 			break;
@@ -86,10 +98,15 @@ public class DeliveryTableModel extends DefaultTableModel {
 				delivery.actualDeliveryTime, delivery.actualReturnTime, delivery.status });
 		deliveries.add(delivery);
 	}
+	
+	public void removeRow(int rowNumber) {
+		super.removeRow(rowNumber);
+		deliveries.remove(rowNumber);
+	}
 
 	public void refresh() {
 		deliveries.clear();
-		for (Delivery d : CourierSystem.Deliveries) {
+		for (Delivery d : CourierSystem.Deliveries.values()) {
 			if (d.status == DeliveryStatus.Requested)
 				deliveries.add(d);
 		}
