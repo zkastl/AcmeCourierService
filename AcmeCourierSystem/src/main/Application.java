@@ -27,9 +27,9 @@ public class Application {
 
 		// test map stuff
 		Map map = new Map();
-		map.getRoute(map.getIntersection("a1"), map.getIntersection("f1")).print();
-		map.getIntersection("b2").changeClosure(LocalDate.of(2017, 6, 7), LocalDate.of(2018, 6, 9));
-		map.getRoute(map.getIntersection("a1"), map.getIntersection("f1")).print();
+		map.getRoute(map.getIntersection("A1"), map.getIntersection("F1")).print();
+		map.getIntersection("B2").changeClosure(LocalDate.of(2017, 6, 7), LocalDate.of(2018, 6, 9));
+		map.getRoute(map.getIntersection("A1"), map.getIntersection("F1")).print();
 
 		/*
 		 * for(Character a = 'A'; a < 'H'; a++){ for(Integer i = 1; i < 8; i++)
