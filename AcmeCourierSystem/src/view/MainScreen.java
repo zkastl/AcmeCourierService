@@ -26,7 +26,7 @@ public class MainScreen extends Container {
 		tabbedPane.addTab("Report Management", new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")),
 				new LogOutScreen(window));
 		tabbedPane.addTab("Map Management", new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")),
-				new LogOutScreen(window));
+				new MapManagement(window));
 		if (CourierSystem.currentUser.role == EmployeeRole.Administrator)
 			tabbedPane.addTab("Employee Management",
 					new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")), new EmployeeManagement());
