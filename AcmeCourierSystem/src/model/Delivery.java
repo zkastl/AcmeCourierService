@@ -2,7 +2,6 @@ package model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Date;
 
 import javax.persistence.*;
 
@@ -17,13 +16,15 @@ public class Delivery implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@Column(name="ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	public int packageID;
 	/**
 	 * The time the delivery was created.
 	 */
-	public Date creationTime;
+	public LocalDate creationTime;
 	/**
 	 * The OrderTaker who created the delivery.
 	 */
@@ -70,11 +71,6 @@ public class Delivery implements Serializable {
 	 * client receiving the package should be billed.
 	 */
 	public boolean billToSender;
-	/**
-	 * Unique ID written on the package to ensure the courier picks up the
-	 * correct one.
-	 */
-	public int packageID;
 	/**
 	 * Estimation of the total distance traveled during the delivery. Used to
 	 * calculate price.

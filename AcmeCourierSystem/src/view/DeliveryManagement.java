@@ -53,15 +53,7 @@ public class DeliveryManagement extends Container {
 		scrollPane.setViewportView(table);
 		table.setColumnSelectionAllowed(true);
 
-		JComboBox<String> fromComboBox = new JComboBox<String>();
-		JComboBox<String> toComboBox = new JComboBox<String>();
-		for(Client c : CourierSystem.Clients.values()) {
-			fromComboBox.addItem(c.name);
-			toComboBox.addItem(c.name);
-		}
-		table.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(fromComboBox));
-		table.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(toComboBox));
-		
+		updateAvailableClients();		
 
 		JLabel lblNewLabel = new JLabel(" ");
 		add(lblNewLabel, "cell 0 4");
@@ -114,5 +106,18 @@ public class DeliveryManagement extends Container {
 				}
 			}
 		});
+	}
+	
+	public void updateAvailableClients() {
+		JComboBox<String> fromComboBox = new JComboBox<String>();
+		JComboBox<String> toComboBox = new JComboBox<String>();
+		for(Client c : CourierSystem.Clients.values()) {
+			if (!c.getIsArchived()) {
+				fromComboBox.addItem(c.name);
+				toComboBox.addItem(c.name);
+			}
+		}
+		table.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(fromComboBox));
+		table.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(toComboBox));
 	}
 }

@@ -7,7 +7,6 @@ import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
 import main.CourierSystem;
-import model.Client;
 import model.Delivery;
 import model.DeliveryStatus;
 
@@ -23,7 +22,7 @@ public class DeliveryTableModel extends DefaultTableModel {
 
 		for (Delivery d : CourierSystem.Deliveries.values()) {
 			if (d.status == DeliveryStatus.Requested) {
-				super.addRow(new Object[] { d.packageID, d.pickupClient, d.deliveryClient, d.calculatedDepartureTime,
+				super.addRow(new Object[] { d.packageID, d.pickupClient.name, d.deliveryClient.name, d.calculatedDepartureTime,
 						d.actualDepartureTime, d.actualPickupTime, d.actualDeliveryTime, d.actualReturnTime,
 						d.status });
 				deliveries.add(d);
@@ -36,10 +35,6 @@ public class DeliveryTableModel extends DefaultTableModel {
 		switch (columnIndex) {
 		case 0:
 			return int.class;
-		case 1:
-			return Client.class;
-		case 2:
-			return Client.class;
 		case 8:
 			return DeliveryStatus.class;
 		default:
@@ -63,12 +58,10 @@ public class DeliveryTableModel extends DefaultTableModel {
 
 		switch (columnIndex) {
 		case 1:
-			deliveries.get(rowIndex).deliveryClient = CourierSystem.Clients.size() > 1 ?
-					CourierSystem.Clients.get("aValue") : new Client();
+			deliveries.get(rowIndex).pickupClient = CourierSystem.Clients.get(aValue);
 			break;
 		case 2:
-			deliveries.get(rowIndex).deliveryClient = CourierSystem.Clients.size() > 1 ?
-					CourierSystem.Clients.get("aValue") : new Client();
+			deliveries.get(rowIndex).deliveryClient = CourierSystem.Clients.get(aValue);
 			break;
 		case 3:
 			break;
