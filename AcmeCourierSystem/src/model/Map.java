@@ -4,9 +4,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.persistence.Entity;
+
 /**
  * a directed graph that holds the geographical area serviced by the company
  */
+@Entity(name="CityMap")
 public class Map implements Serializable {
 
 	/**
@@ -20,7 +23,7 @@ public class Map implements Serializable {
 	/**
 	 * The array of roads that exist between the intersections on the map
 	 */
-	private ArrayList<Road> roads; // TODO probably get rid of this since each
+	//private ArrayList<Road> roads; // TODO probably get rid of this since each
 									// Intersection tracks its own roads
 
 	/**
@@ -33,13 +36,13 @@ public class Map implements Serializable {
 
 	public Map() {
 		intersections = new HashMap<String, Intersection>();
-		roads = new ArrayList<Road>();
+		//roads = new ArrayList<Road>();
 		initMap();
 	}
 
 	public Map(HashMap<String, Intersection> intersections, ArrayList<Road> roads) {
 		this.intersections = intersections;
-		this.roads = roads;
+		//this.roads = roads;
 	}
 
 	public Route getRoute(Intersection start, Intersection end) {
@@ -57,12 +60,16 @@ public class Map implements Serializable {
 	public void addIntersection(Intersection intersection) {
 		intersections.put(intersection.getName(), intersection);
 	}
+	
+	public void setIntersections(HashMap<String, Intersection> intersections) {
+		this.intersections = intersections;
+	}
 
 	public void removeIntersection(Intersection intersection) {
 		intersections.remove(intersection);
 	}
 
-	public ArrayList<Road> getRoads() {
+	/*public ArrayList<Road> getRoads() {
 		return roads;
 	}
 
@@ -72,11 +79,11 @@ public class Map implements Serializable {
 
 	public void removeRoad(Road road) {
 		roads.remove(road);
-	}
+	}*/
 
 	public void clear() {
 		intersections.clear();
-		roads.clear();
+		//roads.clear();
 	}
 
 	public void initMap() {

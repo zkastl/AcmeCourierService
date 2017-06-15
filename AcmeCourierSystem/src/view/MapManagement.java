@@ -16,20 +16,21 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
 import javax.swing.SpinnerModel;
 
+import main.CourierSystem;
+
 import java.util.Calendar;
 import java.util.Date;
 
 import javax.swing.JLayeredPane;
-import model.Map;
 import java.awt.BorderLayout;
 import java.awt.Component;
 
 public class MapManagement  extends Container {
 	private static final long serialVersionUID = 1L;
-	private Map map;
+	//private Map map;
 	
 	public MapManagement(JFrame window) {
-		map = new Map();
+		//map = new Map();
 		
 		setLayout(new BorderLayout(0, 0));
 		
@@ -73,9 +74,7 @@ public class MapManagement  extends Container {
 		endSpinner.setVisible(false);
 		layeredPane.add(endSpinner, "cell 8 0 4 1,alignx left,aligny center");
 		layeredPane.setLayer(endSpinner, 1);
-		
-		//layeredPane.setBounds(0, 0, backgroundMap.getIcon().getIconWidth(), backgroundMap.getIcon().getIconHeight());
-		
+				
 		JButton saveChanges = new JButton("Save Changes");
 		layeredPane.setLayer(saveChanges, 1);
 		saveChanges.setIcon(null);
@@ -86,17 +85,25 @@ public class MapManagement  extends Container {
 				Calendar endTime = Calendar.getInstance();
 				endTime.setTime((Date)endSpinner.getValue());
 				
-				map.getIntersection(lblIntersection.getText().substring(0, lblIntersection.getText().length() - " Closure".length())).changeClosure(startTime, endTime);
-				if(!map.getIntersection(lblIntersection.getText().substring(0, lblIntersection.getText().length() - " Closure".length())).isOpen()) {
+				CourierSystem.CityMap.getIntersection(lblIntersection.getText().substring(0, lblIntersection.getText().length() - " Closure".length())).changeClosure(startTime, endTime);
+				/*try {
+					CourierSystem.UpdateCityMap();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}*/
+				// indicate that the intersection is closed
+				if(!CourierSystem.CityMap.getIntersection(lblIntersection.getText().substring(0, lblIntersection.getText().length() - " Closure".length())).isOpen()) {
 					for(Component button :layeredPane.getComponentsInLayer(1)) {
-						if(button.getClass() == JButton.class && ((JButton)button).getText().equals(lblIntersection.getText().length() - " Closure".length())) {
-							((JButton)button).setFont(new Font("Tahoma", 1, 5));
+						if(button.getClass() == JButton.class && ((JButton)button).getText().equals(lblIntersection.getText().substring(0, lblIntersection.getText().length() - " Closure".length()))) {
+							((JButton)button).setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+							((JButton)button).setText("");
 						}
 					}
 				} else {
 					for(Component button :layeredPane.getComponentsInLayer(1)) {
-						if(button.getClass() == JButton.class && ((JButton)button).getText().equals(lblIntersection.getText().length() - " Closure".length())) {
-							((JButton)button).setFont(new Font("Tahoma", 1, 11));
+						if(button.getClass() == JButton.class && ((JButton)button).getName().equals(lblIntersection.getText().substring(0, lblIntersection.getText().length() - " Closure".length()))) {
+							((JButton)button).setIcon(null);
+							((JButton)button).setText(button.getName());
 						}
 					}
 				}
@@ -118,7 +125,7 @@ public class MapManagement  extends Container {
 				endSpinner.setVisible(false);
 				saveChanges.setVisible(false);
 				cancel.setVisible(false);
-				map.getRoute(map.getIntersection("A1"), map.getIntersection("F1")).print();
+				CourierSystem.CityMap.getRoute(CourierSystem.CityMap.getIntersection("A1"), CourierSystem.CityMap.getIntersection("F1")).print();
 			}
 		});
 		cancel.setVisible(false);
@@ -126,12 +133,16 @@ public class MapManagement  extends Container {
 		
 		JButton a1 = new JButton("A1");
 		layeredPane.setLayer(a1, 1);
-		a1.setIcon(null);
+		a1.setName("A1");
+		if(!CourierSystem.CityMap.getIntersection("A1").isOpen()){
+			a1.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			a1.setText("");
+		}
 		a1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("A1").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("A1").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("A1").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("A1").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("A1").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("A1").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -145,13 +156,16 @@ public class MapManagement  extends Container {
 		
 		JButton a2 = new JButton("A2");
 		layeredPane.setLayer(a2, 1);
-		a2.setIcon(null);
-		a2.setOpaque(false);
+		a2.setName("A2");
+		if(!CourierSystem.CityMap.getIntersection("A2").isOpen()){
+			a2.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			a2.setText("");
+		}
 		a2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("A2").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("A2").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("A2").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("A2").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("A2").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("A2").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -165,13 +179,16 @@ public class MapManagement  extends Container {
 
 		JButton a3 = new JButton("A3");
 		layeredPane.setLayer(a3, 1);
-		a3.setIcon(null);
-		a3.setOpaque(false);
+		a3.setName("A3");
+		if(!CourierSystem.CityMap.getIntersection("A3").isOpen()){
+			a3.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			a3.setText("");
+		}
 		a3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("A3").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("A3").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("A3").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("A3").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("A3").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("A3").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -185,13 +202,16 @@ public class MapManagement  extends Container {
 
 		JButton a4 = new JButton("A4");
 		layeredPane.setLayer(a4, 1);
-		a4.setIcon(null);
-		a4.setOpaque(false);
+		a4.setName("A4");
+		if(!CourierSystem.CityMap.getIntersection("A4").isOpen()){
+			a4.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			a4.setText("");
+		}
 		a4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("A4").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("A4").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("A4").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("A4").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("A4").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("A4").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -205,13 +225,16 @@ public class MapManagement  extends Container {
 
 		JButton a5 = new JButton("A5");
 		layeredPane.setLayer(a5, 1);
-		a5.setIcon(null);
-		a5.setOpaque(false);
+		a5.setName("A5");
+		if(!CourierSystem.CityMap.getIntersection("A5").isOpen()){
+			a5.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			a5.setText("");
+		}
 		a5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("A5").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("A5").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("A5").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("A5").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("A5").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("A5").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -225,13 +248,16 @@ public class MapManagement  extends Container {
 
 		JButton a6 = new JButton("A6");
 		layeredPane.setLayer(a6, 1);
-		a6.setIcon(null);
-		a6.setOpaque(false);
+		a6.setName("A6");
+		if(!CourierSystem.CityMap.getIntersection("A6").isOpen()){
+			a6.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			a6.setText("");
+		}
 		a6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("A6").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("A6").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("A6").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("A6").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("A6").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("A6").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -245,13 +271,16 @@ public class MapManagement  extends Container {
 
 		JButton a7 = new JButton("A7");
 		layeredPane.setLayer(a7, 1);
-		a7.setIcon(null);
-		a7.setOpaque(false);
+		a7.setName("A7");
+		if(!CourierSystem.CityMap.getIntersection("A7").isOpen()){
+			a7.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			a7.setText("");
+		}
 		a7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("A7").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("A7").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("A7").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("A7").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("A7").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("A7").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -265,13 +294,16 @@ public class MapManagement  extends Container {
 		
 		JButton b1 = new JButton("B1");
 		layeredPane.setLayer(b1, 1);
-		b1.setIcon(null);
-		b1.setOpaque(false);
+		b1.setName("B1");
+		if(!CourierSystem.CityMap.getIntersection("B1").isOpen()){
+			b1.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			b1.setText("");
+		}
 		b1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("B1").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("B1").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("B1").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("B1").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("B1").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("B1").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -285,13 +317,16 @@ public class MapManagement  extends Container {
 		
 		JButton b2 = new JButton("B2");
 		layeredPane.setLayer(b2, 1);
-		b2.setIcon(null);
-		b2.setOpaque(false);
+		b2.setName("B2");
+		if(!CourierSystem.CityMap.getIntersection("B2").isOpen()){
+			b2.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			b2.setText("");
+		}
 		b2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("B2").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("B2").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("B2").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("B2").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("B2").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("B2").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -305,13 +340,16 @@ public class MapManagement  extends Container {
 
 		JButton b3 = new JButton("B3");
 		layeredPane.setLayer(b3, 1);
-		b3.setIcon(null);
-		b3.setOpaque(false);
+		b3.setName("B3");
+		if(!CourierSystem.CityMap.getIntersection("B3").isOpen()){
+			b3.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			b3.setText("");
+		}
 		b3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("B3").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("B3").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("B3").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("B3").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("B3").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("B3").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -325,13 +363,16 @@ public class MapManagement  extends Container {
 
 		JButton b4 = new JButton("B4");
 		layeredPane.setLayer(b4, 1);
-		b4.setIcon(null);
-		b4.setOpaque(false);
+		b4.setName("B4");
+		if(!CourierSystem.CityMap.getIntersection("B4").isOpen()){
+			b4.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			b4.setText("");
+		}
 		b4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("B4").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("B4").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("B4").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("B4").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("B4").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("B4").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -345,13 +386,16 @@ public class MapManagement  extends Container {
 
 		JButton b5 = new JButton("B5");
 		layeredPane.setLayer(b5, 1);
-		b5.setIcon(null);
-		b5.setOpaque(false);
+		b5.setName("B5");
+		if(!CourierSystem.CityMap.getIntersection("B5").isOpen()){
+			b5.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			b5.setText("");
+		}
 		b5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("B5").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("B5").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("B5").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("B5").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("B5").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("B5").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -365,13 +409,16 @@ public class MapManagement  extends Container {
 
 		JButton b6 = new JButton("B6");
 		layeredPane.setLayer(b6, 1);
-		b6.setIcon(null);
-		b6.setOpaque(false);
+		b6.setName("B6");
+		if(!CourierSystem.CityMap.getIntersection("B6").isOpen()){
+			b6.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			b6.setText("");
+		}
 		b6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("B6").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("B6").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("B6").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("B6").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("B6").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("B6").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -385,13 +432,16 @@ public class MapManagement  extends Container {
 
 		JButton b7 = new JButton("B7");
 		layeredPane.setLayer(b7, 1);
-		b7.setIcon(null);
-		b7.setOpaque(false);
+		b7.setName("B7");
+		if(!CourierSystem.CityMap.getIntersection("B7").isOpen()){
+			b7.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			b7.setText("");
+		}
 		b7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("B7").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("B7").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("B7").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("B7").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("B7").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("B7").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -405,13 +455,16 @@ public class MapManagement  extends Container {
 
 		JButton c1 = new JButton("C1");
 		layeredPane.setLayer(c1, 1);
-		c1.setIcon(null);
-		c1.setOpaque(false);
+		c1.setName("C1");
+		if(!CourierSystem.CityMap.getIntersection("C1").isOpen()){
+			c1.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			c1.setText("");
+		}
 		c1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("C1").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("C1").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("C1").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("C1").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("C1").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("C1").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -425,13 +478,16 @@ public class MapManagement  extends Container {
 		
 		JButton c2 = new JButton("C2");
 		layeredPane.setLayer(c2, 1);
-		c2.setIcon(null);
-		c2.setOpaque(false);
+		c2.setName("C2");
+		if(!CourierSystem.CityMap.getIntersection("C2").isOpen()){
+			c2.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			c2.setText("");
+		}
 		c2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("C2").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("C2").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("C2").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("C2").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("C2").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("C2").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -445,13 +501,16 @@ public class MapManagement  extends Container {
 
 		JButton c3 = new JButton("C3");
 		layeredPane.setLayer(c3, 1);
-		c3.setIcon(null);
-		c3.setOpaque(false);
+		c3.setName("C3");
+		if(!CourierSystem.CityMap.getIntersection("C3").isOpen()){
+			c3.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			c3.setText("");
+		}
 		c3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("C3").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("C3").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("C3").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("C3").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("C3").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("C3").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -465,13 +524,16 @@ public class MapManagement  extends Container {
 
 		JButton c4 = new JButton("C4");
 		layeredPane.setLayer(c4, 1);
-		c4.setIcon(null);
-		c4.setOpaque(false);
+		c4.setName("C4");
+		if(!CourierSystem.CityMap.getIntersection("C4").isOpen()){
+			c4.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			c4.setText("");
+		}
 		c4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("C4").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("C4").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("C4").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("C4").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("C4").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("C4").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -485,13 +547,16 @@ public class MapManagement  extends Container {
 
 		JButton c5 = new JButton("C5");
 		layeredPane.setLayer(c5, 1);
-		c5.setIcon(null);
-		c5.setOpaque(false);
+		c5.setName("C5");
+		if(!CourierSystem.CityMap.getIntersection("C5").isOpen()){
+			c5.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			c5.setText("");
+		}
 		c5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("C5").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("C5").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("C5").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("C5").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("C5").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("C5").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -505,13 +570,16 @@ public class MapManagement  extends Container {
 
 		JButton c6 = new JButton("C6");
 		layeredPane.setLayer(c6, 1);
-		c6.setIcon(null);
-		c6.setOpaque(false);
+		c6.setName("C6");
+		if(!CourierSystem.CityMap.getIntersection("C6").isOpen()){
+			c6.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			c6.setText("");
+		}
 		c6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("C6").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("C6").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("C6").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("C6").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("C6").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("C6").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -526,12 +594,16 @@ public class MapManagement  extends Container {
 		JButton c7 = new JButton("C7");
 		layeredPane.setLayer(c7, 1);
 		c7.setIcon(null);
-		c7.setOpaque(false);
+		c7.setName("C7");
+		if(!CourierSystem.CityMap.getIntersection("C7").isOpen()){
+			c7.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			c7.setText("");
+		}
 		c7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("C7").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("C7").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("C7").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("C7").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("C7").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("C7").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -545,13 +617,16 @@ public class MapManagement  extends Container {
 
 		JButton d1 = new JButton("D1");
 		layeredPane.setLayer(d1, 1);
-		d1.setIcon(null);
-		d1.setOpaque(false);
+		d1.setName("D1");
+		if(!CourierSystem.CityMap.getIntersection("D1").isOpen()){
+			d1.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			d1.setText("");
+		}
 		d1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("D1").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("D1").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("D1").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("D1").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("D1").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("D1").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -565,13 +640,16 @@ public class MapManagement  extends Container {
 		
 		JButton d2 = new JButton("D2");
 		layeredPane.setLayer(d2, 1);
-		d2.setIcon(null);
-		d2.setOpaque(false);
+		d2.setName("D2");
+		if(!CourierSystem.CityMap.getIntersection("D2").isOpen()){
+			d2.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			d2.setText("");
+		}
 		d2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("D2").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("D2").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("D2").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("D2").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("D2").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("D2").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -585,13 +663,16 @@ public class MapManagement  extends Container {
 
 		JButton d3 = new JButton("D3");
 		layeredPane.setLayer(d3, 1);
-		d3.setIcon(null);
-		d3.setOpaque(false);
+		d3.setName("D3");
+		if(!CourierSystem.CityMap.getIntersection("D3").isOpen()){
+			d3.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			d3.setText("");
+		}
 		d3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("D3").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("D3").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("D3").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("D3").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("D3").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("D3").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -605,13 +686,16 @@ public class MapManagement  extends Container {
 
 		JButton d4 = new JButton("D4");
 		layeredPane.setLayer(d4, 1);
-		d4.setIcon(null);
-		d4.setOpaque(false);
+		d4.setName("D4");
+		if(!CourierSystem.CityMap.getIntersection("D4").isOpen()){
+			d4.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			d4.setText("");
+		}
 		d4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("D4").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("D4").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("D4").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("D4").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("D4").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("D4").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -625,13 +709,16 @@ public class MapManagement  extends Container {
 
 		JButton d5 = new JButton("D5");
 		layeredPane.setLayer(d5, 1);
-		d5.setIcon(null);
-		d5.setOpaque(false);
+		d5.setName("D5");
+		if(!CourierSystem.CityMap.getIntersection("D5").isOpen()){
+			d5.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			d5.setText("");
+		}
 		d5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("D5").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("D5").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("D5").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("D5").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("D5").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("D5").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -645,13 +732,16 @@ public class MapManagement  extends Container {
 
 		JButton d6 = new JButton("D6");
 		layeredPane.setLayer(d6, 1);
-		d6.setIcon(null);
-		d6.setOpaque(false);
+		d6.setName("D6");
+		if(!CourierSystem.CityMap.getIntersection("D6").isOpen()){
+			d6.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			d6.setText("");
+		}
 		d6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("D6").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("D6").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("D6").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("D6").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("D6").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("D6").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -665,13 +755,16 @@ public class MapManagement  extends Container {
 
 		JButton d7 = new JButton("D7");
 		layeredPane.setLayer(d7, 1);
-		d7.setIcon(null);
-		d7.setOpaque(false);
+		d7.setName("D7");
+		if(!CourierSystem.CityMap.getIntersection("D7").isOpen()){
+			d7.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			d7.setText("");
+		}
 		d7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("D7").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("D7").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("D7").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("D7").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("D7").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("D7").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -685,13 +778,16 @@ public class MapManagement  extends Container {
 
 		JButton e1 = new JButton("E1");
 		layeredPane.setLayer(e1, 1);
-		e1.setIcon(null);
-		e1.setOpaque(false);
+		e1.setName("E1");
+		if(!CourierSystem.CityMap.getIntersection("E1").isOpen()){
+			e1.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			e1.setText("");
+		}
 		e1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("E1").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("E1").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("E1").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("E1").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("E1").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("E1").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -705,13 +801,16 @@ public class MapManagement  extends Container {
 		
 		JButton e2 = new JButton("E2");
 		layeredPane.setLayer(e2, 1);
-		e2.setIcon(null);
-		e2.setOpaque(false);
+		e2.setName("E2");
+		if(!CourierSystem.CityMap.getIntersection("E2").isOpen()){
+			e2.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			e2.setText("");
+		}
 		e2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("E2").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("E2").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("E2").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("E2").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("E2").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("E2").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -725,13 +824,16 @@ public class MapManagement  extends Container {
 
 		JButton e3 = new JButton("E3");
 		layeredPane.setLayer(e3, 1);
-		e3.setIcon(null);
-		e3.setOpaque(false);
+		e3.setName("E3");
+		if(!CourierSystem.CityMap.getIntersection("E3").isOpen()){
+			e3.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			e3.setText("");
+		}
 		e3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("E3").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("E3").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("E3").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("E3").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("E3").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("E3").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -745,13 +847,16 @@ public class MapManagement  extends Container {
 
 		JButton e4 = new JButton("E4");
 		layeredPane.setLayer(e4, 1);
-		e4.setIcon(null);
-		e4.setOpaque(false);
+		e4.setName("E4");
+		if(!CourierSystem.CityMap.getIntersection("E4").isOpen()){
+			e4.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			e4.setText("");
+		}
 		e4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("E4").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("E4").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("E4").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("E4").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("E4").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("E4").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -765,13 +870,16 @@ public class MapManagement  extends Container {
 
 		JButton e5 = new JButton("E5");
 		layeredPane.setLayer(e5, 1);
-		e5.setIcon(null);
-		e5.setOpaque(false);
+		e5.setName("E5");
+		if(!CourierSystem.CityMap.getIntersection("E5").isOpen()){
+			e5.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			e5.setText("");
+		}
 		e5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("E5").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("E5").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("E5").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("E5").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("E5").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("E5").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -785,13 +893,16 @@ public class MapManagement  extends Container {
 
 		JButton e6 = new JButton("E6");
 		layeredPane.setLayer(e6, 1);
-		e6.setIcon(null);
-		e6.setOpaque(false);
+		e6.setName("E6");
+		if(!CourierSystem.CityMap.getIntersection("E6").isOpen()){
+			e6.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			e6.setText("");
+		}
 		e6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("E6").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("E6").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("E6").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("E6").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("E6").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("E6").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -805,13 +916,16 @@ public class MapManagement  extends Container {
 
 		JButton e7 = new JButton("E7");
 		layeredPane.setLayer(e7, 1);
-		e7.setIcon(null);
-		e7.setOpaque(false);
+		e7.setName("E7");
+		if(!CourierSystem.CityMap.getIntersection("E7").isOpen()){
+			e7.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			e7.setText("");
+		}
 		e7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("E7").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("E7").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("E7").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("E7").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("E7").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("E7").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -825,13 +939,16 @@ public class MapManagement  extends Container {
 
 		JButton f1 = new JButton("F1");
 		layeredPane.setLayer(f1, 1);
-		f1.setIcon(null);
-		f1.setOpaque(false);
+		f1.setName("F1");
+		if(!CourierSystem.CityMap.getIntersection("F1").isOpen()){
+			f1.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			f1.setText("");
+		}
 		f1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("F1").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("F1").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("F1").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("F1").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("F1").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("F1").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -845,13 +962,16 @@ public class MapManagement  extends Container {
 		
 		JButton f2 = new JButton("F2");
 		layeredPane.setLayer(f2, 1);
-		f2.setIcon(null);
-		f2.setOpaque(false);
+		f2.setName("F2");
+		if(!CourierSystem.CityMap.getIntersection("F2").isOpen()){
+			f2.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			f2.setText("");
+		}
 		f2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("F2").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("F2").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("F2").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("F2").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("F2").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("F2").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -865,13 +985,16 @@ public class MapManagement  extends Container {
 
 		JButton f3 = new JButton("F3");
 		layeredPane.setLayer(f3, 1);
-		f3.setIcon(null);
-		f3.setOpaque(false);
+		f3.setName("F3");
+		if(!CourierSystem.CityMap.getIntersection("F3").isOpen()){
+			f3.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			f3.setText("");
+		}
 		f3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("F3").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("F3").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("F3").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("F3").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("F3").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("F3").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -885,13 +1008,16 @@ public class MapManagement  extends Container {
 
 		JButton f4 = new JButton("F4");
 		layeredPane.setLayer(f4, 1);
-		f4.setIcon(null);
-		f4.setOpaque(false);
+		f4.setName("F4");
+		if(!CourierSystem.CityMap.getIntersection("F4").isOpen()){
+			f4.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			f4.setText("");
+		}
 		f4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("F4").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("F4").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("F4").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("F4").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("F4").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("F4").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -905,13 +1031,16 @@ public class MapManagement  extends Container {
 
 		JButton f5 = new JButton("F5");
 		layeredPane.setLayer(f5, 1);
-		f5.setIcon(null);
-		f5.setOpaque(false);
+		f5.setName("F5");
+		if(!CourierSystem.CityMap.getIntersection("F5").isOpen()){
+			f5.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			f5.setText("");
+		}
 		f5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("F5").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("F5").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("F5").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("F5").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("F5").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("F5").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -925,13 +1054,16 @@ public class MapManagement  extends Container {
 
 		JButton f6 = new JButton("F6");
 		layeredPane.setLayer(f6, 1);
-		f6.setIcon(null);
-		f6.setOpaque(false);
+		f6.setName("F6");
+		if(!CourierSystem.CityMap.getIntersection("F6").isOpen()){
+			f6.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			f6.setText("");
+		}
 		f6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("F6").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("F6").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("F6").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("F6").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("F6").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("F6").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -945,13 +1077,16 @@ public class MapManagement  extends Container {
 
 		JButton f7 = new JButton("F7");
 		layeredPane.setLayer(f7, 1);
-		f7.setIcon(null);
-		f7.setOpaque(false);
+		f7.setName("F7");
+		if(!CourierSystem.CityMap.getIntersection("F7").isOpen()){
+			f7.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			f7.setText("");
+		}
 		f7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("F7").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("F7").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("F7").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("F7").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("F7").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("F7").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -965,13 +1100,16 @@ public class MapManagement  extends Container {
 
 		JButton g1 = new JButton("G1");
 		layeredPane.setLayer(g1, 1);
-		g1.setIcon(null);
-		g1.setOpaque(false);
+		g1.setName("G1");
+		if(!CourierSystem.CityMap.getIntersection("G1").isOpen()){
+			g1.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			g1.setText("");
+		}
 		g1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("G1").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("G1").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("G1").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("G1").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("G1").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("G1").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -985,13 +1123,16 @@ public class MapManagement  extends Container {
 		
 		JButton g2 = new JButton("G2");
 		layeredPane.setLayer(g2, 1);
-		g2.setIcon(null);
-		g2.setOpaque(false);
+		g2.setName("G2");
+		if(!CourierSystem.CityMap.getIntersection("G2").isOpen()){
+			g2.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			g2.setText("");
+		}
 		g2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("G2").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("G2").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("G2").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("G2").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("G2").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("G2").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -1005,13 +1146,16 @@ public class MapManagement  extends Container {
 
 		JButton g3 = new JButton("G3");
 		layeredPane.setLayer(g3, 1);
-		g3.setIcon(null);
-		g3.setOpaque(false);
+		g3.setName("G3");
+		if(!CourierSystem.CityMap.getIntersection("G3").isOpen()){
+			g3.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			g3.setText("");
+		}
 		g3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("G3").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("G3").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("G3").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("G3").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("G3").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("G3").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -1025,13 +1169,16 @@ public class MapManagement  extends Container {
 
 		JButton g4 = new JButton("G4");
 		layeredPane.setLayer(g4, 1);
-		g4.setIcon(null);
-		g4.setOpaque(false);
+		g4.setName("G4");
+		if(!CourierSystem.CityMap.getIntersection("G4").isOpen()){
+			g4.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			g4.setText("");
+		}
 		g4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("G4").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("G4").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("G4").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("G4").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("G4").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("G4").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -1045,13 +1192,16 @@ public class MapManagement  extends Container {
 
 		JButton g5 = new JButton("G5");
 		layeredPane.setLayer(g5, 1);
-		g5.setIcon(null);
-		g5.setOpaque(false);
+		g5.setName("G5");
+		if(!CourierSystem.CityMap.getIntersection("G5").isOpen()){
+			g5.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			g5.setText("");
+		}
 		g5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("G5").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("G5").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("G5").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("G5").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("G5").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("G5").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -1065,13 +1215,16 @@ public class MapManagement  extends Container {
 
 		JButton g6 = new JButton("G6");
 		layeredPane.setLayer(g6, 1);
-		g6.setIcon(null);
-		g6.setOpaque(false);
+		g6.setName("G6");
+		if(!CourierSystem.CityMap.getIntersection("G6").isOpen()){
+			g6.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			g6.setText("");
+		}
 		g6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("G6").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("G6").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("G6").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("G6").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("G6").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("G6").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -1085,13 +1238,16 @@ public class MapManagement  extends Container {
 
 		JButton g7 = new JButton("G7");
 		layeredPane.setLayer(g7, 1);
-		g7.setIcon(null);
-		g7.setOpaque(false);
+		g7.setName("G7");
+		if(!CourierSystem.CityMap.getIntersection("G7").isOpen()){
+			g7.setIcon(new ImageIcon(MapManagement.class.getResource("/view/cancelled.png")));
+			g7.setText("");
+		}
 		g7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(map.getIntersection("G7").getName() + " Closure");
-				startSpinner.setValue(map.getIntersection("G7").getCloseStart().getTime());
-				endSpinner.setValue(map.getIntersection("G7").getCloseEnd().getTime());
+				lblIntersection.setText(CourierSystem.CityMap.getIntersection("G7").getName() + " Closure");
+				startSpinner.setValue(CourierSystem.CityMap.getIntersection("G7").getCloseStart().getTime());
+				endSpinner.setValue(CourierSystem.CityMap.getIntersection("G7").getCloseEnd().getTime());
 				lblClosureEnd.setVisible(true);
 				lblClosureStart.setVisible(true);
 				lblIntersection.setVisible(true);
@@ -1104,6 +1260,7 @@ public class MapManagement  extends Container {
 		layeredPane.add(g7, "cell 15 13,grow");
 
 		setBounds(layeredPane.getBounds());
+		
 	}
 	
 }

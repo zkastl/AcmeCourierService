@@ -24,14 +24,14 @@ public class Application {
 		window.setVisible(true);
 
 		// test map stuff
-		Map map = new Map();
-		map.getRoute(map.getIntersection("A1"), map.getIntersection("F1")).print();
+		//Map map = new Map();
+		CourierSystem.CityMap.getRoute(CourierSystem.CityMap.getIntersection("A1"), CourierSystem.CityMap.getIntersection("F1")).print();
 		Calendar start = Calendar.getInstance();
 		start.set(2016, 0, 1, 0, 0);
 		Calendar end = Calendar.getInstance();
-		end.set(2018, 12, 30, 23, 59);
-		map.getIntersection("B2").changeClosure(start, end);
-		map.getRoute(map.getIntersection("A1"), map.getIntersection("F1")).print();
+		end.set(2018, 11, 30, 23, 59);
+		CourierSystem.CityMap.getIntersection("B2").changeClosure(start, end);
+		CourierSystem.CityMap.getRoute(CourierSystem.CityMap.getIntersection("A1"), CourierSystem.CityMap.getIntersection("F1")).print();
 
 		/*
 		 * for(Character a = 'A'; a < 'H'; a++){ for(Integer i = 1; i < 8; i++)

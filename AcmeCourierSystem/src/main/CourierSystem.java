@@ -31,6 +31,7 @@ import model.Client;
 import model.Courier;
 import model.Delivery;
 import model.Employee;
+import model.Intersection;
 import model.Map;
 import model.Settings;
 
@@ -58,6 +59,7 @@ public final class CourierSystem  {
 		// LoadCouriers();
 		LoadClients();
 		LoadDeliveries();
+		LoadCityMap();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -172,7 +174,7 @@ public final class CourierSystem  {
 			em.persist(d);
 		}
 		trans.commit();
-		LoadClients();
+		LoadClients(); //TODO should this be LoadDeliveries?
 	}
 
 	public static void SaveDelivery(Delivery d) throws FileNotFoundException, IOException {
@@ -188,6 +190,46 @@ public final class CourierSystem  {
 		trans.begin();
 		em.remove(d);
 		Deliveries.remove(String.valueOf(d.packageID));
+		trans.commit();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static void LoadCityMap() throws Exception {
+		if (CityMap == null) {
+			CityMap = new Map();
+		}
+		try {
+			Query eQuery = em.createQuery("SELECT m FROM CityMap m", Map.class);
+			List<Map> maps = eQuery.getResultList();
+			for(Map m : maps) {
+				CityMap.setIntersections(m.getIntersections());
+			}
+		} catch (Exception ex) {
+			System.out.println(ex.getStackTrace());
+		}
+	}
+
+	public static void UpdateCityMap() throws Exception {
+		EntityTransaction trans = em.getTransaction();
+		trans.begin();
+		em.persist(CityMap);
+		trans.commit();
+		LoadCityMap();
+	}
+
+	public static void SaveCityMap(Map m) throws Exception {
+		EntityTransaction trans = em.getTransaction();
+		trans.begin();
+		em.merge(m);
+		trans.commit();
+		LoadCityMap();
+	}
+
+	public static void RemoveCityMap(Map m) throws Exception {
+		EntityTransaction trans = em.getTransaction();
+		trans.begin();
+		em.remove(m);
+		CityMap.clear();
 		trans.commit();
 	}
 
