@@ -1,13 +1,11 @@
 package main;
 
 import java.awt.Toolkit;
-import java.time.LocalDate;
+import java.util.Calendar;
 
 import javax.swing.JFrame;
 
-import model.Intersection;
 import model.Map;
-import model.Road;
 import view.LogInScreen;
 
 public class Application {
@@ -28,7 +26,11 @@ public class Application {
 		// test map stuff
 		Map map = new Map();
 		map.getRoute(map.getIntersection("A1"), map.getIntersection("F1")).print();
-		map.getIntersection("B2").changeClosure(LocalDate.of(2017, 6, 7), LocalDate.of(2018, 6, 9));
+		Calendar start = Calendar.getInstance();
+		start.set(2016, 0, 1, 0, 0);
+		Calendar end = Calendar.getInstance();
+		end.set(2018, 12, 30, 23, 59);
+		map.getIntersection("B2").changeClosure(start, end);
 		map.getRoute(map.getIntersection("A1"), map.getIntersection("F1")).print();
 
 		/*

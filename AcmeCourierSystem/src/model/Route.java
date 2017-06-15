@@ -144,33 +144,39 @@ public class Route {
 	 * route
 	 */
 	public void print() {
-		String directions = "";
-		int distance = 0;
-		Road prevStep = steps.peek();
-		
-		while(!steps.isEmpty()) {
-			Road step = steps.pop();
-			System.out.println(step.getDirection() + " " + step.getLength() + " blocks on " + step.getName()); //
-			
-			if(step.getDirection().compareTo(prevStep.getDirection()) == 0) {
-				distance = distance + step.getLength();
-				if(steps.isEmpty()) {
-					directions = directions + "go " + prevStep.getDirection() + " " + distance + " blocks on " + prevStep.getName() + "\n";
+		if(steps.isEmpty()) {
+			System.out.println("No path available");
+		} else {
+			String directions = "";
+			int distance = 0;
+			Road prevStep = steps.peek();
+			int stepNumber = 0;
+			while(!steps.isEmpty()) {
+				Road step = steps.pop();
+				System.out.println(step.getDirection() + " " + step.getLength() + " blocks on " + step.getName()); //
+				
+				if(step.getDirection().compareTo(prevStep.getDirection()) == 0) {
+					distance = distance + step.getLength();
+					if(steps.isEmpty()) {
+						stepNumber++;
+						directions = directions + stepNumber + ". Go " + prevStep.getDirection() + " " + distance + " blocks on " + prevStep.getName() + "\n";
+					}
+				} else {
+					if(distance == 0) {
+						distance = prevStep.getLength();
+					}
+					stepNumber++;
+					directions = directions + stepNumber + ". Go " + prevStep.getDirection() + " " + distance + " blocks on " + prevStep.getName() + "\n";
+					distance = step.getLength();
+					if(steps.isEmpty()) {
+						stepNumber++;
+						directions = directions + stepNumber + ". Go " + step.getDirection() + " " + step.getLength() + " blocks on " + step.getName() + "\n";
+					}
 				}
-			} else {
-				if(distance == 0) {
-					distance = prevStep.getLength();
-				}
-				directions = directions + "go " + prevStep.getDirection() + " " + distance + " blocks on " + prevStep.getName() + "\n";
-				distance = step.getLength();
-				if(steps.isEmpty()) {
-					directions = directions + "go " + step.getDirection() + " " + step.getLength() + " blocks on " + step.getName() + "\n";
-				}
+				
+				prevStep = step;
 			}
-			
-			prevStep = step;
+			System.out.println(directions);
 		}
-		System.out.println(directions);
 	}
-
 }
