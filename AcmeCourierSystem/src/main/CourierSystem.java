@@ -79,7 +79,7 @@ public final class CourierSystem  {
 		}
 		
 		if (Employees.size() == 0) {
-			Employees.put("Admin", new Employee());
+			Employees.put("Admin", new Employee("admin"));
 		}
 	}
 

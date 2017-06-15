@@ -19,6 +19,8 @@ import main.CourierSystem;
 import model.Client;
 import model.Delivery;
 import model.DeliveryStatus;
+import model.Employee;
+import model.EmployeeRole;
 import net.miginfocom.swing.MigLayout;
 
 public class DeliveryManagement extends Container {
@@ -62,7 +64,8 @@ public class DeliveryManagement extends Container {
 		statusComboBox.addItem(DeliveryStatus.Requested);
 		statusComboBox.addItem(DeliveryStatus.Completed);
 		statusComboBox.addItem(DeliveryStatus.Canceled);
-		table.getColumnModel().getColumn(8).setCellEditor(new DefaultCellEditor(statusComboBox));
+		table.getColumnModel().getColumn(9).setCellEditor(new DefaultCellEditor(statusComboBox));
+		updateAvailableCouriers();
 
 		btnCreateDelivery.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -119,5 +122,15 @@ public class DeliveryManagement extends Container {
 		}
 		table.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(fromComboBox));
 		table.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(toComboBox));
+	}
+	
+	public void updateAvailableCouriers() {
+		JComboBox<String> availableCouriers = new JComboBox<String>();
+		for(Employee e : CourierSystem.Employees.values()) {
+			if (!e.getIsArchived() && e.role == EmployeeRole.Courier) {
+				availableCouriers.addItem(e.name);
+			}
+		}
+		table.getColumnModel().getColumn(10).setCellEditor(new DefaultCellEditor(availableCouriers));
 	}
 }
