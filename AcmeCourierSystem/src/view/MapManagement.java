@@ -78,6 +78,7 @@ public class MapManagement  extends Container {
 		JButton saveChanges = new JButton("Save Changes");
 		layeredPane.setLayer(saveChanges, 1);
 		saveChanges.setIcon(null);
+		saveChanges.setName("saveChanges");
 		saveChanges.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Calendar startTime = Calendar.getInstance();
@@ -116,6 +117,7 @@ public class MapManagement  extends Container {
 		JButton cancel = new JButton("Cancel");
 		layeredPane.setLayer(cancel, 1);
 		cancel.setIcon(null);
+		cancel.setName("cancel");
 		cancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lblClosureEnd.setVisible(false);
