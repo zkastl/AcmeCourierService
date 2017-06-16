@@ -31,7 +31,6 @@ import model.Client;
 import model.Courier;
 import model.Delivery;
 import model.Employee;
-import model.Intersection;
 import model.Map;
 import model.Settings;
 
@@ -53,10 +52,8 @@ public final class CourierSystem  {
 		// Load the database.
 		factory = Persistence.createEntityManagerFactory("entities");
 		em = factory.createEntityManager();
-		Clients = new HashMap<String, Client>();
 
 		LoadEmployees();
-		// LoadCouriers();
 		LoadClients();
 		LoadDeliveries();
 		LoadCityMap();
@@ -113,6 +110,7 @@ public final class CourierSystem  {
 
 	@SuppressWarnings("unchecked")
 	public static void LoadClients() throws Exception {
+		Clients = new HashMap<String, Client>();
 		try {
 			Query eQuery = em.createQuery("SELECT c FROM Clients c", Client.class);
 			List<Client> cli = eQuery.getResultList();
@@ -195,32 +193,20 @@ public final class CourierSystem  {
 	
 	@SuppressWarnings("unchecked")
 	public static void LoadCityMap() throws Exception {
-		if (CityMap == null) {
-			CityMap = new Map();
-		}
 		try {
 			Query eQuery = em.createQuery("SELECT m FROM CityMap m", Map.class);
 			List<Map> maps = eQuery.getResultList();
-			for(Map m : maps) {
-				CityMap.setIntersections(m.getIntersections());
-			}
+			CourierSystem.CityMap = (maps != null && !maps.isEmpty()) ? maps.get(maps.size() - 1) : new Map();
+			
 		} catch (Exception ex) {
 			System.out.println(ex.getStackTrace());
 		}
 	}
 
-	public static void UpdateCityMap() throws Exception {
+	public static void SaveCityMap() throws Exception {
 		EntityTransaction trans = em.getTransaction();
 		trans.begin();
-		em.persist(CityMap);
-		trans.commit();
-		LoadCityMap();
-	}
-
-	public static void SaveCityMap(Map m) throws Exception {
-		EntityTransaction trans = em.getTransaction();
-		trans.begin();
-		em.merge(m);
+		em.persist(CourierSystem.CityMap);
 		trans.commit();
 		LoadCityMap();
 	}

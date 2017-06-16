@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 /**
  * a directed graph that holds the geographical area serviced by the company
@@ -15,6 +15,11 @@ public class Map implements Serializable {
 	/**
 	 * 
 	 */
+	@Id
+	@Column(name="ID")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	public long mapId;
+	
 	private static final long serialVersionUID = 1L;
 	/**
 	 * The array of intersections that are on the map

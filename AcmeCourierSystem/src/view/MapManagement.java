@@ -27,10 +27,8 @@ import java.awt.Component;
 
 public class MapManagement  extends Container {
 	private static final long serialVersionUID = 1L;
-	//private Map map;
 	
 	public MapManagement(JFrame window) {
-		//map = new Map();
 		
 		setLayout(new BorderLayout(0, 0));
 		
@@ -87,11 +85,11 @@ public class MapManagement  extends Container {
 				endTime.setTime((Date)endSpinner.getValue());
 				
 				CourierSystem.CityMap.getIntersection(lblIntersection.getText().substring(0, lblIntersection.getText().length() - " Closure".length())).changeClosure(startTime, endTime);
-				/*try {
-					CourierSystem.UpdateCityMap();
+				try {
+					CourierSystem.SaveCityMap();
 				} catch (Exception e1) {
 					e1.printStackTrace();
-				}*/
+				}
 				// indicate that the intersection is closed
 				if(!CourierSystem.CityMap.getIntersection(lblIntersection.getText().substring(0, lblIntersection.getText().length() - " Closure".length())).isOpen()) {
 					for(Component button :layeredPane.getComponentsInLayer(1)) {

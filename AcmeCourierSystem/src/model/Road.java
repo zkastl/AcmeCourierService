@@ -1,9 +1,12 @@
 package model;
 
+import java.io.Serializable;
+
 /**
  * an edge in the map graph. the connection between two intersections
  */
-public class Road {
+@SuppressWarnings("serial")
+public class Road implements Serializable {
 
 	/**
 	 * The intersection the road starts from
