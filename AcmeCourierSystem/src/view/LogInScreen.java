@@ -85,7 +85,6 @@ public class LogInScreen extends Container {
 
 	private boolean AttemptLogin(JFrame window, String username, String password) {
 		for (Employee e : CourierSystem.Employees.values()) {
-			System.out.println(e.userName);
 			if (e.userName.equalsIgnoreCase(username) && e.password.equals(password) && !e.getIsArchived()) {
 				CourierSystem.currentUser = e;
 
@@ -94,9 +93,6 @@ public class LogInScreen extends Container {
 				window.setContentPane(new MainScreen(window));
 				window.validate();
 				return true;
-			} else {
-				System.out.println(e.userName + " " + username);
-				System.out.println(e.password + " " + password);
 			}
 		}
 		return false;

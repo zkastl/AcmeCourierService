@@ -194,29 +194,33 @@ public final class CourierSystem  {
 	@SuppressWarnings("unchecked")
 	public static void LoadCityMap() throws Exception {
 		try {
-			Query eQuery = em.createQuery("SELECT m FROM CityMap m", Map.class);
+			Query eQuery = em.createQuery("SELECT m FROM Map m", Map.class);
 			List<Map> maps = eQuery.getResultList();
-			CourierSystem.CityMap = (maps != null && !maps.isEmpty()) ? maps.get(maps.size() - 1) : new Map();
+			CourierSystem.CityMap = (maps != null && !maps.isEmpty()) ? maps.get(0) : new Map();
+			PrintMapToConsole();
 			
 		} catch (Exception ex) {
-			System.out.println(ex.getStackTrace());
+			System.out.println(ex.getMessage());
 		}
 	}
 
 	public static void SaveCityMap() throws Exception {
 		EntityTransaction trans = em.getTransaction();
 		trans.begin();
+		em.createQuery("DELETE FROM Map c").executeUpdate();
 		em.persist(CourierSystem.CityMap);
+		em.flush();
 		trans.commit();
 		LoadCityMap();
+		PrintMapToConsole();
 	}
-
-	public static void RemoveCityMap(Map m) throws Exception {
-		EntityTransaction trans = em.getTransaction();
-		trans.begin();
-		em.remove(m);
-		CityMap.clear();
-		trans.commit();
+	
+	public static void PrintMapToConsole() {
+		System.out.println("City Map: ID-" + CourierSystem.CityMap.mapId);
+		System.out.println("Closed Intersections:");
+		for(String s : CourierSystem.CityMap.getClosedIntersections()) {
+			System.out.println("  " + s);
+		}
 	}
 
 	private CourierSystem() throws Exception {

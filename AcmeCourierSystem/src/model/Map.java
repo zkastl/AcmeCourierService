@@ -3,13 +3,14 @@ package model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.persistence.*;
 
 /**
  * a directed graph that holds the geographical area serviced by the company
  */
-@Entity(name="CityMap")
+@Entity(name="Map")
 public class Map implements Serializable {
 
 	/**
@@ -17,7 +18,7 @@ public class Map implements Serializable {
 	 */
 	@Id
 	@Column(name="ID")
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	public long mapId;
 	
 	private static final long serialVersionUID = 1L;
@@ -306,5 +307,15 @@ public class Map implements Serializable {
 		addIntersection(g5);
 		addIntersection(g6);
 		addIntersection(g7);
+	}
+	
+	public List<String> getClosedIntersections() {
+		ArrayList<String> closed = new ArrayList<String>();
+		for(Intersection i : intersections.values()) {
+			if (!i.isOpen())
+				closed.add(i.getName());
+		}
+		
+		return closed;
 	}
 }

@@ -25,9 +25,10 @@ public class ClientManagement extends Container {
 
 	private static final long serialVersionUID = 1L;
 	private JTable table;
+	private ClientTableModel clientTable;
 
 	public ClientManagement() {
-		ClientTableModel clientTable = new ClientTableModel();
+		clientTable = new ClientTableModel();
 		setLayout(new MigLayout("", "[grow][50%][grow][10]", "[25][40][5][grow][][20]"));
 
 		JLabel lblEmployeeManagement = new JLabel("Client Management");
@@ -94,20 +95,24 @@ public class ClientManagement extends Container {
 
 		btnSaveChanges.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (!TableValidator.isValid(table))
-					return;
-				try {
-					CourierSystem.Clients = new HashMap<String, Client>();
-					for(Client cli : clientTable.clients) {
-						CourierSystem.Clients.put(cli.name, cli);
-					}
-					CourierSystem.UpdateClients();
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				} finally {
-					clientTable.refresh();
-				}
+				save();
 			}
 		});
+	}
+	
+	private void save() {
+		if (!TableValidator.isValid(table))
+			return;
+		try {
+			CourierSystem.Clients = new HashMap<String, Client>();
+			for(Client cli : clientTable.clients) {
+				CourierSystem.Clients.put(cli.name, cli);
+			}
+			CourierSystem.UpdateClients();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		} finally {
+			clientTable.refresh();
+		}
 	}
 }

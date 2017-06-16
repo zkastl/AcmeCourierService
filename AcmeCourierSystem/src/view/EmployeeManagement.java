@@ -27,9 +27,10 @@ public class EmployeeManagement extends Container {
 
 	private static final long serialVersionUID = 1L;
 	private JTable table;
+	private EmployeeTableModel employeeTable;
 
 	public EmployeeManagement() {
-		EmployeeTableModel employeeTable = new EmployeeTableModel();
+		employeeTable = new EmployeeTableModel();
 		setLayout(new MigLayout("", "[grow][50%][grow][10]", "[25][40][5][grow][][20]"));
 
 		JLabel lblEmployeeManagement = new JLabel("Employee Management");
@@ -84,25 +85,32 @@ public class EmployeeManagement extends Container {
 					employee.ArchiveEmployee();
 				}
 				employeeTable.removeRow(selectedRow);
+				saveAction();
 			}
 		});
 
 		btnSaveChanges.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (!TableValidator.isValid(table))
-					return;
-				try {
-					CourierSystem.Employees = new HashMap<String, Employee>();
-					for (Employee emp : employeeTable.employees) {
-						CourierSystem.Employees.put(emp.name, emp);
-					}
-					CourierSystem.UpdateEmployees();
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				} finally {
-					employeeTable.refresh();
-				}
+				saveAction();
 			}
 		});
+	}
+	
+	private void saveAction() {
+		if (!TableValidator.isValid(table))
+			return;
+		try {
+			CourierSystem.Employees = new HashMap<String, Employee>();
+			for (Employee emp : employeeTable.employees) {
+				CourierSystem.Employees.put(emp.name, emp);
+			}
+			CourierSystem.UpdateEmployees();
+		} 
+		catch (Exception e1) {
+			e1.printStackTrace();
+		} 
+		finally {
+			employeeTable.refresh();
+		}
 	}
 }
