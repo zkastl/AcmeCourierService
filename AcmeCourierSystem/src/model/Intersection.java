@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Objects;
@@ -29,12 +30,12 @@ public class Intersection implements Comparable<Intersection>, Serializable {
 	 * The first day of the most recent closure of the intersection, must be <=
 	 * closeEnd, initialize to 1/1/17
 	 */
-	private Calendar closeStart;
+	private LocalDate closeStart;
 	/**
 	 * the last day of the most recent closure of the intersection, must be >=
 	 * closeStart, initialize to 1/1/17
 	 */
-	private Calendar closeEnd;
+	private LocalDate closeEnd;
 	/**
 	 * an array of the roads that start at the intersection (the edges that
 	 * leave the node)
@@ -53,10 +54,8 @@ public class Intersection implements Comparable<Intersection>, Serializable {
 	public Intersection(String st, String ave) {
 		street = st;
 		avenue = ave;
-		closeStart = Calendar.getInstance();
-		closeStart.set(2017, 0, 1, 0, 0);
-		closeEnd = Calendar.getInstance();
-		closeEnd.set(2017, 0, 1, 23, 59);
+		closeStart = LocalDate.of(2017, 1, 1);
+		closeEnd = LocalDate.of(2017, 1, 1);
 		roads = new ArrayList<Road>();
 		distance = 0;
 		previous = null;
@@ -66,17 +65,15 @@ public class Intersection implements Comparable<Intersection>, Serializable {
 	public Intersection(String st, String ave, ArrayList<Road> roads) {
 		street = st;
 		avenue = ave;
-		closeStart = Calendar.getInstance();
-		closeStart.set(2017, 1, 1, 0, 0);
-		closeEnd = Calendar.getInstance();
-		closeEnd.set(2017, 1, 1, 23, 59);
+		closeStart = LocalDate.of(2017, 1, 1);
+		closeEnd = LocalDate.of(2017, 1, 1);
 		this.roads = roads;
 		distance = 0;
 		previous = null;
 		visited = false;
 	}
 
-	public Intersection(String st, String ave, ArrayList<Road> roads, Calendar closeStart, Calendar closeEnd) {
+	public Intersection(String st, String ave, ArrayList<Road> roads, LocalDate closeStart, LocalDate closeEnd) {
 		street = st;
 		avenue = ave;
 		this.closeStart = closeStart;
@@ -99,11 +96,11 @@ public class Intersection implements Comparable<Intersection>, Serializable {
 		return street + avenue;
 	}
 
-	public Calendar getCloseStart() {
+	public LocalDate getCloseStart() {
 		return closeStart;
 	}
 
-	public Calendar getCloseEnd() {
+	public LocalDate getCloseEnd() {
 		return closeEnd;
 	}
 
@@ -143,9 +140,9 @@ public class Intersection implements Comparable<Intersection>, Serializable {
 	 * returns true if closeEnd is in the past, or closeStart is in the future
 	 */
 	public boolean isOpen() {
-		Calendar today = Calendar.getInstance();
-		// today.setTime(new Date()); //shouldn't be necessary
-		if (today.before(closeStart) || today.after(closeEnd)) {
+		LocalDate today = LocalDate.now();
+		
+		if (today.isBefore(closeStart) || today.isAfter(closeEnd)) {
 			return true;
 		}
 		return false;
@@ -158,8 +155,8 @@ public class Intersection implements Comparable<Intersection>, Serializable {
 	 * @param start
 	 * @param end
 	 */
-	public void changeClosure(Calendar start, Calendar end) {
-		if (end.before(start)) {
+	public void changeClosure(LocalDate start, LocalDate end) {
+		if (end.isBefore(start)) {
 			// error message
 			System.out.println("closeEnd cannot be before closeStart");
 		} else {

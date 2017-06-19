@@ -1,7 +1,11 @@
 package view;
 
 import java.awt.Container;
-import java.awt.Font;
+
+import com.github.lgooddatepicker.components.DatePicker;
+import com.github.lgooddatepicker.components.DateTimePicker;
+
+import javafx.util.converter.LocalDateStringConverter;
 
 import javax.swing.JLabel;
 
@@ -10,6 +14,8 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.ImageIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JSpinner;
@@ -27,6 +33,13 @@ import java.awt.Component;
 
 public class MapManagement  extends Container {
 	private static final long serialVersionUID = 1L;
+	private JLabel lblIntersection;
+	private JLabel lblClosureStart;
+	private JLabel lblClosureEnd;
+	private DatePicker startSpinner;
+	private DatePicker endSpinner;
+	private JButton saveChanges;
+	private JButton cancel;
 	
 	public MapManagement(JFrame window) {
 		
@@ -40,53 +53,54 @@ public class MapManagement  extends Container {
 		backgroundMap.setIcon(new ImageIcon(MapManagement.class.getResource("/view/MapLow.png")));
 		layeredPane.add(backgroundMap, "cell 0 0 17 15,alignx right,aligny center");
 		
-		JLabel lblIntersection = new JLabel("Z0 Closure");
+		lblIntersection = new JLabel("Z0 Closure");
 		layeredPane.setLayer(lblIntersection, 1);
 		lblIntersection.setVisible(false);
 		layeredPane.add(lblIntersection, "cell 2 0");
 		
-		JLabel lblClosureStart = new JLabel("Start:");
+		lblClosureStart = new JLabel("Start:");
 		layeredPane.setLayer(lblClosureStart, 1);
 		lblClosureStart.setVisible(false);
-		layeredPane.add(lblClosureStart, "cell 3 0 2");
+		layeredPane.add(lblClosureStart, "cell 3 0,alignx right");
 		
-		Calendar start = Calendar.getInstance();
+		/*Calendar start = Calendar.getInstance();
 		start.set(Calendar.HOUR_OF_DAY, 0);
 		start.set(Calendar.MINUTE, 0);
 		SpinnerModel startModel = new SpinnerDateModel(start.getTime(), null, null,Calendar.YEAR);
-		JSpinner startSpinner = new JSpinner(startModel);
+		JSpinner startSpinner = new JSpinner(startModel);*/
+		startSpinner = new DatePicker();
 		startSpinner.setVisible(false);
-		layeredPane.add(startSpinner, "cell 4 0 4 1,alignx left,aligny center");
+		layeredPane.add(startSpinner, "cell 4 0 3 1,alignx left,aligny center");
 		layeredPane.setLayer(startSpinner, 1);
 		
-		JLabel lblClosureEnd = new JLabel("End:");
+		lblClosureEnd = new JLabel("End:");
 		layeredPane.setLayer(lblClosureEnd, 1);
 		lblClosureEnd.setVisible(false);
-		layeredPane.add(lblClosureEnd, "cell 7 0");
+		layeredPane.add(lblClosureEnd, "cell 7 0,alignx right");
 		
-		Calendar end = Calendar.getInstance();
+		/*Calendar end = Calendar.getInstance();
 		end.set(Calendar.HOUR_OF_DAY, 23);
 		end.set(Calendar.MINUTE, 59);
 		SpinnerModel endModel = new SpinnerDateModel(end.getTime(), null, null,Calendar.YEAR);
-		JSpinner endSpinner = new JSpinner(endModel);
+		JSpinner endSpinner = new JSpinner(endModel);*/
+		endSpinner = new DatePicker();
 		endSpinner.setVisible(false);
-		layeredPane.add(endSpinner, "cell 8 0 4 1,alignx left,aligny center");
+		layeredPane.add(endSpinner, "cell 8 0 3 1,alignx left,aligny center");
 		layeredPane.setLayer(endSpinner, 1);
 				
-		JButton saveChanges = new JButton("Save Changes");
+		saveChanges = new JButton("Save Changes");
 		layeredPane.setLayer(saveChanges, 1);
 		saveChanges.setIcon(null);
 		saveChanges.setName("saveChanges");
 		saveChanges.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Calendar startTime = Calendar.getInstance();
-				startTime.setTime((Date)startSpinner.getValue());
-				Calendar endTime = Calendar.getInstance();
-				endTime.setTime((Date)endSpinner.getValue());
-				
-				CourierSystem.CityMap.getIntersection(lblIntersection.getText().substring(0, lblIntersection.getText().length() - " Closure".length())).changeClosure(startTime, endTime);
+				LocalDate startDate = startSpinner.getDate();
+				LocalDate endDate = endSpinner.getDate();
+
+				CourierSystem.CityMap.getIntersection(lblIntersection.getText().substring(0, lblIntersection.getText().length() - " Closure".length())).changeClosure(startDate, endDate);
 				try {
 					CourierSystem.SaveCityMap();
+					hideEditor();
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -108,28 +122,23 @@ public class MapManagement  extends Container {
 				}
 				
 			}
+			
 		});
 		saveChanges.setVisible(false);
-		layeredPane.add(saveChanges, "cell 11 0 3");
+		layeredPane.add(saveChanges, "cell 12 0 3");
 		
-		JButton cancel = new JButton("Cancel");
+		cancel = new JButton("Cancel");
 		layeredPane.setLayer(cancel, 1);
 		cancel.setIcon(null);
 		cancel.setName("cancel");
 		cancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblClosureEnd.setVisible(false);
-				lblClosureStart.setVisible(false);
-				lblIntersection.setVisible(false);
-				startSpinner.setVisible(false);
-				endSpinner.setVisible(false);
-				saveChanges.setVisible(false);
-				cancel.setVisible(false);
+				hideEditor();
 				CourierSystem.CityMap.getRoute(CourierSystem.CityMap.getIntersection("A1"), CourierSystem.CityMap.getIntersection("F1")).print();
 			}
 		});
 		cancel.setVisible(false);
-		layeredPane.add(cancel, "cell 14 0 2 1,alignx left");
+		layeredPane.add(cancel, "cell 15 0 2 1,alignx left");
 		
 		JButton a1 = new JButton("A1");
 		layeredPane.setLayer(a1, 1);
@@ -140,16 +149,7 @@ public class MapManagement  extends Container {
 		}
 		a1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("A1").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("A1").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("A1").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("A1");
 			}
 		});
 		layeredPane.add(a1, "cell 3 1,grow");
@@ -163,16 +163,7 @@ public class MapManagement  extends Container {
 		}
 		a2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("A2").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("A2").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("A2").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("A2");
 			}
 		});
 		layeredPane.add(a2, "cell 3 3,grow");
@@ -186,16 +177,7 @@ public class MapManagement  extends Container {
 		}
 		a3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("A3").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("A3").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("A3").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("A3");
 			}
 		});
 		layeredPane.add(a3, "cell 3 5,grow");
@@ -209,16 +191,7 @@ public class MapManagement  extends Container {
 		}
 		a4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("A4").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("A4").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("A4").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("A4");
 			}
 		});
 		layeredPane.add(a4, "cell 3 7,grow");
@@ -232,16 +205,7 @@ public class MapManagement  extends Container {
 		}
 		a5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("A5").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("A5").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("A5").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("A5");
 			}
 		});
 		layeredPane.add(a5, "cell 3 9,grow");
@@ -255,16 +219,7 @@ public class MapManagement  extends Container {
 		}
 		a6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("A6").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("A6").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("A6").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("A6");
 			}
 		});
 		layeredPane.add(a6, "cell 3 11,grow");
@@ -278,16 +233,7 @@ public class MapManagement  extends Container {
 		}
 		a7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("A7").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("A7").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("A7").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("A7");
 			}
 		});
 		layeredPane.add(a7, "cell 3 13,grow");
@@ -301,16 +247,7 @@ public class MapManagement  extends Container {
 		}
 		b1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("B1").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("B1").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("B1").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("B1");
 			}
 		});
 		layeredPane.add(b1, "cell 5 1,grow");
@@ -324,16 +261,7 @@ public class MapManagement  extends Container {
 		}
 		b2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("B2").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("B2").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("B2").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("B2");
 			}
 		});
 		layeredPane.add(b2, "cell 5 3,grow");
@@ -347,16 +275,7 @@ public class MapManagement  extends Container {
 		}
 		b3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("B3").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("B3").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("B3").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("B3");
 			}
 		});
 		layeredPane.add(b3, "cell 5 5,grow");
@@ -370,16 +289,7 @@ public class MapManagement  extends Container {
 		}
 		b4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("B4").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("B4").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("B4").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("B4");
 			}
 		});
 		layeredPane.add(b4, "cell 5 7,grow");
@@ -393,16 +303,7 @@ public class MapManagement  extends Container {
 		}
 		b5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("B5").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("B5").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("B5").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("B5");
 			}
 		});
 		layeredPane.add(b5, "cell 5 9,grow");
@@ -416,16 +317,7 @@ public class MapManagement  extends Container {
 		}
 		b6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("B6").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("B6").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("B6").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("B6");
 			}
 		});
 		layeredPane.add(b6, "cell 5 11,grow");
@@ -439,16 +331,7 @@ public class MapManagement  extends Container {
 		}
 		b7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("B7").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("B7").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("B7").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("B7");
 			}
 		});
 		layeredPane.add(b7, "cell 5 13,grow");
@@ -462,16 +345,7 @@ public class MapManagement  extends Container {
 		}
 		c1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("C1").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("C1").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("C1").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("C1");
 			}
 		});
 		layeredPane.add(c1, "cell 7 1,grow");
@@ -485,16 +359,7 @@ public class MapManagement  extends Container {
 		}
 		c2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("C2").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("C2").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("C2").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("C2");
 			}
 		});
 		layeredPane.add(c2, "cell 7 3,grow");
@@ -508,16 +373,7 @@ public class MapManagement  extends Container {
 		}
 		c3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("C3").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("C3").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("C3").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("C3");
 			}
 		});
 		layeredPane.add(c3, "cell 7 5,grow");
@@ -531,16 +387,7 @@ public class MapManagement  extends Container {
 		}
 		c4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("C4").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("C4").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("C4").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("C4");
 			}
 		});
 		layeredPane.add(c4, "cell 7 7,grow");
@@ -554,16 +401,7 @@ public class MapManagement  extends Container {
 		}
 		c5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("C5").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("C5").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("C5").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("C5");
 			}
 		});
 		layeredPane.add(c5, "cell 7 9,grow");
@@ -577,16 +415,7 @@ public class MapManagement  extends Container {
 		}
 		c6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("C6").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("C6").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("C6").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("C6");
 			}
 		});
 		layeredPane.add(c6, "cell 7 11,grow");
@@ -601,16 +430,7 @@ public class MapManagement  extends Container {
 		}
 		c7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("C7").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("C7").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("C7").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("C7");
 			}
 		});
 		layeredPane.add(c7, "cell 7 13,grow");
@@ -624,16 +444,7 @@ public class MapManagement  extends Container {
 		}
 		d1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("D1").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("D1").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("D1").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("D1");
 			}
 		});
 		layeredPane.add(d1, "cell 9 1,grow");
@@ -647,16 +458,7 @@ public class MapManagement  extends Container {
 		}
 		d2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("D2").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("D2").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("D2").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("D2");
 			}
 		});
 		layeredPane.add(d2, "cell 9 3,grow");
@@ -670,16 +472,7 @@ public class MapManagement  extends Container {
 		}
 		d3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("D3").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("D3").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("D3").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("D3");
 			}
 		});
 		layeredPane.add(d3, "cell 9 5,grow");
@@ -693,16 +486,7 @@ public class MapManagement  extends Container {
 		}
 		d4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("D4").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("D4").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("D4").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("D4");
 			}
 		});
 		layeredPane.add(d4, "cell 9 7,grow");
@@ -716,16 +500,7 @@ public class MapManagement  extends Container {
 		}
 		d5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("D5").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("D5").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("D5").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("D5");
 			}
 		});
 		layeredPane.add(d5, "cell 9 9,grow");
@@ -739,16 +514,7 @@ public class MapManagement  extends Container {
 		}
 		d6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("D6").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("D6").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("D6").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("D6");
 			}
 		});
 		layeredPane.add(d6, "cell 9 11,grow");
@@ -762,16 +528,7 @@ public class MapManagement  extends Container {
 		}
 		d7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("D7").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("D7").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("D7").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("D7");
 			}
 		});
 		layeredPane.add(d7, "cell 9 13,grow");
@@ -785,16 +542,7 @@ public class MapManagement  extends Container {
 		}
 		e1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("E1").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("E1").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("E1").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("E1");
 			}
 		});
 		layeredPane.add(e1, "cell 11 1,grow");
@@ -808,16 +556,7 @@ public class MapManagement  extends Container {
 		}
 		e2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("E2").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("E2").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("E2").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("E2");
 			}
 		});
 		layeredPane.add(e2, "cell 11 3,grow");
@@ -831,16 +570,7 @@ public class MapManagement  extends Container {
 		}
 		e3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("E3").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("E3").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("E3").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("E3");
 			}
 		});
 		layeredPane.add(e3, "cell 11 5,grow");
@@ -854,16 +584,7 @@ public class MapManagement  extends Container {
 		}
 		e4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("E4").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("E4").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("E4").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("E4");
 			}
 		});
 		layeredPane.add(e4, "cell 11 7,grow");
@@ -877,16 +598,7 @@ public class MapManagement  extends Container {
 		}
 		e5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("E5").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("E5").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("E5").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("E5");
 			}
 		});
 		layeredPane.add(e5, "cell 11 9,grow");
@@ -900,16 +612,7 @@ public class MapManagement  extends Container {
 		}
 		e6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("E6").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("E6").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("E6").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("E6");
 			}
 		});
 		layeredPane.add(e6, "cell 11 11,grow");
@@ -923,16 +626,7 @@ public class MapManagement  extends Container {
 		}
 		e7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("E7").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("E7").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("E7").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("E7");
 			}
 		});
 		layeredPane.add(e7, "cell 11 13,grow");
@@ -946,16 +640,7 @@ public class MapManagement  extends Container {
 		}
 		f1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("F1").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("F1").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("F1").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("F1");
 			}
 		});
 		layeredPane.add(f1, "cell 13 1,grow");
@@ -969,16 +654,7 @@ public class MapManagement  extends Container {
 		}
 		f2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("F2").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("F2").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("F2").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("F2");
 			}
 		});
 		layeredPane.add(f2, "cell 13 3,grow");
@@ -992,16 +668,7 @@ public class MapManagement  extends Container {
 		}
 		f3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("F3").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("F3").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("F3").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("F3");
 			}
 		});
 		layeredPane.add(f3, "cell 13 5,grow");
@@ -1015,16 +682,7 @@ public class MapManagement  extends Container {
 		}
 		f4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("F4").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("F4").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("F4").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("F4");
 			}
 		});
 		layeredPane.add(f4, "cell 13 7,grow");
@@ -1038,16 +696,7 @@ public class MapManagement  extends Container {
 		}
 		f5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("F5").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("F5").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("F5").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("F5");
 			}
 		});
 		layeredPane.add(f5, "cell 13 9,grow");
@@ -1061,16 +710,7 @@ public class MapManagement  extends Container {
 		}
 		f6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("F6").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("F6").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("F6").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("F6");
 			}
 		});
 		layeredPane.add(f6, "cell 13 11,grow");
@@ -1084,16 +724,7 @@ public class MapManagement  extends Container {
 		}
 		f7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("F7").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("F7").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("F7").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("F7");
 			}
 		});
 		layeredPane.add(f7, "cell 13 13,grow");
@@ -1107,16 +738,7 @@ public class MapManagement  extends Container {
 		}
 		g1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("G1").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("G1").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("G1").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("G1");
 			}
 		});
 		layeredPane.add(g1, "cell 15 1,grow");
@@ -1130,16 +752,7 @@ public class MapManagement  extends Container {
 		}
 		g2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("G2").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("G2").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("G2").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("G2");
 			}
 		});
 		layeredPane.add(g2, "cell 15 3,grow");
@@ -1153,16 +766,7 @@ public class MapManagement  extends Container {
 		}
 		g3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("G3").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("G3").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("G3").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("G3");
 			}
 		});
 		layeredPane.add(g3, "cell 15 5,grow");
@@ -1176,16 +780,7 @@ public class MapManagement  extends Container {
 		}
 		g4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("G4").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("G4").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("G4").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("G4");
 			}
 		});
 		layeredPane.add(g4, "cell 15 7,grow");
@@ -1199,16 +794,7 @@ public class MapManagement  extends Container {
 		}
 		g5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("G5").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("G5").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("G5").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("G5");
 			}
 		});
 		layeredPane.add(g5, "cell 15 9,grow");
@@ -1222,16 +808,7 @@ public class MapManagement  extends Container {
 		}
 		g6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("G6").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("G6").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("G6").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("G6");
 			}
 		});
 		layeredPane.add(g6, "cell 15 11,grow");
@@ -1245,16 +822,7 @@ public class MapManagement  extends Container {
 		}
 		g7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblIntersection.setText(CourierSystem.CityMap.getIntersection("G7").getName() + " Closure");
-				startSpinner.setValue(CourierSystem.CityMap.getIntersection("G7").getCloseStart().getTime());
-				endSpinner.setValue(CourierSystem.CityMap.getIntersection("G7").getCloseEnd().getTime());
-				lblClosureEnd.setVisible(true);
-				lblClosureStart.setVisible(true);
-				lblIntersection.setVisible(true);
-				startSpinner.setVisible(true);
-				endSpinner.setVisible(true);
-				saveChanges.setVisible(true);
-				cancel.setVisible(true);
+				showEditor("G7");
 			}
 		});
 		layeredPane.add(g7, "cell 15 13,grow");
@@ -1263,4 +831,26 @@ public class MapManagement  extends Container {
 		
 	}
 	
+	public void showEditor(String intersection) {
+		lblIntersection.setText(CourierSystem.CityMap.getIntersection(intersection).getName() + " Closure");
+		startSpinner.setDate(CourierSystem.CityMap.getIntersection(intersection).getCloseStart());
+		endSpinner.setDate(CourierSystem.CityMap.getIntersection(intersection).getCloseEnd());
+		lblClosureEnd.setVisible(true);
+		lblClosureStart.setVisible(true);
+		lblIntersection.setVisible(true);
+		startSpinner.setVisible(true);
+		endSpinner.setVisible(true);
+		saveChanges.setVisible(true);
+		cancel.setVisible(true);
+	}
+	
+	public void hideEditor() {
+		lblClosureEnd.setVisible(false);
+		lblClosureStart.setVisible(false);
+		lblIntersection.setVisible(false);
+		startSpinner.setVisible(false);
+		endSpinner.setVisible(false);
+		saveChanges.setVisible(false);
+		cancel.setVisible(false);
+	}
 }

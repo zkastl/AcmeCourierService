@@ -29,10 +29,12 @@ public final class Settings {
 	public static Intersection courierStartAddress;
 	
 	/**
-	 * The average speed at which a courier travels. Used in delivery time
+	 * The average speed at which a courier travels in miles per hour. Used in delivery time
 	 * calculations
 	 */
 	public static double averageCourierSpeed;
+	
+	public static int blocksPerMile;
 	
 	/**
 	 * The time in minutes before and after the requested pickup and estimated

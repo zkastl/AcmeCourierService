@@ -1,5 +1,6 @@
 package model;
 
+import java.time.Duration;
 import java.util.PriorityQueue;
 import java.util.Stack;
 
@@ -30,7 +31,7 @@ public class Route {
 	 * the time it takes someone moving at the speed of an average courier to
 	 * travel the route
 	 */
-	private double time;
+	private Duration time;
 
 	/**
 	 * calculate the steps that compose the shortest path from start to end
@@ -44,7 +45,7 @@ public class Route {
 	public int getDistance() {
 		return distance;
 	}
-	public double getTime() {
+	public Duration getTime() {
 		return time;
 	}
 	public Route(Map map, Intersection start, Intersection end) {
@@ -136,7 +137,11 @@ public class Route {
 	 * calculated first (distance / averageCourierSpeed)
 	 */
 	public void calculateTime() {
-		time = distance / Settings.averageCourierSpeed;
+		if(distance > 0) {
+			time = Duration.ofSeconds((long)((double)distance / (Settings.averageCourierSpeed * Settings.blocksPerMile / 60 / 60)));
+		} else {
+			time = Duration.ofSeconds(0);
+		}
 	}
 
 	/**
