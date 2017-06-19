@@ -57,6 +57,15 @@ public final class CourierSystem  {
 		LoadClients();
 		LoadDeliveries();
 		LoadCityMap();
+		
+		Settings.averageCourierSpeed = 5.0;
+		Settings.baseCost = 10.0;
+		Settings.blocksPerMile = 10;
+		Settings.bonusAmount = 2.0;
+		Settings.bonusLeeway = 5;
+		Settings.courierStartAddress = CityMap.getIntersection("D4");
+		Settings.plannedNonTravelTime = 5.0;
+		Settings.pricePerBlock = 2.0;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -172,7 +181,7 @@ public final class CourierSystem  {
 			em.persist(d);
 		}
 		trans.commit();
-		LoadClients(); //TODO should this be LoadDeliveries?
+		LoadDeliveries();
 	}
 
 	public static void SaveDelivery(Delivery d) throws FileNotFoundException, IOException {
