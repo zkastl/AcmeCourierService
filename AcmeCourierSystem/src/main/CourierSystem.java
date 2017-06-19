@@ -104,7 +104,7 @@ public final class CourierSystem  {
 	public static void SaveEmployee(Employee e) throws Exception {
 		EntityTransaction trans = em.getTransaction();
 		trans.begin();
-		em.merge(e);
+		em.persist(e);
 		trans.commit();
 		LoadEmployees();
 	}
@@ -203,11 +203,11 @@ public final class CourierSystem  {
 	@SuppressWarnings("unchecked")
 	public static void LoadCityMap() throws Exception {
 		try {
-			Query eQuery = em.createQuery("SELECT m FROM Map m", Map.class);
+			Query eQuery = em.createQuery("SELECT m FROM CityMap m", Map.class);
 			List<Map> maps = eQuery.getResultList();
 			CourierSystem.CityMap = (maps != null && !maps.isEmpty()) ? maps.get(0) : new Map();
 			PrintMapToConsole();
-			
+		
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
 		}
@@ -215,12 +215,18 @@ public final class CourierSystem  {
 
 	public static void SaveCityMap() throws Exception {
 		EntityTransaction trans = em.getTransaction();
-		trans.begin();
-		em.createQuery("DELETE FROM Map c").executeUpdate();
-		em.persist(CourierSystem.CityMap);
-		em.flush();
-		trans.commit();
-		LoadCityMap();
+		try {
+			/*trans.begin();
+			Query del = em.createNativeQuery("DELETE FROM CityMap");
+			del.executeUpdate();
+			trans.commit();*/
+			trans.begin();
+			em.persist(CityMap);
+			trans.commit();
+		}
+		catch (Exception ex) {
+			System.out.println(ex.getMessage());
+		}
 		PrintMapToConsole();
 	}
 	
