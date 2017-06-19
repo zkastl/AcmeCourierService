@@ -10,7 +10,7 @@ import com.sun.istack.internal.NotNull;
 /**
  * a directed graph that holds the geographical area serviced by the company
  */
-@Entity(name="Map")
+@Entity(name="CityMap")
 public class Map implements Serializable {
 
 	/**
