@@ -18,6 +18,7 @@ import javax.swing.JTextField;
 import controller.EnterKeyListenerForButtons;
 import main.CourierSystem;
 import model.Employee;
+import model.EmployeeRole;
 import net.miginfocom.swing.MigLayout;
 
 public class LogInScreen extends Container {
@@ -85,7 +86,8 @@ public class LogInScreen extends Container {
 
 	private boolean AttemptLogin(JFrame window, String username, String password) {
 		for (Employee e : CourierSystem.Employees.values()) {
-			if (e.userName.equalsIgnoreCase(username) && e.password.equals(password) && !e.getIsArchived()) {
+			if (e.userName.equalsIgnoreCase(username) && e.role != EmployeeRole.Courier && 
+					e.password.equals(password) && !e.getIsArchived()) {
 				CourierSystem.currentUser = e;
 
 				window.setLocation(screenSize.width / 6, 0);
