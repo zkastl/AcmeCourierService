@@ -19,6 +19,7 @@ package main;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 
@@ -205,24 +206,18 @@ public final class CourierSystem  {
 	}
 
 	public static void SaveCityMap() throws Exception {
+		System.out.println("Saving map to database...");
+		CourierSystem.CityMap.lastSavedDate = LocalDateTime.now().toString();
 		EntityTransaction trans = em.getTransaction();
-		try {
-			/*trans.begin();
-			Query del = em.createNativeQuery("DELETE FROM CityMap");
-			del.executeUpdate();
-			trans.commit();*/
-			trans.begin();
-			em.persist(CityMap);
-			trans.commit();
-		}
-		catch (Exception ex) {
-			System.out.println(ex.getMessage());
-		}
+		trans.begin();
+		em.persist(CourierSystem.CityMap);
+		trans.commit();
 		PrintMapToConsole();
 	}
 	
 	public static void PrintMapToConsole() {
 		System.out.println("City Map: ID-" + CourierSystem.CityMap.mapId);
+		System.out.println("Last Saved: " + CourierSystem.CityMap.lastSavedDate);
 		System.out.println("Closed Intersections:");
 		for(String s : CourierSystem.CityMap.getClosedIntersections()) {
 			System.out.println("  " + s);

@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,17 +27,19 @@ public class Map implements Serializable {
 	 * The array of intersections that are on the map
 	 */
 	@NotNull
-	private HashMap<String, Intersection> intersections;
+	public HashMap<String, Intersection> intersections;
+	
+	@NotNull
+	public String lastSavedDate;
 
 	public Map() {
-		intersections = new HashMap<String, Intersection>();
-		//roads = new ArrayList<Road>();
-		initMap();
+		lastSavedDate = LocalDateTime.now().toString();
+		if (intersections == null)
+			initMap();
 	}
 
 	public Map(HashMap<String, Intersection> intersections, ArrayList<Road> roads) {
 		this.intersections = intersections;
-		//this.roads = roads;
 	}
 	
 	/**
@@ -75,6 +78,8 @@ public class Map implements Serializable {
 	}
 
 	public void initMap() {
+		intersections = new HashMap<String, Intersection>();
+		
 		Intersection a1 = new Intersection("A", "1");
 		Intersection a2 = new Intersection("A", "2");
 		Intersection a3 = new Intersection("A", "3");
