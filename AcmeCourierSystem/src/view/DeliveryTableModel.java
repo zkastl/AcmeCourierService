@@ -20,14 +20,14 @@ public class DeliveryTableModel extends DefaultTableModel {
 	public List<Delivery> deliveries;
 
 	public DeliveryTableModel() {
-		super(new Object[] { "ID", "From", "To", "Requested Pickup Time", "Calculated Departure Time", "Estimated Delivery Time", "Departure Time", "Pickup Time",
+		super(new Object[] { "ID", "From", "To", "Requested Pickup Time", "Calculated Departure Time", "Departure Time", "Pickup Time",
 				"Delivery Time", "Return Time", "Status", "Assigned Courier" }, 0);
 		deliveries = new ArrayList<Delivery>();
 
 		for (Delivery d : CourierSystem.Deliveries.values()) {
 			if (d.status == DeliveryStatus.Requested) {
 				super.addRow(new Object[] { d.packageID, d.pickupClient.name, d.deliveryClient.name, d.requestedPickupTime,
-						d.calculatedDepartureTime, d.estimatedDeliveryTime, d.actualDepartureTime, d.actualPickupTime, d.actualDeliveryTime, d.actualReturnTime,
+						d.calculatedDepartureTime, d.actualDepartureTime, d.actualPickupTime, d.actualDeliveryTime, d.actualReturnTime,
 						d.status, d.assignedCourier });
 				deliveries.add(d);
 			}
@@ -49,11 +49,7 @@ public class DeliveryTableModel extends DefaultTableModel {
 	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
 		switch (columnIndex) {
-		case 0:	// ID
-			return false;
-		case 4:	// Calculated Departure time
-			return false;
-		case 5: // Estimated Delivery time
+		case 0:
 			return false;
 		default:
 			return true;
@@ -75,30 +71,27 @@ public class DeliveryTableModel extends DefaultTableModel {
 			deliveries.get(rowIndex).deliveryClient = CourierSystem.Clients.get(aValue);
 			break;
 		case 3:
-			deliveries.get(rowIndex).requestedPickupTime = LocalDateTime.from((LocalDateTime)aValue);
+			deliveries.get(rowIndex).requestedPickupTime = LocalDateTime.parse(aValue.toString(), formatter);
 			break;
 		case 4:
-			deliveries.get(rowIndex).calculatedDepartureTime = LocalDateTime.parse(aValue.toString(), formatter);
+			deliveries.get(rowIndex).requestedPickupTime = LocalDateTime.parse(aValue.toString(), formatter);
 			break;
 		case 5:
-			deliveries.get(rowIndex).estimatedDeliveryTime = LocalDateTime.parse(aValue.toString(), formatter);
-			break;
-		case 6:
 			deliveries.get(rowIndex).actualDepartureTime = LocalDateTime.parse(aValue.toString(), formatter);
 			break;
-		case 7:
+		case 6:
 			deliveries.get(rowIndex).actualPickupTime = LocalDateTime.parse(aValue.toString(), formatter);
 			break;
-		case 8:
+		case 7:
 			deliveries.get(rowIndex).actualDeliveryTime = LocalDateTime.parse(aValue.toString(), formatter);
 			break;
-		case 9:
+		case 8:
 			deliveries.get(rowIndex).actualReturnTime = LocalDateTime.parse(aValue.toString(), formatter);
 			break;
-		case 10:
+		case 9:
 			deliveries.get(rowIndex).status = DeliveryStatus.valueOf(aValue.toString());
 			break;
-		case 11:
+		case 10:
 			deliveries.get(rowIndex).assignedCourier = CourierSystem.Employees.get(aValue);
 		default:
 			break;
