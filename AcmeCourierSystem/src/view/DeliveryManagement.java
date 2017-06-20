@@ -66,6 +66,7 @@ public class DeliveryManagement extends Container {
 		table.setCellSelectionEnabled(true);
 		scrollPane.setViewportView(table);
 		table.setColumnSelectionAllowed(true);
+<<<<<<< Upstream, based on branch 'master' of https://github.com/zkastl/AcmeCourierService.git
 		
 		// date picker
 		table.setDefaultEditor(LocalDateTime.class, new DateTimeTableEditor());
@@ -93,10 +94,14 @@ public class DeliveryManagement extends Container {
 		});*/
 		
 		updateAvailableClients();		
+=======
+
+		updateAvailableClients();
+>>>>>>> f011918 initial layout of delivery editor and merging with date picker stuff
 
 		JLabel lblNewLabel = new JLabel(" ");
 		add(lblNewLabel, "cell 0 4");
-		
+
 		JComboBox<DeliveryStatus> statusComboBox = new JComboBox<DeliveryStatus>();
 		statusComboBox.addItem(DeliveryStatus.Requested);
 		statusComboBox.addItem(DeliveryStatus.Completed);
@@ -135,7 +140,7 @@ public class DeliveryManagement extends Container {
 
 				try {
 					CourierSystem.Deliveries = new HashMap<String, Delivery>();
-					for(Delivery del : deliveryTable.deliveries) {
+					for (Delivery del : deliveryTable.deliveries) {
 						CourierSystem.Deliveries.put(String.valueOf(del.packageID), del);
 					}
 					CourierSystem.UpdateDeliveries();
@@ -147,11 +152,11 @@ public class DeliveryManagement extends Container {
 			}
 		});
 	}
-	
+
 	public void updateAvailableClients() {
 		JComboBox<String> fromComboBox = new JComboBox<String>();
 		JComboBox<String> toComboBox = new JComboBox<String>();
-		for(Client c : CourierSystem.Clients.values()) {
+		for (Client c : CourierSystem.Clients.values()) {
 			if (!c.getIsArchived()) {
 				fromComboBox.addItem(c.name);
 				toComboBox.addItem(c.name);
@@ -160,14 +165,14 @@ public class DeliveryManagement extends Container {
 		table.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(fromComboBox));
 		table.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(toComboBox));
 	}
-	
+
 	public void updateAvailableCouriers() {
 		JComboBox<String> availableCouriers = new JComboBox<String>();
-		for(Employee e : CourierSystem.Employees.values()) {
+		for (Employee e : CourierSystem.Employees.values()) {
 			if (!e.getIsArchived() && e.role == EmployeeRole.Courier) {
 				availableCouriers.addItem(e.name);
 			}
 		}
-		table.getColumnModel().getColumn(10).setCellEditor(new DefaultCellEditor(availableCouriers));
+		table.getColumnModel().getColumn(9).setCellEditor(new DefaultCellEditor(availableCouriers));
 	}
 }
