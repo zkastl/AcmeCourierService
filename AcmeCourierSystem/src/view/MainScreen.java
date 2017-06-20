@@ -39,7 +39,7 @@ public class MainScreen extends Container {
 					new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")), new EmployeeManagement());
 		if (CourierSystem.currentUser.role == EmployeeRole.Administrator)
 			tabbedPane.addTab("System Settings", new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")),
-					new LogOutScreen(window));
+					new SettingsManagement(window));
 		tabbedPane.addTab("Change Password", new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")),
 				new ChangePasswordScreen(window));
 		tabbedPane.addTab("Logout", new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")),
