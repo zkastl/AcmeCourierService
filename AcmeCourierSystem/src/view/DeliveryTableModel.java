@@ -20,13 +20,16 @@ public class DeliveryTableModel extends DefaultTableModel {
 	public List<Delivery> deliveries;
 
 	public DeliveryTableModel() {
-		super(new Object[] { "ID", "From", "To", "Date", "Depart", "Pickup", "Deliver", "Return", "Status", "Courier" },
-				0);
+		super(new Object[] { "ID", "From", "To", "Requested Pickup Time", "Calculated Departure Time", "Departure Time", "Pickup Time",
+				"Delivery Time", "Return Time", "Status", "Assigned Courier" }, 0);
 		deliveries = new ArrayList<Delivery>();
 
 		for (Delivery d : CourierSystem.Deliveries.values()) {
 			if (d.status == DeliveryStatus.Requested) {
-				addRow(d);
+				super.addRow(new Object[] { d.packageID, d.pickupClient.name, d.deliveryClient.name, d.requestedPickupTime,
+						d.calculatedDepartureTime, d.actualDepartureTime, d.actualPickupTime, d.actualDeliveryTime, d.actualReturnTime,
+						d.status, d.assignedCourier });
+				deliveries.add(d);
 			}
 		}
 	}
@@ -46,12 +49,10 @@ public class DeliveryTableModel extends DefaultTableModel {
 	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
 		switch (columnIndex) {
-		case 7:
-		case 8:
-		case 9:
-			return true;
-		default:
+		case 0:
 			return false;
+		default:
+			return true;
 		}
 	}
 
@@ -63,13 +64,34 @@ public class DeliveryTableModel extends DefaultTableModel {
 		formatter = formatter.withLocale(Locale.US);
 		
 		switch (columnIndex) {
+		case 1:
+			deliveries.get(rowIndex).pickupClient = CourierSystem.Clients.get(aValue);
+			break;
+		case 2:
+			deliveries.get(rowIndex).deliveryClient = CourierSystem.Clients.get(aValue);
+			break;
+		case 3:
+			deliveries.get(rowIndex).requestedPickupTime = LocalDateTime.parse(aValue.toString(), formatter);
+			break;
+		case 4:
+			deliveries.get(rowIndex).requestedPickupTime = LocalDateTime.parse(aValue.toString(), formatter);
+			break;
+		case 5:
+			deliveries.get(rowIndex).actualDepartureTime = LocalDateTime.parse(aValue.toString(), formatter);
+			break;
+		case 6:
+			deliveries.get(rowIndex).actualPickupTime = LocalDateTime.parse(aValue.toString(), formatter);
+			break;
 		case 7:
-			deliveries.get(rowIndex).actualReturnTime = LocalDateTime.parse(aValue.toString(), formatter);
+			deliveries.get(rowIndex).actualDeliveryTime = LocalDateTime.parse(aValue.toString(), formatter);
 			break;
 		case 8:
-			deliveries.get(rowIndex).status = DeliveryStatus.valueOf(aValue.toString());
+			deliveries.get(rowIndex).actualReturnTime = LocalDateTime.parse(aValue.toString(), formatter);
 			break;
 		case 9:
+			deliveries.get(rowIndex).status = DeliveryStatus.valueOf(aValue.toString());
+			break;
+		case 10:
 			deliveries.get(rowIndex).assignedCourier = CourierSystem.Employees.get(aValue);
 		default:
 			break;
@@ -77,15 +99,12 @@ public class DeliveryTableModel extends DefaultTableModel {
 	}
 
 	public void addRow(Delivery delivery) {
-		super.addRow(new Object[] { delivery.packageID, delivery.pickupClient.name, delivery.deliveryClient.name,
-				delivery.requestedPickupTime.toLocalDate().toString(),
-				delivery.calculatedDepartureTime.toLocalTime().toString(),
-				delivery.requestedPickupTime.toLocalTime().toString(),
-				delivery.estimatedDeliveryTime.toLocalTime().toString(),
-				delivery.actualReturnTime.toLocalTime().toString(), delivery.status, delivery.assignedCourier.name });
+		super.addRow(new Object[] { delivery.packageID, delivery.pickupClient, delivery.deliveryClient,
+				delivery.requestedPickupTime, delivery.actualDepartureTime, delivery.actualPickupTime,
+				delivery.actualDeliveryTime, delivery.actualReturnTime, delivery.status, delivery.assignedCourier });
 		deliveries.add(delivery);
 	}
-
+	
 	public void removeRow(int rowNumber) {
 		super.removeRow(rowNumber);
 		deliveries.remove(rowNumber);
