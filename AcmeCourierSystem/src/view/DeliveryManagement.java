@@ -105,21 +105,20 @@ public class DeliveryManagement extends Container {
 					return;
 
 				// open delivery creator
-				deliveryTable.addRow(new Delivery());
+				new DeliveryTicketEditor(new Delivery());
 			}
 		});
 
 		btnEditDelivery.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (table.getCellEditor() != null)
-					table.getCellEditor().cancelCellEditing();
+				if (!TableValidator.isValid(table))
+					return;
 
 				int selectedRow = table.getSelectedRow();
 				System.out.println("Selected Row: " + selectedRow);
 				Delivery delivery = deliveryTable.deliveries.get(selectedRow);
-				delivery.status = DeliveryStatus.Canceled;
 
-				deliveryTable.removeRow(selectedRow);
+				new DeliveryTicketEditor(delivery);
 			}
 		});
 
