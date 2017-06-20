@@ -92,6 +92,10 @@ public class Intersection implements Comparable<Intersection>, Serializable {
 		previous = null;
 		visited = false;
 	}
+	
+	public Intersection() {
+		
+	}
 
 	public String getStreet() {
 		return street;

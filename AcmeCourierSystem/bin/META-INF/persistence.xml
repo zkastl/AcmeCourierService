@@ -9,7 +9,7 @@
         <class>model.Employee</class>
         <class>model.Courier</class>
         <class>model.Delivery</class>
-        <class>model.Map</class>
+        <class>model.Intersection</class>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC" />
             <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:data/CourierSystem.db" />
