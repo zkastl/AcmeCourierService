@@ -14,12 +14,13 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JRadioButton;
 
 import com.github.lgooddatepicker.components.DateTimePicker;
 
 import main.Application;
 import main.CourierSystem;
+import model.Client;
+import model.Courier;
 import model.Delivery;
 import net.miginfocom.swing.MigLayout;;
 
@@ -62,8 +63,7 @@ public class DeliveryTicketEditor extends JDialog {
 		lblClientName.setIcon(null);
 		getContentPane().add(lblClientName, "cell 2 7,alignx trailing");
 
-		// TODO
-		JComboBox pickupClient = new JComboBox();
+		JComboBox<Client> pickupClient = new JComboBox<Client>(CourierSystem.Clients.values().toArray(new Client[0]));
 		getContentPane().add(pickupClient, "cell 3 7,growx");
 
 		JLabel lblClientId = new JLabel("Client Id:");
@@ -83,7 +83,7 @@ public class DeliveryTicketEditor extends JDialog {
 		JLabel lblBillPickupClient = new JLabel("Bill Pickup Client?");
 		getContentPane().add(lblBillPickupClient, "cell 2 10,alignx trailing");
 
-		JRadioButton billToPickup = new JRadioButton("");
+		JCheckBox billToPickup = new JCheckBox("");
 		billToPickup.setSelected(true);
 		getContentPane().add(billToPickup, "cell 3 10");
 
@@ -94,9 +94,8 @@ public class DeliveryTicketEditor extends JDialog {
 		JLabel lblClientName_1 = new JLabel("Client Name:");
 		getContentPane().add(lblClientName_1, "cell 2 13,alignx trailing");
 
-		// TODO
-		JComboBox comboBox = new JComboBox();
-		getContentPane().add(comboBox, "cell 3 13,growx");
+		JComboBox<Client> deliveryClient = new JComboBox<Client>(CourierSystem.Clients.values().toArray(new Client[0]));
+		getContentPane().add(deliveryClient, "cell 3 13,growx");
 
 		JLabel lblClientId_1 = new JLabel("Client Id:");
 		getContentPane().add(lblClientId_1, "flowx,cell 2 14,alignx trailing");
@@ -107,7 +106,7 @@ public class DeliveryTicketEditor extends JDialog {
 		JLabel lblBillDeliveryClient = new JLabel("Bill Delivery Client?");
 		getContentPane().add(lblBillDeliveryClient, "cell 2 15,alignx trailing");
 
-		JRadioButton billToDeliver = new JRadioButton("");
+		JCheckBox billToDeliver = new JCheckBox("");
 		getContentPane().add(billToDeliver, "cell 3 15");
 
 		ButtonGroup radioGroup = new ButtonGroup();
@@ -131,8 +130,7 @@ public class DeliveryTicketEditor extends JDialog {
 		JLabel lblCourier = new JLabel("Courier:");
 		getContentPane().add(lblCourier, "cell 3 18,alignx trailing");
 
-		// TODO
-		JComboBox cbCourier = new JComboBox();
+		JComboBox<Courier> cbCourier = new JComboBox<Courier>(CourierSystem.Couriers.toArray(new Courier[0]));
 		getContentPane().add(cbCourier, "cell 4 18,growx");
 
 		JLabel lblEstimatedDeliveryTime = new JLabel("Estimated Delivery Time:");
@@ -201,6 +199,7 @@ public class DeliveryTicketEditor extends JDialog {
 		lblDeliveryTicket.setFont(new Font("Tahoma", Font.BOLD, 14));
 		getContentPane().add(lblDeliveryTicket, "cell 1 1 4 1,alignx center,aligny center");
 
+		setLocationRelativeTo(null);
 		setVisible(true);
 	}
 }

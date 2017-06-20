@@ -15,7 +15,7 @@ public class Courier extends Employee implements Serializable {
 	/**
 	 * the name of the courier
 	 */
-	
+
 	public Delivery[] deliveryHistory;
 
 	/**
@@ -41,7 +41,11 @@ public class Courier extends Employee implements Serializable {
 		// TODO - implement Courier.getBonuses
 		throw new UnsupportedOperationException();
 	}
-	
+
+	public Courier() {
+		super.name = "";
+	}
+
 	public Courier(String s) {
 		super.name = s;
 	}

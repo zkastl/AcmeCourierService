@@ -33,8 +33,8 @@ public class LogInScreen extends Container {
 
 	public LogInScreen(JFrame window) {
 
-		window.setLocation(screenSize.width / 3, screenSize.height / 4);
 		window.setSize(screenSize.width / 3, screenSize.height / 2);
+		window.setLocationRelativeTo(null);
 		setLayout(new MigLayout("", "[grow][][][grow]", "[grow][][][10][][][10][][grow]"));
 
 		JLabel logo = new JLabel("");
@@ -86,12 +86,12 @@ public class LogInScreen extends Container {
 
 	private boolean AttemptLogin(JFrame window, String username, String password) {
 		for (Employee e : CourierSystem.Employees.values()) {
-			if (e.userName.equalsIgnoreCase(username) && e.role != EmployeeRole.Courier && 
-					e.password.equals(password) && !e.getIsArchived()) {
+			if (e.userName.equalsIgnoreCase(username) && e.role != EmployeeRole.Courier && e.password.equals(password)
+					&& !e.getIsArchived()) {
 				CourierSystem.currentUser = e;
 
-				window.setLocation(screenSize.width / 6, 0);
 				window.setSize(screenSize.width * 2 / 3, screenSize.height);
+				window.setLocationRelativeTo(null);
 				window.setContentPane(new MainScreen(window));
 				window.setTitle("Acme Courier System - Welcome " + CourierSystem.currentUser.name);
 				window.validate();

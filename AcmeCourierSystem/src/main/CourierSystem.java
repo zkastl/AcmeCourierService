@@ -19,9 +19,8 @@ package main;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -30,9 +29,17 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
-import model.*;
 
-public final class CourierSystem  {
+import model.Client;
+import model.Courier;
+import model.Delivery;
+import model.Employee;
+import model.EmployeeRole;
+import model.Intersection;
+import model.Map;
+import model.Settings;
+
+public final class CourierSystem {
 
 	public static HashMap<String, Employee> Employees;
 	public static List<Courier> Couriers;
@@ -56,7 +63,7 @@ public final class CourierSystem  {
 		LoadClients();
 		LoadDeliveries();
 		TestDelivery();
-		
+
 		Settings.averageCourierSpeed = 5.0;
 		Settings.baseCost = 10.0;
 		Settings.blocksPerMile = 10;
@@ -77,14 +84,16 @@ public final class CourierSystem  {
 		try {
 			Query eQuery = em.createQuery("SELECT e FROM Employees e", Employee.class);
 			List<Employee> emp = eQuery.getResultList();
-			for(Employee e : emp) {
+			Couriers = new ArrayList<Courier>();
+			for (Employee e : emp) {
 				Employees.put(e.name, e);
+				if (e.role == EmployeeRole.Courier)
+					Couriers.add((Courier) e);
 			}
-		} 
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			System.out.println(ex.getStackTrace());
 		}
-		
+
 		if (Employees.size() == 0) {
 			Employees.put("Admin", new Employee("admin"));
 		}
@@ -122,7 +131,7 @@ public final class CourierSystem  {
 		try {
 			Query eQuery = em.createQuery("SELECT c FROM Clients c", Client.class);
 			List<Client> cli = eQuery.getResultList();
-			for(Client c : cli) {
+			for (Client c : cli) {
 				c.trueAddress = CityMap.getIntersection(c.address);
 				Clients.put(c.name, c);
 			}
@@ -167,12 +176,11 @@ public final class CourierSystem  {
 			for (Delivery d : del) {
 				Deliveries.put(String.valueOf(d.packageID), d);
 			}
-		} 
-		catch(Exception ex) {
+		} catch (Exception ex) {
 			System.out.println(ex.getStackTrace());
 		}
 	}
-	
+
 	public static void UpdateDeliveries() throws Exception {
 		EntityTransaction trans = em.getTransaction();
 		trans.begin();
@@ -188,9 +196,9 @@ public final class CourierSystem  {
 		trans.begin();
 		em.merge(d);
 		trans.commit();
-		LoadDeliveries();		
+		LoadDeliveries();
 	}
-	
+
 	public static void RemoveDelivery(Delivery d) throws Exception {
 		EntityTransaction trans = em.getTransaction();
 		trans.begin();
@@ -198,7 +206,7 @@ public final class CourierSystem  {
 		Deliveries.remove(String.valueOf(d.packageID));
 		trans.commit();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public static void LoadCityMap() throws Exception {
 		try {
@@ -208,14 +216,13 @@ public final class CourierSystem  {
 			for (Intersection i : savedIntersections) {
 				hashedIntersections.put(i.getName(), i);
 			}
-			
+
 			CityMap = new Map();
 			if (hashedIntersections != null && !hashedIntersections.isEmpty()) {
 				CityMap.setIntersections(hashedIntersections);
 			}
-			
-		}
-		catch (Exception ex) {
+
+		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
 		}
 	}
@@ -228,12 +235,12 @@ public final class CourierSystem  {
 		}
 		trans.commit();
 	}
-	
+
 	public static void PrintMapToConsole() {
 		System.out.println("City Map: ID-" + CityMap.mapId);
 		System.out.println("Last Saved: " + CityMap.lastSavedDate);
 		System.out.println("Closed Intersections:");
-		for(String s : CityMap.getClosedIntersections()) {
+		for (String s : CityMap.getClosedIntersections()) {
 			System.out.println("  " + s);
 		}
 	}
@@ -241,7 +248,7 @@ public final class CourierSystem  {
 	private CourierSystem() throws Exception {
 		InitializeCourierSystem();
 	};
-	
+
 	private static void TestDelivery() {
 		try {
 			Delivery d = new Delivery();
@@ -252,8 +259,7 @@ public final class CourierSystem  {
 			d.assignedCourier = Employees.get("Spiderman");
 			Deliveries.put(String.valueOf(d.hashCode()), d);
 			UpdateDeliveries();
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			System.out.print(ex.getMessage());
 			System.out.println("something went wrong, probably because it's not running on zak's computer.");
 		}
