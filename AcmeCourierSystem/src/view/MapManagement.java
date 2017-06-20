@@ -3,10 +3,6 @@ package view;
 import java.awt.Container;
 
 import com.github.lgooddatepicker.components.DatePicker;
-import com.github.lgooddatepicker.components.DateTimePicker;
-
-import javafx.util.converter.LocalDateStringConverter;
-
 import javax.swing.JLabel;
 
 import net.miginfocom.swing.MigLayout;
@@ -18,14 +14,7 @@ import java.time.LocalDate;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerDateModel;
-import javax.swing.SpinnerModel;
-
 import main.CourierSystem;
-
-import java.util.Calendar;
-import java.util.Date;
 
 import javax.swing.JLayeredPane;
 import java.awt.BorderLayout;
