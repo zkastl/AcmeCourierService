@@ -143,8 +143,6 @@ public class Delivery implements Serializable {
 	 * back to the courierStart
 	 */
 	public void calculateRoutes() {
-		// TODO - implement Delivery.calculateRoutes
-		throw new UnsupportedOperationException();
 	}
 
 }
