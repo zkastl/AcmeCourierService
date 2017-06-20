@@ -203,7 +203,7 @@ public final class CourierSystem  {
 	
 	@SuppressWarnings("unchecked")
 	public static void LoadCityMap() throws Exception {
-		try {
+		/*try {
 			Query eQuery = em.createQuery("SELECT m FROM CityMap m", Map.class);
 			List<Map> maps = eQuery.getResultList();
 			CourierSystem.CityMap = (maps != null && !maps.isEmpty()) ? maps.get(0) : new Map();
@@ -211,17 +211,17 @@ public final class CourierSystem  {
 		
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
-		}
+		}*/
 	}
 
 	public static void SaveCityMap() throws Exception {
-		System.out.println("Saving map to database...");
+		/*System.out.println("Saving map to database...");
 		CourierSystem.CityMap.lastSavedDate = LocalDateTime.now().toString();
 		EntityTransaction trans = em.getTransaction();
 		trans.begin();
 		em.persist(CourierSystem.CityMap);
 		trans.commit();
-		PrintMapToConsole();
+		PrintMapToConsole();*/
 	}
 	
 	public static void PrintMapToConsole() {

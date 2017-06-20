@@ -11,15 +11,9 @@ import com.sun.istack.internal.NotNull;
 /**
  * a directed graph that holds the geographical area serviced by the company
  */
-@Entity(name="CityMap")
+//@Entity(name="CityMap")
 public class Map implements Serializable {
 
-	/**
-	 * 
-	 */
-	@Id
-	@Column(name="ID")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public long mapId;
 	
 	private static final long serialVersionUID = 1L;

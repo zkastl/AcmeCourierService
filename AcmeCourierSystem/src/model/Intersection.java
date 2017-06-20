@@ -3,21 +3,30 @@ package model;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
  * a node in the map graph. represents the intersection of two streets
  */
 // is not consistent with equals
 // only designed to work for streets that only intersect once
-@Entity(name="Intersection")
+@Entity(name="CityMap")
 public class Intersection implements Comparable<Intersection>, Serializable {
 
 	
 	private static final long serialVersionUID = 1L;
+	
+
+	@Id
+	@Column(name="ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 	/**
 	 * The name of the north-south street of an intersection
 	 */
