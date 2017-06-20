@@ -28,12 +28,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
-import model.Client;
-import model.Courier;
-import model.Delivery;
-import model.Employee;
-import model.Map;
-import model.Settings;
+import model.*;
 
 public final class CourierSystem  {
 
@@ -212,6 +207,24 @@ public final class CourierSystem  {
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
 		}*/
+		
+		try {
+			Query eQuery = em.createQuery("SELECT m FROM CityMap m", Intersection.class);
+			List<Intersection> savedIntersections = eQuery.getResultList();
+			HashMap<String, Intersection> hashedIntersections = new HashMap<String, Intersection>();
+			for (Intersection i : savedIntersections) {
+				hashedIntersections.put(i.getName(), i);
+			}
+			
+			CourierSystem.CityMap = new Map();
+			if (hashedIntersections != null && !hashedIntersections.isEmpty()) {
+				CourierSystem.CityMap.setIntersections(hashedIntersections);
+			}
+			
+		}
+		catch (Exception ex) {
+			System.out.println(ex.getMessage());
+		}
 	}
 
 	public static void SaveCityMap() throws Exception {
@@ -222,6 +235,14 @@ public final class CourierSystem  {
 		em.persist(CourierSystem.CityMap);
 		trans.commit();
 		PrintMapToConsole();*/
+		
+
+		EntityTransaction trans = em.getTransaction();
+		trans.begin();
+		for (Intersection i : CourierSystem.CityMap.intersections.values()) {
+			em.persist(i);
+		}
+		trans.commit();
 	}
 	
 	public static void PrintMapToConsole() {

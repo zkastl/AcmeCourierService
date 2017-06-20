@@ -34,6 +34,7 @@ public class Map implements Serializable {
 
 	public Map(HashMap<String, Intersection> intersections, ArrayList<Road> roads) {
 		this.intersections = intersections;
+		initMap();
 	}
 	
 	/**
