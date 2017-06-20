@@ -4,8 +4,6 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
@@ -16,11 +14,8 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.TableColumn;
-import javax.swing.table.TableModel;
 
 import com.github.lgooddatepicker.tableeditors.DateTimeTableEditor;
-
-import javax.swing.JSpinner;
 
 import controller.EnterKeyListenerForButtons;
 import controller.TableValidator;
@@ -30,9 +25,6 @@ import model.Delivery;
 import model.DeliveryStatus;
 import model.Employee;
 import model.EmployeeRole;
-import model.Intersection;
-import model.Route;
-import model.Settings;
 import net.miginfocom.swing.MigLayout;
 
 public class DeliveryManagement extends Container {
@@ -66,38 +58,36 @@ public class DeliveryManagement extends Container {
 		table.setCellSelectionEnabled(true);
 		scrollPane.setViewportView(table);
 		table.setColumnSelectionAllowed(true);
-<<<<<<< Upstream, based on branch 'master' of https://github.com/zkastl/AcmeCourierService.git
-		
+
 		// date picker
 		table.setDefaultEditor(LocalDateTime.class, new DateTimeTableEditor());
 		table.setDefaultRenderer(LocalDateTime.class, new DateTimeTableEditor());
 		TableColumn column = table.getColumnModel().getColumn(3);
 		column.setCellEditor(table.getDefaultEditor(LocalDateTime.class));
 		column.setCellRenderer(table.getDefaultRenderer(LocalDateTime.class));
-		
-		/*column.addPropertyChangeListener(new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent arg0) {
-				// TODO Auto-generated method stub
-				TableModel model = table.getModel();
-				int row = table.getSelectedRow();
-				if(row != -1 && model.getValueAt(row, 1) != null  && model.getValueAt(row, 2) != null)	{
-					// set Calculated Departure time
-					Route pickupRoute = CourierSystem.CityMap.getRoute(Settings.courierStartAddress, CourierSystem.Clients.get(model.getValueAt(row, 1)).address);
-					model.setValueAt(((LocalDateTime)model.getValueAt(row, 3)).minus(pickupRoute.getTime()), row, 4);
-					
-					// set Estimated Delivery Time
-					Route deliveryRoute = CourierSystem.CityMap.getRoute(CourierSystem.Clients.get(model.getValueAt(row, 1)).address, CourierSystem.Clients.get(model.getValueAt(row, 2)).address);
-					model.setValueAt(((LocalDateTime)model.getValueAt(row, 3)).plus(deliveryRoute.getTime()), row, 5);
-				}
-			}
-		});*/
-		
-		updateAvailableClients();		
-=======
+
+		/*
+		 * column.addPropertyChangeListener(new PropertyChangeListener() {
+		 * 
+		 * @Override public void propertyChange(PropertyChangeEvent arg0) { //
+		 * TODO Auto-generated method stub TableModel model = table.getModel();
+		 * int row = table.getSelectedRow(); if(row != -1 &&
+		 * model.getValueAt(row, 1) != null && model.getValueAt(row, 2) != null)
+		 * { // set Calculated Departure time Route pickupRoute =
+		 * CourierSystem.CityMap.getRoute(Settings.courierStartAddress,
+		 * CourierSystem.Clients.get(model.getValueAt(row, 1)).address);
+		 * model.setValueAt(((LocalDateTime)model.getValueAt(row,
+		 * 3)).minus(pickupRoute.getTime()), row, 4);
+		 * 
+		 * // set Estimated Delivery Time Route deliveryRoute =
+		 * CourierSystem.CityMap.getRoute(CourierSystem.Clients.get(model.
+		 * getValueAt(row, 1)).address,
+		 * CourierSystem.Clients.get(model.getValueAt(row, 2)).address);
+		 * model.setValueAt(((LocalDateTime)model.getValueAt(row,
+		 * 3)).plus(deliveryRoute.getTime()), row, 5); } } });
+		 */
 
 		updateAvailableClients();
->>>>>>> f011918 initial layout of delivery editor and merging with date picker stuff
 
 		JLabel lblNewLabel = new JLabel(" ");
 		add(lblNewLabel, "cell 0 4");
