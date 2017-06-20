@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import javax.persistence.*;
 import com.sun.istack.internal.NotNull;
 
 /**
@@ -32,7 +31,7 @@ public class Map implements Serializable {
 			initMap();
 	}
 
-	public Map(HashMap<String, Intersection> intersections, ArrayList<Road> roads) {
+	public Map(HashMap<String, Intersection> intersections) {
 		this.intersections = intersections;
 		initMap();
 	}

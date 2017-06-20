@@ -9,19 +9,19 @@ public final class Settings {
 	/**
 	 * The base price for a delivery
 	 */
-	public static double baseCost;
+	public static Double baseCost;
 	
 	/**
 	 * The price per block traveled that is added to the base price for a
 	 * delivery
 	 */
-	public static double pricePerBlock;
+	public static Double pricePerBlock;
 	
 	/**
 	 * The amount of non-travel time for pickup and delivery that is planned
 	 * into a delivery
 	 */
-	public static double plannedNonTravelTime;
+	public static Double plannedNonTravelTime;
 	
 	/**
 	 * The intersection of the company that couriers depart from and return to.
@@ -32,18 +32,18 @@ public final class Settings {
 	 * The average speed at which a courier travels in miles per hour. Used in delivery time
 	 * calculations
 	 */
-	public static double averageCourierSpeed;
+	public static Double averageCourierSpeed;
 	
-	public static int blocksPerMile;
+	public static Integer blocksPerMile;
 	
 	/**
 	 * The time in minutes before and after the requested pickup and estimated
 	 * delivery times during which a delivery is considered on time. Default is
 	 * 5minutes.
 	 */
-	public static int bonusLeeway;
+	public static Integer bonusLeeway;
 	
-	public static double bonusAmount;
+	public static Double bonusAmount;
 	
 	// Settings to point to the locations for the persistent data.
 	public static String EmployeeFile = "Employees.xml";
