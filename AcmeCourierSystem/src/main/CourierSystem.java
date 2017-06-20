@@ -49,10 +49,10 @@ public final class CourierSystem  {
 		factory = Persistence.createEntityManagerFactory("entities");
 		em = factory.createEntityManager();
 
+		LoadCityMap();
 		LoadEmployees();
 		LoadClients();
 		LoadDeliveries();
-		LoadCityMap();
 		
 		Settings.averageCourierSpeed = 5.0;
 		Settings.baseCost = 10.0;
@@ -120,6 +120,7 @@ public final class CourierSystem  {
 			Query eQuery = em.createQuery("SELECT c FROM Clients c", Client.class);
 			List<Client> cli = eQuery.getResultList();
 			for(Client c : cli) {
+				c.trueAddress = CourierSystem.CityMap.getIntersection(c.address);
 				Clients.put(c.name, c);
 			}
 		} catch (Exception ex) {
@@ -131,6 +132,7 @@ public final class CourierSystem  {
 		EntityTransaction trans = em.getTransaction();
 		trans.begin();
 		for (Client c : Clients.values()) {
+			c.address = c.trueAddress.getName();
 			em.persist(c);
 		}
 		trans.commit();

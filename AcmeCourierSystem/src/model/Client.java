@@ -4,6 +4,8 @@ import java.io.Serializable;
 import javax.persistence.*;
 import com.sun.istack.internal.NotNull;
 
+import main.CourierSystem;
+
 /**
  * an entity that is served by the courier company
  */
@@ -50,7 +52,11 @@ public class Client implements Serializable {
 	 * from and delivered to
 	 */
 	
-	public Intersection address;
+	@NotNull
+	public String address;
+	
+	@Transient
+	public Intersection trueAddress;
 	
 	@NotNull
 	private boolean isArchived = false;
@@ -58,11 +64,12 @@ public class Client implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	public Client() {
-		address = new Intersection("", "");
+		address = "";
 		name = "";
 		phoneNumber = "";
 		emailAddress = "";
 		dropoffInstructions = "";
+		trueAddress = new Intersection("", "");
 	}
 
 	public void ArchiveClient() {
