@@ -7,6 +7,7 @@ import javax.swing.table.DefaultTableModel;
 
 import main.CourierSystem;
 import model.Client;
+import model.Intersection;
 
 public final class ClientTableModel extends DefaultTableModel {
 
@@ -19,8 +20,8 @@ public final class ClientTableModel extends DefaultTableModel {
 
 		for (Client c : CourierSystem.Clients.values()) {
 			if (!c.getIsArchived()) {
-				super.addRow(new Object[] { c.clientID, c.name, c.phoneNumber, c.address.getStreet(),
-						c.address.getAve(), c.dropoffInstructions, c.emailAddress });
+				super.addRow(new Object[] { c.clientID, c.name, c.phoneNumber, c.trueAddress.getStreet(),
+						c.trueAddress.getAve(), c.dropoffInstructions, c.emailAddress });
 				clients.add(c);
 			}
 		}
@@ -57,11 +58,11 @@ public final class ClientTableModel extends DefaultTableModel {
 		case 2:
 			clients.get(rowIndex).phoneNumber = aValue.toString();
 			break;
-		case 3:
-			clients.get(rowIndex).address.setStreet(aValue.toString().substring(0, 1));
+		case 3:			
+			clients.get(rowIndex).trueAddress.setStreet(aValue.toString().substring(0, 1));
 			break;
 		case 4:
-			clients.get(rowIndex).address.setAve(aValue.toString().substring(0, 1));
+			clients.get(rowIndex).trueAddress.setAve(aValue.toString().substring(0, 1));
 			break;
 		case 5:
 			clients.get(rowIndex).dropoffInstructions = aValue.toString();
@@ -75,8 +76,8 @@ public final class ClientTableModel extends DefaultTableModel {
 	}
 
 	public void addRow(Client client) {
-		super.addRow(new Object[] { client.clientID, client.name, client.phoneNumber, client.address.getStreet(),
-				client.address.getAve(), client.dropoffInstructions, client.emailAddress });
+		super.addRow(new Object[] { client.clientID, client.name, client.phoneNumber, client.trueAddress.getStreet(),
+				client.trueAddress.getAve(), client.dropoffInstructions, client.emailAddress });
 		clients.add(client);
 	}
 	

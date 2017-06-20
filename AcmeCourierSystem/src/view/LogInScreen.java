@@ -93,6 +93,7 @@ public class LogInScreen extends Container {
 				window.setLocation(screenSize.width / 6, 0);
 				window.setSize(screenSize.width * 2 / 3, screenSize.height);
 				window.setContentPane(new MainScreen(window));
+				window.setTitle("Acme Courier System - Welcome " + CourierSystem.currentUser.name);
 				window.validate();
 				return true;
 			}
