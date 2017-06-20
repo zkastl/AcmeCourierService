@@ -19,7 +19,9 @@ package main;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 
@@ -53,6 +55,7 @@ public final class CourierSystem  {
 		LoadEmployees();
 		LoadClients();
 		LoadDeliveries();
+		TestDelivery();
 		
 		Settings.averageCourierSpeed = 5.0;
 		Settings.baseCost = 10.0;
@@ -120,7 +123,7 @@ public final class CourierSystem  {
 			Query eQuery = em.createQuery("SELECT c FROM Clients c", Client.class);
 			List<Client> cli = eQuery.getResultList();
 			for(Client c : cli) {
-				c.trueAddress = CourierSystem.CityMap.getIntersection(c.address);
+				c.trueAddress = CityMap.getIntersection(c.address);
 				Clients.put(c.name, c);
 			}
 		} catch (Exception ex) {
@@ -156,9 +159,7 @@ public final class CourierSystem  {
 	}
 
 	public static void LoadDeliveries() throws IOException {
-		if (Deliveries == null) {
-			Deliveries = new HashMap<String, Delivery>();
-		}
+		Deliveries = new HashMap<String, Delivery>();
 		try {
 			Query eQuery = em.createQuery("SELECT d from Deliveries d", Delivery.class);
 			@SuppressWarnings("unchecked")
@@ -200,16 +201,6 @@ public final class CourierSystem  {
 	
 	@SuppressWarnings("unchecked")
 	public static void LoadCityMap() throws Exception {
-		/*try {
-			Query eQuery = em.createQuery("SELECT m FROM CityMap m", Map.class);
-			List<Map> maps = eQuery.getResultList();
-			CourierSystem.CityMap = (maps != null && !maps.isEmpty()) ? maps.get(0) : new Map();
-			PrintMapToConsole();
-		
-		} catch (Exception ex) {
-			System.out.println(ex.getMessage());
-		}*/
-		
 		try {
 			Query eQuery = em.createQuery("SELECT m FROM CityMap m", Intersection.class);
 			List<Intersection> savedIntersections = eQuery.getResultList();
@@ -218,9 +209,9 @@ public final class CourierSystem  {
 				hashedIntersections.put(i.getName(), i);
 			}
 			
-			CourierSystem.CityMap = new Map();
+			CityMap = new Map();
 			if (hashedIntersections != null && !hashedIntersections.isEmpty()) {
-				CourierSystem.CityMap.setIntersections(hashedIntersections);
+				CityMap.setIntersections(hashedIntersections);
 			}
 			
 		}
@@ -230,28 +221,19 @@ public final class CourierSystem  {
 	}
 
 	public static void SaveCityMap() throws Exception {
-		/*System.out.println("Saving map to database...");
-		CourierSystem.CityMap.lastSavedDate = LocalDateTime.now().toString();
 		EntityTransaction trans = em.getTransaction();
 		trans.begin();
-		em.persist(CourierSystem.CityMap);
-		trans.commit();
-		PrintMapToConsole();*/
-		
-
-		EntityTransaction trans = em.getTransaction();
-		trans.begin();
-		for (Intersection i : CourierSystem.CityMap.intersections.values()) {
+		for (Intersection i : CityMap.intersections.values()) {
 			em.persist(i);
 		}
 		trans.commit();
 	}
 	
 	public static void PrintMapToConsole() {
-		System.out.println("City Map: ID-" + CourierSystem.CityMap.mapId);
-		System.out.println("Last Saved: " + CourierSystem.CityMap.lastSavedDate);
+		System.out.println("City Map: ID-" + CityMap.mapId);
+		System.out.println("Last Saved: " + CityMap.lastSavedDate);
 		System.out.println("Closed Intersections:");
-		for(String s : CourierSystem.CityMap.getClosedIntersections()) {
+		for(String s : CityMap.getClosedIntersections()) {
 			System.out.println("  " + s);
 		}
 	}
@@ -259,4 +241,21 @@ public final class CourierSystem  {
 	private CourierSystem() throws Exception {
 		InitializeCourierSystem();
 	};
+	
+	private static void TestDelivery() {
+		try {
+			Delivery d = new Delivery();
+			d.pickupClient = Clients.get("Darth Vader");
+			d.deliveryClient = Clients.get("Lex Luthor");
+			d.requestedPickupTime = LocalDateTime.of(2017, 7, 25, 9, 00);
+			d.billToSender = true;
+			d.assignedCourier = Employees.get("Spiderman");
+			Deliveries.put(String.valueOf(d.hashCode()), d);
+			UpdateDeliveries();
+		}
+		catch (Exception ex) {
+			System.out.print(ex.getMessage());
+			System.out.println("something went wrong, probably because it's not running on zak's computer.");
+		}
+	}
 }
