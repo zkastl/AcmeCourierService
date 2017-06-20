@@ -94,7 +94,7 @@ public class Intersection implements Comparable<Intersection>, Serializable {
 	}
 	
 	public Intersection() {
-		
+		// Method required for JPA persistence, do not delete.
 	}
 
 	public String getStreet() {
