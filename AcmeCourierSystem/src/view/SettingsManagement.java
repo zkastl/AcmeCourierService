@@ -1,6 +1,8 @@
 package view;
 
 import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.*;
 import java.util.ArrayList;
 
@@ -35,9 +37,39 @@ public class SettingsManagement extends Container{
 		setLayout(new MigLayout("", "[grow][][][grow]", "[grow][][][][][][][][][][grow]"));
 		
 		JButton btnSaveChanges = new JButton("Save Changes");
+		btnSaveChanges.addActionListener( new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Settings.averageCourierSpeed = (Double) editAverageCourierSpeed.getValue();
+				Settings.baseCost = (Double) editBasePrice.getValue();
+				Settings.blocksPerMile = Integer.valueOf(editBlocksPerMile.getValue().toString());
+				Settings.bonusAmount = (Double) editBonusAmount.getValue();
+				Settings.bonusLeeway = Integer.valueOf(editBonusLeewayTime.getValue().toString());
+				Settings.courierStartAddress = CourierSystem.CityMap.getIntersection((String) editCourierStartAddress.getSelectedItem());
+				Settings.plannedNonTravelTime = (Double) editPlannedNonTravelTime.getValue();
+				Settings.pricePerBlock = Double.valueOf(editPricePerBlock.getValue().toString());
+			}
+			
+		});
 		add(btnSaveChanges, "cell 1 9,alignx right");
 		
 		JButton btnCancel = new JButton("Cancel");
+		btnCancel.addActionListener( new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				editAverageCourierSpeed.setValue(Settings.averageCourierSpeed);
+				editBasePrice.setValue(Settings.baseCost);
+				editBlocksPerMile.setValue(Settings.blocksPerMile);
+				editBonusAmount.setValue(Settings.bonusAmount);
+				editBonusLeewayTime.setValue(Settings.bonusLeeway);
+				editCourierStartAddress.setSelectedItem(Settings.courierStartAddress.getName());
+				editPlannedNonTravelTime.setValue(Settings.plannedNonTravelTime);
+				editPricePerBlock.setValue(Settings.pricePerBlock);
+			}
+			
+		});
 		add(btnCancel, "cell 2 9");
 		
 		JLabel lblBasePrice = new JLabel("Base Price:");

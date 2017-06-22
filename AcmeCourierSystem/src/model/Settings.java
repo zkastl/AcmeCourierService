@@ -1,5 +1,7 @@
 package model;
 
+import main.CourierSystem;
+
 /**
  * Global variables used in calculations, some of which may be changed by an
  * administrator
@@ -50,4 +52,15 @@ public final class Settings {
 	public static String CourierFile = "Couriers.xml";
 	public static String ClientFile = "Clients.xml";
 	public static String DeliveriesFile = "Deliveries.xml";
+	
+	public static void setDefaultValues() {
+		averageCourierSpeed = 5.0;
+		baseCost = 10.00;
+		blocksPerMile = 10;
+		bonusAmount = 2.00;
+		bonusLeeway = 5;
+		courierStartAddress = CourierSystem.CityMap.getIntersection("D4");
+		plannedNonTravelTime = 5.0;
+		pricePerBlock = 2.00;
+	}
 }

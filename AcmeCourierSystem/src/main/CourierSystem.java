@@ -64,14 +64,7 @@ public final class CourierSystem {
 		LoadDeliveries();
 		TestDelivery();
 
-		Settings.averageCourierSpeed = 5.0;
-		Settings.baseCost = 10.00;
-		Settings.blocksPerMile = 10;
-		Settings.bonusAmount = 2.00;
-		Settings.bonusLeeway = 5;
-		Settings.courierStartAddress = CityMap.getIntersection("D4");
-		Settings.plannedNonTravelTime = 5.0;
-		Settings.pricePerBlock = 2.00;
+		Settings.setDefaultValues();
 	}
 
 	@SuppressWarnings("unchecked")
