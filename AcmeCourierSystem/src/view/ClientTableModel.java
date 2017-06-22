@@ -7,7 +7,6 @@ import javax.swing.table.DefaultTableModel;
 
 import main.CourierSystem;
 import model.Client;
-import model.Intersection;
 
 public final class ClientTableModel extends DefaultTableModel {
 
@@ -48,6 +47,17 @@ public final class ClientTableModel extends DefaultTableModel {
 	}
 
 	@Override
+	public Object getValueAt(int rowIndex, int columnIndex) {
+		switch (columnIndex) {
+		case 0:
+			return clients.get(rowIndex).clientID;
+		default:
+			return super.getValueAt(rowIndex, columnIndex);
+		}
+
+	}
+
+	@Override
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
 		super.setValueAt(aValue, rowIndex, columnIndex);
 
@@ -58,7 +68,7 @@ public final class ClientTableModel extends DefaultTableModel {
 		case 2:
 			clients.get(rowIndex).phoneNumber = aValue.toString();
 			break;
-		case 3:			
+		case 3:
 			clients.get(rowIndex).trueAddress.setStreet(aValue.toString().substring(0, 1));
 			break;
 		case 4:
@@ -80,7 +90,7 @@ public final class ClientTableModel extends DefaultTableModel {
 				client.trueAddress.getAve(), client.dropoffInstructions, client.emailAddress });
 		clients.add(client);
 	}
-	
+
 	public void removeRow(int rowNumber) {
 		super.removeRow(rowNumber);
 		clients.remove(rowNumber);

@@ -2,6 +2,7 @@ package view;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.table.DefaultTableModel;
 
 import main.CourierSystem;
@@ -72,7 +73,10 @@ public final class EmployeeTableModel extends DefaultTableModel {
 			employees.get(rowIndex).name = aValue.toString();
 			break;
 		case 2:
-			employees.get(rowIndex).role = EmployeeRole.valueOf(aValue.toString());
+			EmployeeRole role = EmployeeRole.valueOf(aValue.toString());
+			employees.get(rowIndex).role = role;
+			if (role == EmployeeRole.Courier)
+				setValueAt("", rowIndex, 3);
 			break;
 		case 3:
 			employees.get(rowIndex).userName = aValue.toString();

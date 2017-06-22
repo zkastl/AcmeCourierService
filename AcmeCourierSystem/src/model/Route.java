@@ -1,14 +1,20 @@
 package model;
 
+import java.io.Serializable;
 import java.time.Duration;
 import java.util.PriorityQueue;
 import java.util.Stack;
+
+import javax.persistence.Entity;
 
 /**
  * an object that calculates the shortest path between two intersections and
  * stores the steps to take to follow that path
  */
-public class Route {
+@Entity(name = "Deliveries")
+public class Route implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * the roads that compose the shortest path from the start intersection to
@@ -39,81 +45,108 @@ public class Route {
 	public Intersection getStart() {
 		return start;
 	}
+
 	public Intersection getEnd() {
 		return end;
 	}
+
 	public int getDistance() {
 		return distance;
 	}
+
 	public Duration getTime() {
 		return time;
 	}
+
 	public Route(Map map, Intersection start, Intersection end) {
-		this.start =start;
+		this.start = start;
 		this.end = end;
 		steps = new Stack<Road>();
 		calculateSteps(map);
 		calculateDistance();
 		calculateTime();
 	}
+
 	public void calculateSteps(Map map) {
 		PriorityQueue<Intersection> unvisited = new PriorityQueue<Intersection>();
-		
-		// sanitize open nodes to make sure they are not affected by previous paths and add them to the unvisited set
+
+		// sanitize open nodes to make sure they are not affected by previous
+		// paths and add them to the unvisited set
 		Intersection prevFiller = new Intersection("-1", "stupid");
-		for(Intersection intersection : map.getIntersections().values()) {
-			if(intersection.isOpen()) {
+		for (Intersection intersection : map.getIntersections().values()) {
+			if (intersection.isOpen()) {
 				int maxLength = 0;
-				for(Road road : intersection.getRoads()){
-					if(maxLength < road.getLength()) {
+				for (Road road : intersection.getRoads()) {
+					if (maxLength < road.getLength()) {
 						maxLength = road.getLength();
 					}
 				}
-				intersection.setDistance(Integer.MAX_VALUE - maxLength); // don't accidently roll over if something goes wrong and shove huge negative numbers to the front
+				intersection.setDistance(Integer.MAX_VALUE - maxLength); // don't
+																			// accidently
+																			// roll
+																			// over
+																			// if
+																			// something
+																			// goes
+																			// wrong
+																			// and
+																			// shove
+																			// huge
+																			// negative
+																			// numbers
+																			// to
+																			// the
+																			// front
 				intersection.setPrevious(prevFiller);
 				intersection.setVisited(false);
-				if( intersection.equals(start) ) {
+				if (intersection.equals(start)) {
 					intersection.setDistance(0);
 				}
 				unvisited.add(intersection);
 			}
 		}
-		
+
 		// find the shortest distance from start to end
-		while(!end.getVisited()) {
-			/*int count = 0; //output first 20 elements of the priority queue
-			for(Intersection i : unvisited) {
-				System.out.println(i.getName() + " " + i.getDistance());
-				count++;
-				if(count > 19) {
-					break;
-				}
-			}*/
+		while (!end.getVisited()) {
+			/*
+			 * int count = 0; //output first 20 elements of the priority queue
+			 * for(Intersection i : unvisited) { System.out.println(i.getName()
+			 * + " " + i.getDistance()); count++; if(count > 19) { break; } }
+			 */
 			Intersection current = unvisited.poll();
-			if(!current.getVisited()) {
-				for(Road edge : current.getRoads()) {
-					//System.out.println("checking " + edge.getName()); //output the current node being inspected
-					if(!edge.getEnd().getVisited() && (edge.getEnd().getDistance() > (current.getDistance() + edge.getLength()))) {
-						//System.out.println("old distance " + edge.getEnd().getDistance()); //output the old distance to the other node
+			if (!current.getVisited()) {
+				for (Road edge : current.getRoads()) {
+					// System.out.println("checking " + edge.getName());
+					// //output the current node being inspected
+					if (!edge.getEnd().getVisited()
+							&& (edge.getEnd().getDistance() > (current.getDistance() + edge.getLength()))) {
+						// System.out.println("old distance " +
+						// edge.getEnd().getDistance()); //output the old
+						// distance to the other node
 						edge.getEnd().setDistance(current.getDistance() + edge.getLength());
-						//System.out.println("new distance " + edge.getEnd().getDistance()); //output the new distance to the other node
+						// System.out.println("new distance " +
+						// edge.getEnd().getDistance()); //output the new
+						// distance to the other node
 						edge.getEnd().setPrevious(current);
-						unvisited.add(edge.getEnd()); // help get around priority queues not resorting all the time
+						unvisited.add(edge.getEnd()); // help get around
+														// priority queues not
+														// resorting all the
+														// time
 					}
 				}
 				current.setVisited(true);
 			}
-			//System.out.println();  // put a line break between loops
+			// System.out.println(); // put a line break between loops
 		}
-		
+
 		// build stack of steps to take
 		Intersection node = end;
-		while(!node.getPrevious().equals(prevFiller)) {
-			if(!node.getPrevious().getRoads().isEmpty()) {
-				for(Road road : node.getPrevious().getRoads()) {
-					if(road.getEnd().equals(node)) {
-						steps.push(road);								// null pointer exception
-						//insert stop for for loop here
+		while (!node.getPrevious().equals(prevFiller)) {
+			if (!node.getPrevious().getRoads().isEmpty()) {
+				for (Road road : node.getPrevious().getRoads()) {
+					if (road.getEnd().equals(node)) {
+						steps.push(road); // null pointer exception
+						// insert stop for for loop here
 					}
 				}
 				node = node.getPrevious();
@@ -127,7 +160,7 @@ public class Route {
 	 */
 	public void calculateDistance() {
 		distance = 0;
-		for(Road step : steps) {
+		for (Road step : steps) {
 			distance = distance + step.getLength();
 		}
 	}
@@ -137,8 +170,9 @@ public class Route {
 	 * calculated first (distance / averageCourierSpeed)
 	 */
 	public void calculateTime() {
-		if(distance > 0) {
-			time = Duration.ofSeconds((long)((double)distance / (Settings.averageCourierSpeed * Settings.blocksPerMile / 60 / 60)));
+		if (distance > 0) {
+			time = Duration.ofSeconds(
+					(long) ((double) distance / (Settings.averageCourierSpeed * Settings.blocksPerMile / 60 / 60)));
 		} else {
 			time = Duration.ofSeconds(0);
 		}
@@ -149,36 +183,39 @@ public class Route {
 	 * route
 	 */
 	public void print() {
-		if(steps.isEmpty()) {
+		if (steps.isEmpty()) {
 			System.out.println("No path available");
 		} else {
 			String directions = "";
 			int distance = 0;
 			Road prevStep = steps.peek();
 			int stepNumber = 0;
-			while(!steps.isEmpty()) {
+			while (!steps.isEmpty()) {
 				Road step = steps.pop();
 				System.out.println(step.getDirection() + " " + step.getLength() + " blocks on " + step.getName()); //
-				
-				if(step.getDirection().compareTo(prevStep.getDirection()) == 0) {
+
+				if (step.getDirection().compareTo(prevStep.getDirection()) == 0) {
 					distance = distance + step.getLength();
-					if(steps.isEmpty()) {
+					if (steps.isEmpty()) {
 						stepNumber++;
-						directions = directions + stepNumber + ". Go " + prevStep.getDirection() + " " + distance + " blocks on " + prevStep.getName() + "\n";
+						directions = directions + stepNumber + ". Go " + prevStep.getDirection() + " " + distance
+								+ " blocks on " + prevStep.getName() + "\n";
 					}
 				} else {
-					if(distance == 0) {
+					if (distance == 0) {
 						distance = prevStep.getLength();
 					}
 					stepNumber++;
-					directions = directions + stepNumber + ". Go " + prevStep.getDirection() + " " + distance + " blocks on " + prevStep.getName() + "\n";
+					directions = directions + stepNumber + ". Go " + prevStep.getDirection() + " " + distance
+							+ " blocks on " + prevStep.getName() + "\n";
 					distance = step.getLength();
-					if(steps.isEmpty()) {
+					if (steps.isEmpty()) {
 						stepNumber++;
-						directions = directions + stepNumber + ". Go " + step.getDirection() + " " + step.getLength() + " blocks on " + step.getName() + "\n";
+						directions = directions + stepNumber + ". Go " + step.getDirection() + " " + step.getLength()
+								+ " blocks on " + step.getName() + "\n";
 					}
 				}
-				
+
 				prevStep = step;
 			}
 			System.out.println(directions);
