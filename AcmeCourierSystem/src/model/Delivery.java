@@ -145,7 +145,7 @@ public class Delivery implements Serializable {
 		estimatedDistanceTraveled = pickupRoute.getDistance() + deliveryRoute.getDistance();
 
 		estimatedDistanceTraveled = pickupRoute.getDistance() + deliveryRoute.getDistance() + returnRoute.getDistance();
-		totalDeliveryCost = Settings.baseCost + estimatedDistanceTraveled * Settings.pricePerBlock;
+		totalDeliveryCost =  CourierSystem.SystemSettings.baseCost + estimatedDistanceTraveled * CourierSystem.SystemSettings.pricePerBlock;
 	}
 
 	/**
@@ -154,9 +154,9 @@ public class Delivery implements Serializable {
 	 * back to the courierStart
 	 */
 	private void calculateRoutes() {
-		pickupRoute = CourierSystem.CityMap.getRoute(Settings.courierStartAddress, pickupClient.trueAddress);
+		pickupRoute = CourierSystem.CityMap.getRoute(CourierSystem.SystemSettings.courierStartAddress, pickupClient.trueAddress);
 		deliveryRoute = CourierSystem.CityMap.getRoute(pickupClient.trueAddress, deliveryClient.trueAddress);
-		returnRoute = CourierSystem.CityMap.getRoute(deliveryClient.trueAddress, Settings.courierStartAddress);
+		returnRoute = CourierSystem.CityMap.getRoute(deliveryClient.trueAddress, CourierSystem.SystemSettings.courierStartAddress);
 	}
 
 	/**
@@ -172,7 +172,7 @@ public class Delivery implements Serializable {
 		long estimatedTimeInTransit = estimatedDeliveryTime.toEpochSecond(null)
 				- requestedPickupTime.toEpochSecond(null);
 		int differenceInMinutesAsInt = (int) (Math.abs(actualTimeInTransit - estimatedTimeInTransit) / 60);
-		if (differenceInMinutesAsInt < Settings.bonusLeeway) {
+		if (differenceInMinutesAsInt < CourierSystem.SystemSettings.bonusLeeway) {
 			bonusEarned = true;
 		} else {
 			bonusEarned = false;

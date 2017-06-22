@@ -162,7 +162,7 @@ public class Route implements Serializable {
 	public void calculateTime() {
 		if (distance > 0) {
 			time = Duration.ofSeconds(
-					(long) ((double) distance / (Settings.averageCourierSpeed * Settings.blocksPerMile / 60 / 60)));
+					(long) ((double) distance / (CourierSystem.SystemSettings.averageCourierSpeed * CourierSystem.SystemSettings.blocksPerMile / 60 / 60)));
 		} else {
 			time = Duration.ofSeconds(0);
 		}

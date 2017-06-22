@@ -3,6 +3,7 @@ package view;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.text.*;
 import java.util.ArrayList;
 
@@ -41,14 +42,20 @@ public class SettingsManagement extends Container{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Settings.averageCourierSpeed = (Double) editAverageCourierSpeed.getValue();
-				Settings.baseCost = (Double) editBasePrice.getValue();
-				Settings.blocksPerMile = Integer.valueOf(editBlocksPerMile.getValue().toString());
-				Settings.bonusAmount = (Double) editBonusAmount.getValue();
-				Settings.bonusLeeway = Integer.valueOf(editBonusLeewayTime.getValue().toString());
-				Settings.courierStartAddress = CourierSystem.CityMap.getIntersection((String) editCourierStartAddress.getSelectedItem());
-				Settings.plannedNonTravelTime = (Double) editPlannedNonTravelTime.getValue();
-				Settings.pricePerBlock = Double.valueOf(editPricePerBlock.getValue().toString());
+				CourierSystem.SystemSettings.averageCourierSpeed = (Double) editAverageCourierSpeed.getValue();
+				CourierSystem.SystemSettings.baseCost = (Double) editBasePrice.getValue();
+				CourierSystem.SystemSettings.blocksPerMile = Integer.valueOf(editBlocksPerMile.getValue().toString());
+				CourierSystem.SystemSettings.bonusAmount = (Double) editBonusAmount.getValue();
+				CourierSystem.SystemSettings.bonusLeeway = Integer.valueOf(editBonusLeewayTime.getValue().toString());
+				CourierSystem.SystemSettings.courierStartAddress = CourierSystem.CityMap.getIntersection((String) editCourierStartAddress.getSelectedItem());
+				CourierSystem.SystemSettings.plannedNonTravelTime = (Double) editPlannedNonTravelTime.getValue();
+				CourierSystem.SystemSettings.pricePerBlock = Double.valueOf(editPricePerBlock.getValue().toString());
+				try {
+					CourierSystem.SaveSettings();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 			
 		});
@@ -59,14 +66,14 @@ public class SettingsManagement extends Container{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				editAverageCourierSpeed.setValue(Settings.averageCourierSpeed);
-				editBasePrice.setValue(Settings.baseCost);
-				editBlocksPerMile.setValue(Settings.blocksPerMile);
-				editBonusAmount.setValue(Settings.bonusAmount);
-				editBonusLeewayTime.setValue(Settings.bonusLeeway);
-				editCourierStartAddress.setSelectedItem(Settings.courierStartAddress.getName());
-				editPlannedNonTravelTime.setValue(Settings.plannedNonTravelTime);
-				editPricePerBlock.setValue(Settings.pricePerBlock);
+				editAverageCourierSpeed.setValue(CourierSystem.SystemSettings.averageCourierSpeed);
+				editBasePrice.setValue(CourierSystem.SystemSettings.baseCost);
+				editBlocksPerMile.setValue(CourierSystem.SystemSettings.blocksPerMile);
+				editBonusAmount.setValue(CourierSystem.SystemSettings.bonusAmount);
+				editBonusLeewayTime.setValue(CourierSystem.SystemSettings.bonusLeeway);
+				editCourierStartAddress.setSelectedItem(CourierSystem.SystemSettings.courierStartAddress.getName());
+				editPlannedNonTravelTime.setValue(CourierSystem.SystemSettings.plannedNonTravelTime);
+				editPricePerBlock.setValue(CourierSystem.SystemSettings.pricePerBlock);
 			}
 			
 		});
@@ -77,7 +84,7 @@ public class SettingsManagement extends Container{
 		add(lblBasePrice, "cell 1 1,alignx trailing");
 		
 		editBasePrice = new JFormattedTextField(money);
-		editBasePrice.setValue(Settings.baseCost);
+		editBasePrice.setValue(CourierSystem.SystemSettings.baseCost);
 		add(editBasePrice, "cell 2 1,growx");
 		editBasePrice.setColumns(6);
 		
@@ -86,7 +93,7 @@ public class SettingsManagement extends Container{
 		add(lblPricePerBlock, "cell 1 2,alignx trailing");
 		
 		editPricePerBlock = new JFormattedTextField(money);
-		editPricePerBlock.setValue(Settings.pricePerBlock);
+		editPricePerBlock.setValue(CourierSystem.SystemSettings.pricePerBlock);
 		add(editPricePerBlock, "cell 2 2,growx");
 		editPricePerBlock.setColumns(6);
 		
@@ -95,7 +102,7 @@ public class SettingsManagement extends Container{
 		add(lblPlannedNontravelTime, "cell 1 3,alignx trailing");
 		
 		editPlannedNonTravelTime = new JFormattedTextField(decimal);
-		editPlannedNonTravelTime.setValue(Settings.plannedNonTravelTime);
+		editPlannedNonTravelTime.setValue(CourierSystem.SystemSettings.plannedNonTravelTime);
 		add(editPlannedNonTravelTime, "cell 2 3,growx");
 		editPlannedNonTravelTime.setColumns(6);
 		
@@ -112,7 +119,7 @@ public class SettingsManagement extends Container{
 		for(String s: names) {
 			editCourierStartAddress.addItem(s);
 		}
-		editCourierStartAddress.setSelectedItem(Settings.courierStartAddress.getName());
+		editCourierStartAddress.setSelectedItem(CourierSystem.SystemSettings.courierStartAddress.getName());
 		add(editCourierStartAddress, "cell 2 4,growx");
 				
 		JLabel lblAverageCourierSpeed = new JLabel("Average Courier Speed (mph):");
@@ -120,7 +127,7 @@ public class SettingsManagement extends Container{
 		add(lblAverageCourierSpeed, "cell 1 5,alignx trailing");
 		
 		editAverageCourierSpeed = new JFormattedTextField(decimal);
-		editAverageCourierSpeed.setValue(Settings.averageCourierSpeed);
+		editAverageCourierSpeed.setValue(CourierSystem.SystemSettings.averageCourierSpeed);
 		add(editAverageCourierSpeed, "cell 2 5,growx");
 		editAverageCourierSpeed.setColumns(6);
 		
@@ -129,7 +136,7 @@ public class SettingsManagement extends Container{
 		add(lblBlocksPerMile, "cell 1 6,alignx trailing");
 		
 		editBlocksPerMile = new JFormattedTextField(digit);
-		editBlocksPerMile.setValue(Settings.blocksPerMile);
+		editBlocksPerMile.setValue(CourierSystem.SystemSettings.blocksPerMile);
 		add(editBlocksPerMile, "cell 2 6,growx");
 		editBlocksPerMile.setColumns(6);
 		
@@ -138,7 +145,7 @@ public class SettingsManagement extends Container{
 		add(lblBonusLeewayTime, "cell 1 7,alignx trailing");
 		
 		editBonusLeewayTime = new JFormattedTextField(digit);
-		editBonusLeewayTime.setValue(Settings.bonusLeeway);
+		editBonusLeewayTime.setValue(CourierSystem.SystemSettings.bonusLeeway);
 		add(editBonusLeewayTime, "cell 2 7,growx");
 		editBonusLeewayTime.setColumns(6);
 		
@@ -147,7 +154,7 @@ public class SettingsManagement extends Container{
 		add(lblBonusAmount, "cell 1 8,alignx trailing");
 		
 		editBonusAmount = new JFormattedTextField(money);
-		editBonusAmount.setValue(Settings.bonusAmount);
+		editBonusAmount.setValue(CourierSystem.SystemSettings.bonusAmount);
 		add(editBonusAmount, "cell 2 8,growx");
 		editBonusAmount.setColumns(6);
 	}

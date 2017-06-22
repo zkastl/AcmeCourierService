@@ -19,6 +19,7 @@ package main;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,14 +30,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
-import model.Client;
-import model.Courier;
-import model.Delivery;
-import model.Employee;
-import model.EmployeeRole;
-import model.Intersection;
-import model.Map;
-import model.Settings;
+import model.*;
 
 public final class CourierSystem {
 
@@ -60,9 +54,44 @@ public final class CourierSystem {
 		LoadCityMap();
 		LoadEmployees();
 		LoadClients();
-		LoadDeliveries();
+		LoadDeliveries();		
+		LoadSettings();		
+	}
 
-		Settings.setDefaultValues();
+	private static void LoadSettings() {
+		try {
+			FileInputStream fin = new FileInputStream("./settings.ser");
+			ObjectInputStream ois = new ObjectInputStream(fin);
+			SystemSettings = (Settings) ois.readObject();
+			ois.close();
+			fin.close();
+			
+			if (SystemSettings == null){
+				System.out.println("Settings failed to load.");
+				SystemSettings = new Settings();
+				SystemSettings.setDefaultValues();
+			}
+		}
+		catch(IOException ioex) {
+			SystemSettings = new Settings();
+			SystemSettings.setDefaultValues();
+			ioex.printStackTrace();
+		} 
+		catch (ClassNotFoundException e) {
+			SystemSettings = new Settings();
+			SystemSettings.setDefaultValues();
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public static void SaveSettings() throws IOException {
+		FileOutputStream fout = new FileOutputStream("./settings.ser");
+		ObjectOutputStream oos = new ObjectOutputStream(fout);
+		oos.writeObject(SystemSettings);
+		oos.close();
+		fout.close();
+		System.out.println("Settings saved successfully.");
 	}
 
 	@SuppressWarnings("unchecked")
