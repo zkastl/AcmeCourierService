@@ -215,9 +215,8 @@ public class DeliveryTicketEditor extends JDialog {
 		delivery.calculateBonus();
 		bonusEarned.setSelected(delivery.bonusEarned);
 
-		if (delivery.assignedCourier != null && delivery.actualDepartureTime != null
-				&& delivery.actualPickupTime != null && delivery.actualDeliveryTime != null
-				&& delivery.actualReturnTime != null)
+		if (delivery.assignedCourier != null && delivery.actualPickupTime != null
+				&& delivery.actualDeliveryTime != null)
 			delivery.status = DeliveryStatus.Completed;
 	}
 
