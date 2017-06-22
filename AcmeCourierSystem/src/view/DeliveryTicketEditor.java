@@ -51,11 +51,15 @@ public class DeliveryTicketEditor extends JDialog {
 	DateTimePicker pickupEditor;
 	JComboBox<Employee> cbCourier;
 	DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("h:mm a");
+	private boolean saved = true;
 
 	public DeliveryTicketEditor(Delivery delivery, DeliveryTableModel deliveryTable) {
 		super((JFrame) null, "ACME Delivery Ticket Editor", true);
 		this.delivery = delivery;
 		this.deliveryTable = deliveryTable;
+		if (delivery.packageID == 0) {
+			saved = false;
+		}
 
 		setSize(650, 740);
 		setAlwaysOnTop(true);
@@ -138,7 +142,7 @@ public class DeliveryTicketEditor extends JDialog {
 		btnOk.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (isValid()) {
+				if (validInputs()) {
 					save();
 					close();
 				}
@@ -150,7 +154,7 @@ public class DeliveryTicketEditor extends JDialog {
 		btnApply.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (isValid())
+				if (validInputs())
 					save();
 			}
 		});
@@ -171,19 +175,15 @@ public class DeliveryTicketEditor extends JDialog {
 		setVisible(true);
 	}
 
-	@Override
-	public boolean isValid() {
-		if (super.isValid() && pickupClient.getSelectedItem() != null && deliveryClient.getSelectedItem() != null) {
-			return true;
-		}
-		return false;
+	public boolean validInputs() {
+		return pickupClient.getSelectedItem() != null && deliveryClient.getSelectedItem() != null;
 	}
 
 	protected void save() {
 		try {
 			populateDeliveryInfo();
 			CourierSystem.SaveDelivery(delivery);
-			delivery.packageID = -1;
+			saved = true;
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -218,7 +218,7 @@ public class DeliveryTicketEditor extends JDialog {
 
 	@Override
 	public void dispose() {
-		if (delivery.packageID == 0) {
+		if (!saved) {
 			deliveryTable.removeRow(deliveryTable.getRowCount() - 1);
 		}
 		super.dispose();

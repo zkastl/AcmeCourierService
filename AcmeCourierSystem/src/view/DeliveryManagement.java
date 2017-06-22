@@ -88,14 +88,12 @@ public class DeliveryManagement extends Container {
 
 		btnEditDelivery.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (!TableValidator.isValid(table))
-					return;
-
 				int selectedRow = table.getSelectedRow();
 				System.out.println("Selected Row: " + selectedRow);
 				Delivery delivery = deliveryTable.deliveries.get(selectedRow);
 
-				new DeliveryTicketEditor(delivery, deliveryTable);
+				if (TableValidator.isValid(table))
+					new DeliveryTicketEditor(delivery, deliveryTable);
 			}
 		});
 
