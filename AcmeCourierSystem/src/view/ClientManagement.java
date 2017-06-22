@@ -56,12 +56,8 @@ public class ClientManagement extends Container {
 		table.getColumnModel().getColumn(1).setCellEditor(new MandatoryStringCellEditor(new JTextField()));
 		table.getColumnModel().getColumn(2).setCellEditor(new MandatoryStringCellEditor(new JTextField()));
 
-		JComboBox<String> streets = new JComboBox<>(
-				new String[] { "A Street", "B Street", "C Street", "D Street", "E Street", "F Street", "G Street" });
-		streets.setSelectedIndex(0);
-		JComboBox<String> avenues = new JComboBox<>(
-				new String[] { "1st Ave", "2nd Ave", "3rd Ave", "4th Ave", "5th Ave", "6th Ave", "7th Ave" });
-		avenues.setSelectedIndex(0);
+		JComboBox<String> streets = new JComboBox<>(new String[] { "A", "B", "C", "D", "E", "F", "G" });
+		JComboBox<String> avenues = new JComboBox<>(new String[] { "1", "2", "3", "4", "5", "6", "7" });
 		table.getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(streets));
 		table.getColumnModel().getColumn(4).setCellEditor(new DefaultCellEditor(avenues));
 
@@ -99,13 +95,13 @@ public class ClientManagement extends Container {
 			}
 		});
 	}
-	
+
 	private void save() {
 		if (!TableValidator.isValid(table))
 			return;
 		try {
 			CourierSystem.Clients = new HashMap<String, Client>();
-			for(Client cli : clientTable.clients) {
+			for (Client cli : clientTable.clients) {
 				CourierSystem.Clients.put(cli.name, cli);
 			}
 			CourierSystem.UpdateClients();

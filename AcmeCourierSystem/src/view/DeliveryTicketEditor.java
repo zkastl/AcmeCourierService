@@ -183,6 +183,7 @@ public class DeliveryTicketEditor extends JDialog {
 		try {
 			populateDeliveryInfo();
 			CourierSystem.SaveDelivery(delivery);
+			delivery.packageID = -1;
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {

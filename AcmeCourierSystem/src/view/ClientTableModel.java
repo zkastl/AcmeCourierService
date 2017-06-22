@@ -19,9 +19,7 @@ public final class ClientTableModel extends DefaultTableModel {
 
 		for (Client c : CourierSystem.Clients.values()) {
 			if (!c.getIsArchived()) {
-				super.addRow(new Object[] { c.clientID, c.name, c.phoneNumber, c.trueAddress.getStreet(),
-						c.trueAddress.getAve(), c.dropoffInstructions, c.emailAddress });
-				clients.add(c);
+				addRow(c);
 			}
 		}
 	}
@@ -69,10 +67,10 @@ public final class ClientTableModel extends DefaultTableModel {
 			clients.get(rowIndex).phoneNumber = aValue.toString();
 			break;
 		case 3:
-			clients.get(rowIndex).trueAddress.setStreet(aValue.toString().substring(0, 1));
+			clients.get(rowIndex).trueAddress.setStreet(aValue.toString());
 			break;
 		case 4:
-			clients.get(rowIndex).trueAddress.setAve(aValue.toString().substring(0, 1));
+			clients.get(rowIndex).trueAddress.setAve(aValue.toString());
 			break;
 		case 5:
 			clients.get(rowIndex).dropoffInstructions = aValue.toString();
