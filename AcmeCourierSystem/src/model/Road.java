@@ -2,6 +2,8 @@ package model;
 
 import java.io.Serializable;
 
+import main.CourierSystem;
+
 /**
  * an edge in the map graph. the connection between two intersections
  */
@@ -11,11 +13,11 @@ public class Road implements Serializable {
 	/**
 	 * The intersection the road starts from
 	 */
-	private Intersection start;
+	private String start;
 	/**
 	 * the intersection the road goes to
 	 */
-	private Intersection end;
+	private String end;
 	/**
 	 * the direction the road goes (North, South, East, West)
 	 */
@@ -29,40 +31,40 @@ public class Road implements Serializable {
 	private Integer length;
 	
 	public Road(Intersection start, Intersection end, String dir, String name, Integer len) {
-		this.start = start;
-		this.end = end;
+		this.start = start.getName();
+		this.end = end.getName();
 		this.direction = dir;
 		this.name = name;
 		this.length = len;
 	}
 	
 	public Road(Intersection start, Intersection end, String dir, String name) {
-		this.start = start;
-		this.end = end;
+		this.start = start.getName();
+		this.end = end.getName();
 		this.direction = dir;
 		this.name = name;
 		this.length = 1;
 	}
 	
 	public Road(Intersection start, Intersection end, String dir) {
-		this.start = start;
-		this.end = end;
+		this.start = start.getName();
+		this.end = end.getName();
 		this.direction = dir;
 		this.name = ((dir.compareTo("North") == 0 || dir.compareTo("South") == 0) ? start.getStreet() : start.getAve()) /*start.getName() + "to" + end.getName()*/;
 		this.length = 1;
 	}
 	
 	public Intersection getStart() {
-		return start;
+		return CourierSystem.CityMap.getIntersection(start);
 	}
 	public void setStart(Intersection intersection) {
-		this.start = intersection;
+		this.start = intersection.getName();
 	}
 	public Intersection getEnd() {
-		return end;
+		return CourierSystem.CityMap.getIntersection(end);
 	}
 	public void setEnd(Intersection intersection) {
-		this.end = intersection;
+		this.end = intersection.getName();
 	}
 	public String getDirection() {
 		return direction;
