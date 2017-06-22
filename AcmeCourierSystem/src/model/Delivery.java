@@ -141,8 +141,10 @@ public class Delivery implements Serializable {
 	 * Calculate if the delivery was on time
 	 */
 	public void calculateDeliveryStatistics() {
-		// TODO - implement Delivery.calculateDeliveryStatistics
-		throw new UnsupportedOperationException();
+		calculateRoutes();
+		calculatedDepartureTime = requestedPickupTime.minus(pickupRoute.getTime());
+		estimatedDeliveryTime = requestedPickupTime.plus(deliveryRoute.getTime());
+		estimatedDistanceTraveled = pickupRoute.getDistance() + deliveryRoute.getDistance();
 	}
 
 	/**
@@ -151,7 +153,24 @@ public class Delivery implements Serializable {
 	 * back to the courierStart
 	 */
 	public void calculateRoutes() {
-		// TODO implement method
+		pickupRoute = CourierSystem.CityMap.getRoute(Settings.courierStartAddress, pickupClient.trueAddress);
+		pickupRoute.calculateDistance();
+		pickupRoute.calculateTime();
+		deliveryRoute = CourierSystem.CityMap.getRoute(pickupClient.trueAddress, deliveryClient.trueAddress);
+		deliveryRoute.calculateDistance();
+		deliveryRoute.calculateTime();
+	}
+	
+	public void calculateBonus() {
+		long actualTimeInTransit = actualDeliveryTime.toEpochSecond(null) - actualPickupTime.toEpochSecond(null);
+		long estimatedTimeInTransit = estimatedDeliveryTime.toEpochSecond(null) - requestedPickupTime.toEpochSecond(null);
+		int differenceInMinutesAsInt = (int) (Math.abs(actualTimeInTransit - estimatedTimeInTransit) / 60);
+		if (differenceInMinutesAsInt < Settings.bonusLeeway) {
+			bonusEarned = true;
+		}
+		else {
+			bonusEarned = false;
+		}
 	}
 
 	public Route getPickupRoute() {
