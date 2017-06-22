@@ -17,6 +17,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import com.github.lgooddatepicker.components.DatePickerSettings;
 import com.github.lgooddatepicker.components.DateTimePicker;
@@ -176,7 +177,11 @@ public class DeliveryTicketEditor extends JDialog {
 	}
 
 	public boolean validInputs() {
-		return pickupClient.getSelectedItem() != null && deliveryClient.getSelectedItem() != null;
+		boolean valid = pickupClient.getSelectedItem() != null && deliveryClient.getSelectedItem() != null;
+		if (!valid)
+			JOptionPane.showMessageDialog(this,
+					"Pickup and Delivery clients must be specified before delivery route can be calculated.");
+		return valid;
 	}
 
 	protected void save() {
@@ -219,7 +224,7 @@ public class DeliveryTicketEditor extends JDialog {
 	@Override
 	public void dispose() {
 		if (!saved) {
-			deliveryTable.removeRow(deliveryTable.getRowCount() - 1);
+			deliveryTable.removeRow(delivery);
 		}
 		super.dispose();
 	}

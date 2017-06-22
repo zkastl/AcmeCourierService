@@ -145,7 +145,8 @@ public class Delivery implements Serializable {
 		estimatedDistanceTraveled = pickupRoute.getDistance() + deliveryRoute.getDistance();
 
 		estimatedDistanceTraveled = pickupRoute.getDistance() + deliveryRoute.getDistance() + returnRoute.getDistance();
-		totalDeliveryCost =  CourierSystem.SystemSettings.baseCost + estimatedDistanceTraveled * CourierSystem.SystemSettings.pricePerBlock;
+		totalDeliveryCost = CourierSystem.SystemSettings.baseCost
+				+ estimatedDistanceTraveled * CourierSystem.SystemSettings.pricePerBlock;
 	}
 
 	/**
@@ -154,9 +155,11 @@ public class Delivery implements Serializable {
 	 * back to the courierStart
 	 */
 	private void calculateRoutes() {
-		pickupRoute = CourierSystem.CityMap.getRoute(CourierSystem.SystemSettings.courierStartAddress, pickupClient.trueAddress);
+		Intersection home = CourierSystem.CityMap
+				.getIntersection(CourierSystem.SystemSettings.courierStartAddress.getName());
+		pickupRoute = CourierSystem.CityMap.getRoute(home, pickupClient.trueAddress);
 		deliveryRoute = CourierSystem.CityMap.getRoute(pickupClient.trueAddress, deliveryClient.trueAddress);
-		returnRoute = CourierSystem.CityMap.getRoute(deliveryClient.trueAddress, CourierSystem.SystemSettings.courierStartAddress);
+		returnRoute = CourierSystem.CityMap.getRoute(deliveryClient.trueAddress, home);
 	}
 
 	/**

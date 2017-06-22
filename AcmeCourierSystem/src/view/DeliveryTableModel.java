@@ -116,6 +116,11 @@ public class DeliveryTableModel extends DefaultTableModel {
 			deliveries.remove(rowNumber);
 	}
 
+	public void removeRow(Delivery delivery) {
+		if (deliveries.contains(delivery))
+			removeRow(deliveries.indexOf(delivery));
+	}
+
 	public void refresh() {
 		int lastRowIndex = deliveries.size() - 1;
 		deliveries.clear();
