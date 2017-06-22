@@ -44,7 +44,7 @@ public class Map implements Serializable {
 	 * @param end
 	 */
 	public Route getRoute(Intersection start, Intersection end) {
-		return new Route(this, start, end);
+		return new Route(start, end);
 	}
 
 	public HashMap<String, Intersection> getIntersections() {
@@ -298,5 +298,11 @@ public class Map implements Serializable {
 		}
 		
 		return closed;
+	}
+	
+	public void print() {
+		for(Intersection i : intersections.values()) {
+			System.out.println(i.getName());
+		}
 	}
 }

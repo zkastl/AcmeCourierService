@@ -52,11 +52,6 @@ public class MapManagement  extends Container {
 		lblClosureStart.setVisible(false);
 		layeredPane.add(lblClosureStart, "cell 3 0,alignx right");
 		
-		/*Calendar start = Calendar.getInstance();
-		start.set(Calendar.HOUR_OF_DAY, 0);
-		start.set(Calendar.MINUTE, 0);
-		SpinnerModel startModel = new SpinnerDateModel(start.getTime(), null, null,Calendar.YEAR);
-		JSpinner startSpinner = new JSpinner(startModel);*/
 		startSpinner = new DatePicker();
 		startSpinner.setVisible(false);
 		layeredPane.add(startSpinner, "cell 4 0 3 1,alignx left,aligny center");
@@ -67,11 +62,6 @@ public class MapManagement  extends Container {
 		lblClosureEnd.setVisible(false);
 		layeredPane.add(lblClosureEnd, "cell 7 0,alignx right");
 		
-		/*Calendar end = Calendar.getInstance();
-		end.set(Calendar.HOUR_OF_DAY, 23);
-		end.set(Calendar.MINUTE, 59);
-		SpinnerModel endModel = new SpinnerDateModel(end.getTime(), null, null,Calendar.YEAR);
-		JSpinner endSpinner = new JSpinner(endModel);*/
 		endSpinner = new DatePicker();
 		endSpinner.setVisible(false);
 		layeredPane.add(endSpinner, "cell 8 0 3 1,alignx left,aligny center");

@@ -7,6 +7,8 @@ import java.util.Stack;
 
 import javax.persistence.Entity;
 
+import main.CourierSystem;
+
 /**
  * an object that calculates the shortest path between two intersections and
  * stores the steps to take to follow that path
@@ -58,22 +60,22 @@ public class Route implements Serializable {
 		return time;
 	}
 
-	public Route(Map map, Intersection start, Intersection end) {
+	public Route(Intersection start, Intersection end) {
 		this.start = start;
 		this.end = end;
 		steps = new Stack<Road>();
-		calculateSteps(map);
+		calculateSteps();
 		calculateDistance();
 		calculateTime();
 	}
 
-	public void calculateSteps(Map map) {
+	public void calculateSteps() {
 		PriorityQueue<Intersection> unvisited = new PriorityQueue<Intersection>();
 
 		// sanitize open nodes to make sure they are not affected by previous
 		// paths and add them to the unvisited set
 		Intersection prevFiller = new Intersection("-1", "stupid");
-		for (Intersection intersection : map.getIntersections().values()) {
+		for (Intersection intersection : CourierSystem.CityMap.getIntersections().values()) {
 			if (intersection.isOpen()) {
 				int maxLength = 0;
 				for (Road road : intersection.getRoads()) {
@@ -81,22 +83,7 @@ public class Route implements Serializable {
 						maxLength = road.getLength();
 					}
 				}
-				intersection.setDistance(Integer.MAX_VALUE - maxLength); // don't
-																			// accidently
-																			// roll
-																			// over
-																			// if
-																			// something
-																			// goes
-																			// wrong
-																			// and
-																			// shove
-																			// huge
-																			// negative
-																			// numbers
-																			// to
-																			// the
-																			// front
+				intersection.setDistance(Integer.MAX_VALUE - maxLength); // not quite max so you don't accidently roll over if something goes wrong and shove huge negative numbers to the front
 				intersection.setPrevious(prevFiller);
 				intersection.setVisited(false);
 				if (intersection.equals(start)) {
@@ -108,35 +95,38 @@ public class Route implements Serializable {
 
 		// find the shortest distance from start to end
 		while (!end.getVisited()) {
-			/*
-			 * int count = 0; //output first 20 elements of the priority queue
-			 * for(Intersection i : unvisited) { System.out.println(i.getName()
-			 * + " " + i.getDistance()); count++; if(count > 19) { break; } }
-			 */
+			// DEBUG output first 20 elements of the priority queue
+//			  int count = 0;
+//			  for(Intersection i : unvisited) {
+//				  System.out.println(i.getName() + " " + i.getDistance() + " " + i.getVisited());
+//				  count++;
+//				  if(count > 19) {
+//					  break;
+//				  }
+//			  }
+			 
 			Intersection current = unvisited.poll();
 			if (!current.getVisited()) {
+				// DEBUG output current node information
+//				System.out.println("checking node " + current.getName() + " current distance is " + current.getDistance());
 				for (Road edge : current.getRoads()) {
-					// System.out.println("checking " + edge.getName());
-					// //output the current node being inspected
+					//DEBUG output adjacent node information
+//					 System.out.println("checking edge " + edge.getName() + " of length " + edge.getLength() + " to " + edge.getEnd().getName() + " whose distance is " + edge.getEnd().getDistance()); // //output the current node being inspected
 					if (!edge.getEnd().getVisited()
 							&& (edge.getEnd().getDistance() > (current.getDistance() + edge.getLength()))) {
-						// System.out.println("old distance " +
-						// edge.getEnd().getDistance()); //output the old
-						// distance to the other node
+						 //DEBUG output the old distance to the other node
+//						 System.out.println("old distance " + edge.getEnd().getDistance());
 						edge.getEnd().setDistance(current.getDistance() + edge.getLength());
-						// System.out.println("new distance " +
-						// edge.getEnd().getDistance()); //output the new
-						// distance to the other node
+						//DEBUGoutput the new distance to the other node
+//						System.out.println("new distance " + edge.getEnd().getDistance());
 						edge.getEnd().setPrevious(current);
-						unvisited.add(edge.getEnd()); // help get around
-														// priority queues not
-														// resorting all the
-														// time
+						unvisited.add(edge.getEnd()); // help get around priority queues not resorting all the time
 					}
 				}
 				current.setVisited(true);
 			}
-			// System.out.println(); // put a line break between loops
+			//DEBUG put a line break between loops
+//			System.out.println();
 		}
 
 		// build stack of steps to take
@@ -145,8 +135,8 @@ public class Route implements Serializable {
 			if (!node.getPrevious().getRoads().isEmpty()) {
 				for (Road road : node.getPrevious().getRoads()) {
 					if (road.getEnd().equals(node)) {
-						steps.push(road); // null pointer exception
-						// insert stop for for loop here
+						steps.push(road);
+						break;
 					}
 				}
 				node = node.getPrevious();
