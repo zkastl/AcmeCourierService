@@ -32,9 +32,10 @@ public class DeliveryManagement extends Container {
 
 	private static final long serialVersionUID = 1L;
 	private JTable table;
+	DeliveryTableModel deliveryTable;
 
 	public DeliveryManagement() {
-		DeliveryTableModel deliveryTable = new DeliveryTableModel();
+		deliveryTable = new DeliveryTableModel();
 		setLayout(new MigLayout("", "[grow][50%][grow][10]", "[25][40][5][grow][][20]"));
 
 		JLabel lblDeliveryManagement = new JLabel("Delivery Management");
@@ -81,7 +82,7 @@ public class DeliveryManagement extends Container {
 				// open delivery creator
 				Delivery newDelivery = new Delivery();
 				deliveryTable.addRow(newDelivery);
-				new DeliveryTicketEditor(newDelivery, btnSaveChanges);
+				new DeliveryTicketEditor(newDelivery, deliveryTable);
 			}
 		});
 
@@ -94,7 +95,7 @@ public class DeliveryManagement extends Container {
 				System.out.println("Selected Row: " + selectedRow);
 				Delivery delivery = deliveryTable.deliveries.get(selectedRow);
 
-				new DeliveryTicketEditor(delivery, btnSaveChanges);
+				new DeliveryTicketEditor(delivery, deliveryTable);
 			}
 		});
 

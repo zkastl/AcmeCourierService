@@ -19,7 +19,6 @@ package main;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -62,7 +61,6 @@ public final class CourierSystem {
 		LoadEmployees();
 		LoadClients();
 		LoadDeliveries();
-		TestDelivery();
 
 		Settings.setDefaultValues();
 	}
@@ -241,20 +239,4 @@ public final class CourierSystem {
 	private CourierSystem() throws Exception {
 		InitializeCourierSystem();
 	};
-
-	private static void TestDelivery() {
-		try {
-			Delivery d = new Delivery();
-			d.pickupClient = Clients.get("Darth Vader");
-			d.deliveryClient = Clients.get("Lex Luthor");
-			d.requestedPickupTime = LocalDateTime.of(2017, 7, 25, 9, 00);
-			d.billToSender = true;
-			d.assignedCourier = Employees.get("Spiderman");
-			Deliveries.put(String.valueOf(d.hashCode()), d);
-			UpdateDeliveries();
-		} catch (Exception ex) {
-			System.out.print(ex.getMessage());
-			System.out.println("something went wrong, probably because it's not running on zak's computer.");
-		}
-	}
 }

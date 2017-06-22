@@ -135,16 +135,17 @@ public class Delivery implements Serializable {
 	public Delivery() {
 		creationTime = LocalDateTime.now();
 		orderTaker = CourierSystem.currentUser;
+		status = DeliveryStatus.Requested;
 	}
 
-	/**
-	 * Calculate if the delivery was on time
-	 */
 	public void calculateDeliveryStatistics() {
 		calculateRoutes();
 		calculatedDepartureTime = requestedPickupTime.minus(pickupRoute.getTime());
 		estimatedDeliveryTime = requestedPickupTime.plus(deliveryRoute.getTime());
 		estimatedDistanceTraveled = pickupRoute.getDistance() + deliveryRoute.getDistance();
+
+		estimatedDistanceTraveled = pickupRoute.getDistance() + deliveryRoute.getDistance() + returnRoute.getDistance();
+		totalDeliveryCost = Settings.baseCost + estimatedDistanceTraveled * Settings.pricePerBlock;
 	}
 
 	/**
@@ -152,13 +153,21 @@ public class Delivery implements Serializable {
 	 * from the pickupClient to the deliveryClient, and from the deliveryClient
 	 * back to the courierStart
 	 */
-	public void calculateRoutes() {
+	private void calculateRoutes() {
 		pickupRoute = CourierSystem.CityMap.getRoute(Settings.courierStartAddress, pickupClient.trueAddress);
 		deliveryRoute = CourierSystem.CityMap.getRoute(pickupClient.trueAddress, deliveryClient.trueAddress);
 		returnRoute = CourierSystem.CityMap.getRoute(deliveryClient.trueAddress, Settings.courierStartAddress);
 	}
 
+	/**
+	 * Calculate if the delivery was on time
+	 */
 	public void calculateBonus() {
+		if (actualDeliveryTime == null) {
+			bonusEarned = false;
+			return;
+		}
+
 		long actualTimeInTransit = actualDeliveryTime.toEpochSecond(null) - actualPickupTime.toEpochSecond(null);
 		long estimatedTimeInTransit = estimatedDeliveryTime.toEpochSecond(null)
 				- requestedPickupTime.toEpochSecond(null);

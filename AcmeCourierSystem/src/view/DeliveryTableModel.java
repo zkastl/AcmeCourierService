@@ -1,6 +1,7 @@
 package view;
 //https://github.com/LGoodDatePicker/LGoodDatePicker.git
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,15 +18,13 @@ public class DeliveryTableModel extends DefaultTableModel {
 
 	private static final long serialVersionUID = 1L;
 	public List<Delivery> deliveries;
-	private DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("h:mm a");
 
 	public DeliveryTableModel() {
-		super(new Object[] { "ID", "From", "To", "Requested Pickup Time", "Calculated Departure Time", "Status",
-				"Assigned Courier" }, 0);
-		deliveries = new ArrayList<Delivery>();
+		super(new Object[] { "ID", "From", "To", "Pickup", "Depart", "Status", "Assigned Courier" }, 0);
 
+		deliveries = new ArrayList<Delivery>();
 		for (Delivery d : CourierSystem.Deliveries.values()) {
-			if (d.status == DeliveryStatus.Requested) {
+			if (d.status != DeliveryStatus.Canceled) {
 				addRow(d);
 			}
 		}
@@ -46,6 +45,7 @@ public class DeliveryTableModel extends DefaultTableModel {
 	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
 		switch (columnIndex) {
+		case 5:
 		case 6:
 			return true;
 		default:
@@ -66,16 +66,21 @@ public class DeliveryTableModel extends DefaultTableModel {
 		case 2:
 			return deliveries.get(rowIndex).deliveryClient;
 		case 3:
-			return deliveries.get(rowIndex).requestedPickupTime;
+			LocalDateTime pickupTime = deliveries.get(rowIndex).requestedPickupTime;
+			if (pickupTime != null)
+				return pickupTime.format(DateTimeFormatter.ofPattern("MM/dd/yyyy h:mm a"));
+			break;
 		case 4:
-			return deliveries.get(rowIndex).calculatedDepartureTime;
+			LocalDateTime departTime = deliveries.get(rowIndex).calculatedDepartureTime;
+			if (departTime != null)
+				return departTime.format(DateTimeFormatter.ofPattern("h:mm a"));
+			break;
 		case 5:
 			return deliveries.get(rowIndex).status;
 		case 6:
 			return deliveries.get(rowIndex).assignedCourier;
-		default:
-			return super.getValueAt(rowIndex, columnIndex);
 		}
+		return super.getValueAt(rowIndex, columnIndex);
 	}
 
 	@Override
@@ -107,15 +112,21 @@ public class DeliveryTableModel extends DefaultTableModel {
 
 	public void removeRow(int rowNumber) {
 		super.removeRow(rowNumber);
-		deliveries.remove(rowNumber);
+		if (deliveries.size() > rowNumber)
+			deliveries.remove(rowNumber);
 	}
 
 	public void refresh() {
+		int lastRowIndex = deliveries.size() - 1;
 		deliveries.clear();
 		for (Delivery d : CourierSystem.Deliveries.values()) {
-			if (d.status == DeliveryStatus.Requested)
+			if (d.status != DeliveryStatus.Canceled)
 				deliveries.add(d);
 		}
-		fireTableRowsUpdated(0, deliveries.size() - 1);
+		fireTableRowsUpdated(0, lastRowIndex);
+		while (getRowCount() > deliveries.size()) {
+			removeRow(lastRowIndex);
+			lastRowIndex--;
+		}
 	}
 }
