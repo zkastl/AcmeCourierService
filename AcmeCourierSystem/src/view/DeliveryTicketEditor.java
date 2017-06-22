@@ -19,14 +19,16 @@ import javax.swing.JLabel;
 
 import com.github.lgooddatepicker.components.DatePickerSettings;
 import com.github.lgooddatepicker.components.DateTimePicker;
+import com.github.lgooddatepicker.components.TimePicker;
 import com.github.lgooddatepicker.components.TimePickerSettings;
 import com.github.lgooddatepicker.components.TimePickerSettings.TimeIncrement;
 
 import main.Application;
 import main.CourierSystem;
 import model.Client;
-import model.Courier;
 import model.Delivery;
+import model.Employee;
+import model.EmployeeRole;
 import net.miginfocom.swing.MigLayout;;
 
 public class DeliveryTicketEditor extends JDialog {
@@ -37,13 +39,12 @@ public class DeliveryTicketEditor extends JDialog {
 	JLabel price;
 	Delivery delivery;
 
-	public DeliveryTicketEditor(Delivery delivery) {
+	public DeliveryTicketEditor(Delivery delivery, JButton save) {
 		super((JFrame) null, "ACME Delivery Ticket Editor", true);
 		this.delivery = delivery;
 
-		setSize(650, 700);
+		setSize(650, 740);
 		setAlwaysOnTop(true);
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Application.class.getResource("/view/courier logo.png")));
 		setTitle("ACME Delivery Ticket Editor");
@@ -81,7 +82,8 @@ public class DeliveryTicketEditor extends JDialog {
 		lblClientName.setIcon(null);
 		getContentPane().add(lblClientName, "cell 2 8 2 1,alignx left");
 
-		JComboBox<Client> pickupClient = new JComboBox<Client>(CourierSystem.Clients.values().toArray(new Client[0]));
+		pickupClient = new JComboBox<Client>(CourierSystem.Clients.values().toArray(new Client[0]));
+		pickupClient.setSelectedIndex(-1);
 		getContentPane().add(pickupClient, "cell 4 8 2 1,growx");
 
 		JLabel lblClientId = new JLabel("Client Id:");
@@ -127,6 +129,7 @@ public class DeliveryTicketEditor extends JDialog {
 		getContentPane().add(lblClientName_1, "cell 2 14 2 1,alignx left");
 
 		deliveryClient = new JComboBox<Client>(CourierSystem.Clients.values().toArray(new Client[0]));
+		deliveryClient.setSelectedIndex(-1);
 		getContentPane().add(deliveryClient, "cell 4 14 2 1,growx");
 
 		JLabel lblClientId_1 = new JLabel("Client Id:");
@@ -168,15 +171,20 @@ public class DeliveryTicketEditor extends JDialog {
 		JLabel lblCourier = new JLabel("Courier:");
 		getContentPane().add(lblCourier, "cell 5 19,alignx left");
 
-		JComboBox<Courier> cbCourier = new JComboBox<Courier>(CourierSystem.Couriers.toArray(new Courier[0]));
+		JComboBox<Employee> cbCourier = new JComboBox<Employee>();
+		for (Employee e : CourierSystem.Employees.values()) {
+			if (e.role == EmployeeRole.Courier)
+				cbCourier.addItem(e);
+		}
+		cbCourier.setSelectedIndex(-1);
 		getContentPane().add(cbCourier, "cell 6 19,growx");
 
 		JLabel lblEstimatedDeliveryTime = new JLabel("Estimated Delivery Time:");
 		getContentPane().add(lblEstimatedDeliveryTime, "cell 1 20 2 1,alignx left");
 
 		// TODO set this
-		JLabel estimatedDelivery = new JLabel("");
-		getContentPane().add(estimatedDelivery, "cell 3 20");
+		JLabel estimatedDeliveryTime = new JLabel("");
+		getContentPane().add(estimatedDeliveryTime, "cell 3 20");
 
 		JLabel lblAssignedTime = new JLabel("Assigned Time:");
 		getContentPane().add(lblAssignedTime, "cell 5 20,alignx left");
@@ -194,8 +202,11 @@ public class DeliveryTicketEditor extends JDialog {
 		JLabel lblPickedUpTime = new JLabel("Picked Up Time:");
 		getContentPane().add(lblPickedUpTime, "cell 5 21,alignx left");
 
-		JLabel pickedUpTime = new JLabel("");
-		getContentPane().add(pickedUpTime, "cell 6 21,alignx trailing");
+		TimePickerSettings actualTimeSettings = new TimePickerSettings();
+		actualTimeSettings.setAllowEmptyTimes(true);
+		TimePicker pickedUpTime = new TimePicker(actualTimeSettings);
+		pickedUpTime.setTime(null);
+		getContentPane().add(pickedUpTime, "cell 6 21,alignx left");
 
 		JLabel lblQuotedPrice = new JLabel("Quoted Price:");
 		getContentPane().add(lblQuotedPrice, "cell 1 22 2 1,alignx left");
@@ -203,26 +214,48 @@ public class DeliveryTicketEditor extends JDialog {
 		price = new JLabel("");
 		getContentPane().add(price, "cell 3 22");
 
-		JLabel lblDeliveredTime = new JLabel("Delivered Time?");
+		JLabel lblDeliveredTime = new JLabel("Delivered Time:");
 		getContentPane().add(lblDeliveredTime, "cell 5 22,alignx left");
+
+		TimePicker deliveredTime = new TimePicker(actualTimeSettings);
+		deliveredTime.setTime(null);
+		getContentPane().add(deliveredTime, "cell 6 22, alignx left");
 
 		JLabel lblBonus = new JLabel("Bonus?");
 		getContentPane().add(lblBonus, "cell 5 23,alignx left");
 
-		// TODO: Disable without looking disabled
 		JCheckBox bonusEarned = new JCheckBox("");
+		bonusEarned.setEnabled(false);
 		getContentPane().add(bonusEarned, "cell 6 23");
 
-		// TODO
-		JButton btnSave = new JButton("Ok");
-		getContentPane().add(btnSave, "cell 0 25,growx");
+		JButton btnOk = new JButton("Ok");
+		btnOk.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				save();
+				save.doClick();
+				close();
+			}
+		});
+		getContentPane().add(btnOk, "cell 0 25,growx");
 
-		// TODO
 		JButton btnApply = new JButton("Apply");
-		getContentPane().add(btnApply, "cell 1 25,alignx center");
+		btnApply.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				save();
+				save.doClick();
+			}
+		});
+		getContentPane().add(btnApply, "cell 1 25");
 
-		// TODO
 		JButton btnCancel = new JButton("Cancel");
+		btnCancel.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				close();
+			}
+		});
 		getContentPane().add(btnCancel, "cell 2 25");
 
 		JLabel lblOrdertaker = new JLabel(CourierSystem.currentUser.name);
@@ -241,7 +274,17 @@ public class DeliveryTicketEditor extends JDialog {
 		setVisible(true);
 	}
 
+	protected void save() {
+		// TODO validate and save data Auto-generated method stub
+
+	}
+
+	protected void close() {
+		this.dispose();
+	}
+
 	private void CalculateRoute() {
+		// TODO finish this and call when appropriate fields change
 		delivery.calculateRoutes();
 		// blocks.setText(String.valueOf(route.getDistance()));
 		// price.setText(String.valueOf(route.getDistance() *

@@ -154,21 +154,18 @@ public class Delivery implements Serializable {
 	 */
 	public void calculateRoutes() {
 		pickupRoute = CourierSystem.CityMap.getRoute(Settings.courierStartAddress, pickupClient.trueAddress);
-		pickupRoute.calculateDistance();
-		pickupRoute.calculateTime();
 		deliveryRoute = CourierSystem.CityMap.getRoute(pickupClient.trueAddress, deliveryClient.trueAddress);
-		deliveryRoute.calculateDistance();
-		deliveryRoute.calculateTime();
+		returnRoute = CourierSystem.CityMap.getRoute(deliveryClient.trueAddress, Settings.courierStartAddress);
 	}
-	
+
 	public void calculateBonus() {
 		long actualTimeInTransit = actualDeliveryTime.toEpochSecond(null) - actualPickupTime.toEpochSecond(null);
-		long estimatedTimeInTransit = estimatedDeliveryTime.toEpochSecond(null) - requestedPickupTime.toEpochSecond(null);
+		long estimatedTimeInTransit = estimatedDeliveryTime.toEpochSecond(null)
+				- requestedPickupTime.toEpochSecond(null);
 		int differenceInMinutesAsInt = (int) (Math.abs(actualTimeInTransit - estimatedTimeInTransit) / 60);
 		if (differenceInMinutesAsInt < Settings.bonusLeeway) {
 			bonusEarned = true;
-		}
-		else {
+		} else {
 			bonusEarned = false;
 		}
 	}

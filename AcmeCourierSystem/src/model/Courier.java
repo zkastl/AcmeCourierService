@@ -49,10 +49,4 @@ public class Courier extends Employee implements Serializable {
 	public Courier(String s) {
 		super.name = s;
 	}
-
-	@Override
-	public String toString() {
-		return super.name;
-	}
-
 }

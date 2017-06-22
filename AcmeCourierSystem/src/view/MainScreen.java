@@ -16,20 +16,18 @@ public class MainScreen extends Container {
 	private static final long serialVersionUID = 1L;
 	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
 	private JFrame window;
-	private static ClientManagement clientManagement;
 	private static DeliveryManagement deliveryManagement;
 
 	public MainScreen(JFrame window) {
 		this.window = window;
 		tabbedPane.setBounds(0, 0, window.getWidth(), window.getHeight());
 		add(tabbedPane);
-		clientManagement = new ClientManagement();
 		deliveryManagement = new DeliveryManagement();
-		
+
 		tabbedPane.addTab("Delivery Management", new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")),
 				deliveryManagement);
 		tabbedPane.addTab("Client Management", new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")),
-				clientManagement);
+				new ClientManagement());
 		tabbedPane.addTab("Report Management", new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")),
 				new LogOutScreen(window));
 		tabbedPane.addTab("Map Management", new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")),
@@ -45,14 +43,12 @@ public class MainScreen extends Container {
 		tabbedPane.addTab("Logout", new ImageIcon(MainScreen.class.getResource("/view/taller tab.png")),
 				new LogOutScreen(window));
 
-		
 		tabbedPane.addChangeListener(new ChangeListener() {
-			@Override 
-			public void stateChanged(ChangeEvent e) { 
+			@Override
+			public void stateChanged(ChangeEvent e) {
 				try {
-					deliveryManagement.updateAvailableClients();
-				}
-				catch (Exception ex) {
+					deliveryManagement.updateAvailableCouriers();
+				} catch (Exception ex) {
 					System.out.println(ex.getStackTrace());
 				}
 			}
