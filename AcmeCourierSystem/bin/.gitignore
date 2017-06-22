@@ -1,4 +1,6 @@
 /view/
 /main/
 /model/
-*.ser
+/META-INF/
+/view/
+/controller/

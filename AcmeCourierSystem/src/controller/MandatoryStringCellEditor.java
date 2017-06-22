@@ -7,7 +7,7 @@ import javax.swing.JTextField;
 
 public class MandatoryStringCellEditor extends DefaultCellEditor {
 	private static final long serialVersionUID = 1L;
-	
+
 	public MandatoryStringCellEditor(JTextField textField) {
 		super(textField);
 	}
@@ -15,6 +15,9 @@ public class MandatoryStringCellEditor extends DefaultCellEditor {
 	@Override
 	public boolean stopCellEditing() {
 		JTable table = (JTable) getComponent().getParent();
+		if (table == null)
+			return true;
+
 		int rowNumber = table.getSelectedRow() + 1;
 		String columnName = table.getColumnName(table.getSelectedColumn());
 

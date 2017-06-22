@@ -12,7 +12,7 @@ import view.EmployeeTableModel;
 public class UsernameCellEditor extends DefaultCellEditor {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	public UsernameCellEditor(JTextField textField) {
 		super(textField);
 	}
@@ -21,6 +21,9 @@ public class UsernameCellEditor extends DefaultCellEditor {
 	public boolean stopCellEditing() {
 
 		JTable table = (JTable) getComponent().getParent();
+		if (table == null)
+			return true;
+
 		int employeeIndex = table.getSelectedRow();
 		Employee selectedEmployee = ((EmployeeTableModel) table.getModel()).employees.get(employeeIndex);
 
