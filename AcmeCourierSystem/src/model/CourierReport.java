@@ -7,12 +7,6 @@ import java.util.Date;
  * time.
  */
 public class CourierReport {
-
-	/**
-	 * The couriers who made at least one delivery during the time period the
-	 * report covers.
-	 */
-	private Courier[] couriers;
 	/**
 	 * The percentage of deliveries that were on time for each courier during
 	 * the specified time period.
@@ -46,8 +40,8 @@ public class CourierReport {
 	/**
 	 * returns the array of couriers the report is for
 	 */
-	public Courier[] getCouriers() {
-		return this.couriers;
+	public Employee[] getCouriers() {
+		return null;
 	}
 
 	/**
@@ -55,7 +49,7 @@ public class CourierReport {
 	 * 
 	 * @param courier
 	 */
-	public void addCourier(Courier courier) {
+	public void addCourier(Employee courier) {
 		// TODO - implement CourierReport.addCourier
 		throw new UnsupportedOperationException();
 	}

@@ -35,7 +35,6 @@ import model.*;
 public final class CourierSystem {
 
 	public static HashMap<String, Employee> Employees;
-	public static List<Courier> Couriers;
 	public static HashMap<String, Client> Clients;
 	public static HashMap<String, Delivery> Deliveries;
 	public static Map CityMap;
@@ -104,11 +103,8 @@ public final class CourierSystem {
 		try {
 			Query eQuery = em.createQuery("SELECT e FROM Employees e", Employee.class);
 			List<Employee> emp = eQuery.getResultList();
-			Couriers = new ArrayList<Courier>();
 			for (Employee e : emp) {
 				Employees.put(e.name, e);
-				if (e.role == EmployeeRole.Courier)
-					Couriers.add((Courier) e);
 			}
 		} catch (Exception ex) {
 			System.out.println(ex.getStackTrace());

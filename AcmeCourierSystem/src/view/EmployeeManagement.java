@@ -102,6 +102,9 @@ public class EmployeeManagement extends Container {
 		try {
 			CourierSystem.Employees = new HashMap<String, Employee>();
 			for (Employee emp : employeeTable.employees) {
+				if (emp.userName == "" && emp.role == EmployeeRole.Courier) {
+					emp.userName = "courier" + emp.id;
+				}
 				CourierSystem.Employees.put(emp.name, emp);
 			}
 			CourierSystem.UpdateEmployees();
