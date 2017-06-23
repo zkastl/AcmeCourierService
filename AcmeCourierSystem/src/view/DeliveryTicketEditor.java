@@ -36,6 +36,9 @@ import net.miginfocom.swing.MigLayout;;
 
 public class DeliveryTicketEditor extends JDialog {
 
+	
+	private static final long serialVersionUID = 1L;
+	
 	JComboBox<Client> pickupClient;
 	JComboBox<Client> deliveryClient;
 	JLabel blocks;

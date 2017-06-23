@@ -14,7 +14,6 @@ import javax.swing.JLabel;
 
 import main.CourierSystem;
 import model.Intersection;
-import model.Settings;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
