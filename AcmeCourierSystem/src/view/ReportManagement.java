@@ -1,10 +1,16 @@
 package view;
 
 import java.awt.Container;
+import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -13,6 +19,7 @@ import javax.swing.JLabel;
 import com.github.lgooddatepicker.components.DatePicker;
 
 import main.CourierSystem;
+import model.Bill;
 import model.Client;
 import model.Employee;
 import model.EmployeeRole;
@@ -23,6 +30,8 @@ public class ReportManagement extends Container {
 
 	private JComboBox subject = new JComboBox();
 	JComboBox<ReportType> report = new JComboBox<ReportType>(ReportType.values());
+	private DatePicker startDate;
+	private DatePicker endDate;
 
 	public ReportManagement() {
 		setLayout(new MigLayout("", "[grow][][][5%][][][grow]", "[5%][][15%][][5%][][5%][]"));
@@ -46,14 +55,14 @@ public class ReportManagement extends Container {
 
 		add(subject, "cell 2 5,alignx left");
 
-		DatePicker startDate = new DatePicker();
+		startDate = new DatePicker();
 		startDate.setDate(LocalDate.now().minusDays(6));
 		add(startDate, "cell 5 3,alignx left");
 
 		JLabel lblEndDate = new JLabel("End Date:");
 		add(lblEndDate, "cell 4 5,alignx trailing");
 
-		DatePicker endDate = new DatePicker();
+		endDate = new DatePicker();
 		endDate.setDate(LocalDate.now());
 		add(endDate, "cell 5 5,alignx left");
 
@@ -94,16 +103,33 @@ public class ReportManagement extends Container {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			switch ((ReportType) report.getSelectedItem()) {
-			case Bill:
-				break;
-			case CompanyPerformance:
-				break;
-			case CourierPerformance:
-				break;
-			default:
-				break;
+			try {
+				String fileName = report.getSelectedItem().toString() + LocalDateTime.now();
+				Path invoice = Files.createTempFile(fileName, ".csv");
+				FileWriter invoiceWriter = new FileWriter(invoice.toFile());
 
+				switch ((ReportType) report.getSelectedItem()) {
+				case Bill:
+					invoiceWriter.write(subject.getSelectedItem().getClass() == String.class
+							? Bill.generateInvoice(startDate.getDate(), endDate.getDate())
+							: Bill.generateInvoice((Client) subject.getSelectedItem(), startDate.getDate(),
+									endDate.getDate()));
+					break;
+				case CompanyPerformance:
+					// TODO
+					break;
+				case CourierPerformance:
+					// TODO
+					break;
+				default:
+					break;
+
+				}
+
+				invoiceWriter.close();
+				Desktop.getDesktop().open(invoice.toFile());
+			} catch (IOException ex) {
+				ex.printStackTrace();
 			}
 		}
 	}
