@@ -175,14 +175,12 @@ public class Delivery implements Serializable {
 			return;
 		}
 
-		long actualTimeInTransit = actualDeliveryTime.toEpochSecond(null) - actualPickupTime.toEpochSecond(null);
-		long estimatedTimeInTransit = estimatedDeliveryTime.toEpochSecond(null)
-				- requestedPickupTime.toEpochSecond(null);
-		int differenceInMinutesAsInt = (int) (Math.abs(actualTimeInTransit - estimatedTimeInTransit) / 60);
-		if (differenceInMinutesAsInt < CourierSystem.SystemSettings.bonusLeeway) {
-			bonusEarned = true;
-		} else {
+		int secondsLate = actualDeliveryTime.toLocalTime().toSecondOfDay()
+				- estimatedDeliveryTime.toLocalTime().toSecondOfDay();
+		if (secondsLate > CourierSystem.SystemSettings.bonusLeeway * 60) {
 			bonusEarned = false;
+		} else {
+			bonusEarned = true;
 		}
 	}
 

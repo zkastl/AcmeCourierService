@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
@@ -36,9 +37,8 @@ import net.miginfocom.swing.MigLayout;;
 
 public class DeliveryTicketEditor extends JDialog {
 
-	
 	private static final long serialVersionUID = 1L;
-	
+
 	JComboBox<Client> pickupClient;
 	JComboBox<Client> deliveryClient;
 	JLabel blocks;
@@ -126,6 +126,8 @@ public class DeliveryTicketEditor extends JDialog {
 
 		TimePickerSettings actualTimeSettings = new TimePickerSettings();
 		actualTimeSettings.setAllowEmptyTimes(true);
+		actualTimeSettings.generatePotentialMenuTimes(TimeIncrement.FifteenMinutes, LocalTime.of(8, 0),
+				LocalTime.of(20, 0));
 
 		pickedUpTime = new TimePicker(actualTimeSettings);
 		pickedUpTime.setTime(delivery.actualPickupTime != null ? delivery.actualPickupTime.toLocalTime() : null);
@@ -206,7 +208,7 @@ public class DeliveryTicketEditor extends JDialog {
 	private void populateDeliveryInfo() {
 		delivery.pickupClient = (Client) pickupClient.getSelectedItem();
 		delivery.deliveryClient = (Client) deliveryClient.getSelectedItem();
-		delivery.requestedPickupTime = pickupEditor.getDateTimePermissive();
+		delivery.requestedPickupTime = pickupEditor.getDateTimeStrict();
 		delivery.billToSender = billToPickup.isSelected();
 		delivery.calculateDeliveryStatistics();
 
@@ -215,6 +217,11 @@ public class DeliveryTicketEditor extends JDialog {
 		blocks.setText(Double.toString(delivery.estimatedDistanceTraveled));
 		price.setText(Double.toString(delivery.totalDeliveryCost));
 
+		delivery.assignedCourier = (Employee) cbCourier.getSelectedItem();
+		delivery.actualPickupTime = LocalDateTime.of(delivery.requestedPickupTime.toLocalDate(),
+				pickedUpTime.getTime());
+		delivery.actualDeliveryTime = LocalDateTime.of(delivery.requestedPickupTime.toLocalDate(),
+				deliveredTime.getTime());
 		delivery.calculateBonus();
 		bonusEarned.setSelected(delivery.bonusEarned);
 
