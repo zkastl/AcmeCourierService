@@ -59,6 +59,8 @@ public final class EmployeeTableModel extends DefaultTableModel {
 		switch (column) {
 		case 0:
 			return employees.get(row).id;
+		case 3:
+			return (employees.get(row).role == EmployeeRole.Courier) ? "" : super.getValueAt(row, column);
 		default:
 			return super.getValueAt(row, column);
 		}

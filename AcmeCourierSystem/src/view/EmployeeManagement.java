@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
+import java.util.*;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
@@ -70,6 +71,7 @@ public class EmployeeManagement extends Container {
 		btnAddEmployee.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				employeeTable.addRow(new Employee());
+				btnAddEmployee.setEnabled(false);
 			}
 		});
 
@@ -92,6 +94,7 @@ public class EmployeeManagement extends Container {
 		btnSaveChanges.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				saveAction();
+				btnAddEmployee.setEnabled(true);
 			}
 		});
 	}
@@ -100,10 +103,11 @@ public class EmployeeManagement extends Container {
 		if (!TableValidator.isValid(table))
 			return;
 		try {
+			UUID uuid = UUID.randomUUID();
 			CourierSystem.Employees = new HashMap<String, Employee>();
 			for (Employee emp : employeeTable.employees) {
 				if (emp.userName == "" && emp.role == EmployeeRole.Courier) {
-					emp.userName = "courier" + emp.id;
+					emp.userName = "courier" + uuid.toString();
 				}
 				CourierSystem.Employees.put(emp.name, emp);
 			}

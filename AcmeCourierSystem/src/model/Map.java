@@ -12,13 +12,13 @@ import java.util.List;
 public class Map implements Serializable {
 
 	public long mapId;
-	
+
 	private static final long serialVersionUID = 1L;
 	/**
 	 * The array of intersections that are on the map
 	 */
 	public HashMap<String, Intersection> intersections;
-	
+
 	public String lastSavedDate;
 
 	public Map() {
@@ -31,7 +31,7 @@ public class Map implements Serializable {
 		this.intersections = intersections;
 		initMap();
 	}
-	
+
 	/**
 	 * returns the route from the specified start intersection to the specified
 	 * end intersection
@@ -54,7 +54,7 @@ public class Map implements Serializable {
 	public void addIntersection(Intersection intersection) {
 		intersections.put(intersection.getName(), intersection);
 	}
-	
+
 	public void setIntersections(HashMap<String, Intersection> intersections) {
 		this.intersections = intersections;
 	}
@@ -69,7 +69,7 @@ public class Map implements Serializable {
 
 	public void initMap() {
 		intersections = new HashMap<String, Intersection>();
-		
+
 		Intersection a1 = new Intersection("A", "1");
 		Intersection a2 = new Intersection("A", "2");
 		Intersection a3 = new Intersection("A", "3");
@@ -285,19 +285,19 @@ public class Map implements Serializable {
 		addIntersection(g6);
 		addIntersection(g7);
 	}
-	
+
 	public List<String> getClosedIntersections() {
 		ArrayList<String> closed = new ArrayList<String>();
-		for(Intersection i : intersections.values()) {
+		for (Intersection i : intersections.values()) {
 			if (!i.isOpen())
 				closed.add(i.getName());
 		}
-		
+
 		return closed;
 	}
-	
+
 	public void print() {
-		for(Intersection i : intersections.values()) {
+		for (Intersection i : intersections.values()) {
 			System.out.println(i.getName());
 		}
 	}

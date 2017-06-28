@@ -12,6 +12,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
+
+import main.CourierSystem;
 
 /**
  * a node in the map graph. represents the intersection of two streets
@@ -57,7 +60,10 @@ public class Intersection implements Comparable<Intersection>, Serializable {
 	private Integer distance;
 
 	// previous intersection in the calculated path
-	private Intersection previous;
+	private String previous;
+	
+	@Transient
+	private Intersection truePrevious;
 
 	// whether or not the node has been visited yet in the calculation
 	private boolean visited;
@@ -69,7 +75,8 @@ public class Intersection implements Comparable<Intersection>, Serializable {
 		closeEnd = LocalDate.of(2017, 1, 1);
 		roads = new ArrayList<Road>();
 		distance = 0;
-		previous = null;
+		previous = "";
+		truePrevious = null;
 		visited = false;
 	}
 
@@ -80,7 +87,7 @@ public class Intersection implements Comparable<Intersection>, Serializable {
 		closeEnd = LocalDate.of(2017, 1, 1);
 		this.roads = roads;
 		distance = 0;
-		previous = null;
+		truePrevious = null;
 		visited = false;
 	}
 
@@ -91,7 +98,8 @@ public class Intersection implements Comparable<Intersection>, Serializable {
 		this.closeEnd = closeEnd;
 		this.roads = roads;
 		distance = 0;
-		previous = null;
+		previous = "";
+		truePrevious = null;
 		visited = false;
 	}
 	
@@ -136,11 +144,12 @@ public class Intersection implements Comparable<Intersection>, Serializable {
 	}
 
 	public Intersection getPrevious() {
-		return previous;
+		return truePrevious;
 	}
 
 	public void setPrevious(Intersection prev) {
-		previous = prev;
+		previous = prev.getName();
+		truePrevious = prev;
 	}
 
 	public boolean getVisited() {
