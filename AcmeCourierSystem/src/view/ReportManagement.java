@@ -21,6 +21,8 @@ import com.github.lgooddatepicker.components.DatePicker;
 import main.CourierSystem;
 import model.Bill;
 import model.Client;
+import model.ClientReport;
+import model.CourierReport;
 import model.Employee;
 import model.EmployeeRole;
 import model.ReportType;
@@ -117,10 +119,16 @@ public class ReportManagement extends Container {
 									endDate.getDate()));
 					break;
 				case CompanyPerformance:
-					// TODO
+					invoiceWriter.write(subject.getSelectedItem().getClass() == String.class
+					? ClientReport.generateClientReport(startDate.getDate(), endDate.getDate())
+					: ClientReport.generateClientReport((Client) subject.getSelectedItem(), startDate.getDate(),
+							endDate.getDate()));
 					break;
 				case CourierPerformance:
-					// TODO
+					invoiceWriter.write(subject.getSelectedItem().getClass() == String.class
+					? CourierReport.generateCourierReport(startDate.getDate(), endDate.getDate())
+					: CourierReport.generateCourierReport((Employee) subject.getSelectedItem(), startDate.getDate(),
+							endDate.getDate()));
 					break;
 				default:
 					break;
