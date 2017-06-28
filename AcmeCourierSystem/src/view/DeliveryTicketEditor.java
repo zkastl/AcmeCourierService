@@ -218,10 +218,10 @@ public class DeliveryTicketEditor extends JDialog {
 		price.setText(Double.toString(delivery.totalDeliveryCost));
 
 		delivery.assignedCourier = (Employee) cbCourier.getSelectedItem();
-		delivery.actualPickupTime = LocalDateTime.of(delivery.requestedPickupTime.toLocalDate(),
-				pickedUpTime.getTime());
-		delivery.actualDeliveryTime = LocalDateTime.of(delivery.requestedPickupTime.toLocalDate(),
-				deliveredTime.getTime());
+		delivery.actualPickupTime = (delivery.actualPickupTime != null) ? LocalDateTime.of(delivery.actualPickupTime.toLocalDate(),
+				delivery.actualPickupTime.toLocalTime()) : null;
+		delivery.actualDeliveryTime = (delivery.actualDeliveryTime != null) ? LocalDateTime.of(delivery.actualDeliveryTime.toLocalDate(),
+				delivery.actualDeliveryTime.toLocalTime()) : null;
 		delivery.calculateBonus();
 		bonusEarned.setSelected(delivery.bonusEarned);
 
