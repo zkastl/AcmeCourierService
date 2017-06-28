@@ -5,12 +5,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import com.sun.istack.internal.NotNull;
 
 /**
  * a directed graph that holds the geographical area serviced by the company
  */
-//@Entity(name="CityMap")
 public class Map implements Serializable {
 
 	public long mapId;
@@ -19,10 +17,8 @@ public class Map implements Serializable {
 	/**
 	 * The array of intersections that are on the map
 	 */
-	@NotNull
 	public HashMap<String, Intersection> intersections;
 	
-	@NotNull
 	public String lastSavedDate;
 
 	public Map() {
