@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import com.sun.istack.internal.NotNull;
 
@@ -20,13 +21,15 @@ import main.CourierSystem;
 @Entity(name = "Deliveries")
 public class Delivery implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
+	@Transient
 	private Route pickupRoute;
+	
+	@Transient
 	private Route deliveryRoute;
+	
+	@Transient
 	private Route returnRoute;
 
 	@Id
@@ -66,14 +69,12 @@ public class Delivery implements Serializable {
 	/**
 	 * The estimated time at which the package will be delivered to the client
 	 */
-	// @NotNull
 	public LocalDateTime estimatedDeliveryTime;
 
 	/**
 	 * The time at which the courier should leave in order to pick up the
 	 * package at the requested time.
 	 */
-	// @NotNull
 	public LocalDateTime calculatedDepartureTime;
 
 	/**
@@ -107,13 +108,11 @@ public class Delivery implements Serializable {
 	 * Estimation of the total distance traveled during the delivery. Used to
 	 * calculate price.
 	 */
-	// @NotNull
 	public double estimatedDistanceTraveled;
 
 	/**
 	 * The price that will be billed to a client.
 	 */
-	// @NotNull
 	public double totalDeliveryCost;
 
 	/**
@@ -159,8 +158,7 @@ public class Delivery implements Serializable {
 	 * back to the courierStart
 	 */
 	private void calculateRoutes() {
-		Intersection home = CourierSystem.CityMap
-				.getIntersection(CourierSystem.SystemSettings.courierStartAddress.getName());
+		Intersection home = CourierSystem.CityMap.getIntersection(CourierSystem.SystemSettings.courierStartAddress.getName());
 		pickupRoute = CourierSystem.CityMap.getRoute(home, pickupClient.trueAddress);
 		deliveryRoute = CourierSystem.CityMap.getRoute(pickupClient.trueAddress, deliveryClient.trueAddress);
 		returnRoute = CourierSystem.CityMap.getRoute(deliveryClient.trueAddress, home);
