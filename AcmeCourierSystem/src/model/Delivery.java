@@ -147,7 +147,7 @@ public class Delivery implements Serializable {
 		estimatedDistanceTraveled = pickupRoute.getDistance() + deliveryRoute.getDistance() + returnRoute.getDistance();
 		totalDeliveryCost = CourierSystem.SystemSettings.baseCost
 				+ estimatedDistanceTraveled * CourierSystem.SystemSettings.pricePerBlock;
-		
+
 		pickupRoute.print();
 		deliveryRoute.print();
 		returnRoute.print();
@@ -196,5 +196,9 @@ public class Delivery implements Serializable {
 
 	public Route getReturnRoute() {
 		return returnRoute;
+	}
+
+	public Client getBilledClient() {
+		return billToSender ? pickupClient : deliveryClient;
 	}
 }

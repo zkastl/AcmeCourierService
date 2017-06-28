@@ -5,10 +5,10 @@ import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -104,15 +104,16 @@ public class ReportManagement extends Container {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			try {
-				String fileName = report.getSelectedItem().toString() + LocalDateTime.now();
-				Path invoice = Files.createTempFile(fileName, ".csv");
-				FileWriter invoiceWriter = new FileWriter(invoice.toFile());
+				String fileName = report.getSelectedItem().toString()
+						+ Integer.toString(LocalDateTime.now().hashCode());
+				File invoice = Files.createTempFile(fileName, ".csv").toFile();
+				FileWriter invoiceWriter = new FileWriter(invoice);
 
 				switch ((ReportType) report.getSelectedItem()) {
 				case Bill:
 					invoiceWriter.write(subject.getSelectedItem().getClass() == String.class
-							? Bill.generateInvoice(startDate.getDate(), endDate.getDate())
-							: Bill.generateInvoice((Client) subject.getSelectedItem(), startDate.getDate(),
+							? Bill.generateBill(startDate.getDate(), endDate.getDate())
+							: Bill.generateBill((Client) subject.getSelectedItem(), startDate.getDate(),
 									endDate.getDate()));
 					break;
 				case CompanyPerformance:
@@ -126,8 +127,9 @@ public class ReportManagement extends Container {
 
 				}
 
+				invoice.deleteOnExit();
 				invoiceWriter.close();
-				Desktop.getDesktop().open(invoice.toFile());
+				Desktop.getDesktop().open(invoice);
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
