@@ -70,6 +70,7 @@ public class ClientManagement extends Container {
 					return;
 
 				clientTable.addRow(new Client());
+				btnAddClient.setEnabled(false);
 			}
 		});
 
@@ -92,6 +93,7 @@ public class ClientManagement extends Container {
 		btnSaveChanges.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				save();
+				btnAddClient.setEnabled(true);
 			}
 		});
 	}
