@@ -311,8 +311,8 @@ public class DeliveryTicketEditor extends JDialog {
 		JLabel lblEstimatedDeliveryTime = new JLabel("Estimated Delivery Time:");
 		getContentPane().add(lblEstimatedDeliveryTime, "cell 1 20 2 1,alignx left");
 
-		JLabel lblAssignedTime = new JLabel("Assigned Time:");
-		getContentPane().add(lblAssignedTime, "cell 5 20,alignx left");
+		JLabel lblDepartureTime = new JLabel("Departure Time:");
+		getContentPane().add(lblDepartureTime, "cell 5 20,alignx left");
 
 		JLabel lblEstimatedBlocks = new JLabel("Estimated Blocks:");
 		getContentPane().add(lblEstimatedBlocks, "cell 1 21 2 1,alignx left");
