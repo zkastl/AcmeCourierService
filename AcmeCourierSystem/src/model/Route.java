@@ -97,29 +97,29 @@ public class Route implements Serializable {
 		// find the shortest distance from start to end
 		while (!end.getVisited()) {
 			// DEBUG output first 20 elements of the priority queue
-//			  int count = 0;
-//			  for(Intersection i : unvisited) {
-//				  System.out.println(i.getName() + " " + i.getDistance() + " " + i.getVisited());
-//				  count++;
-//				  if(count > 19) {
-//					  break;
-//				  }
-//			  }
+			  int count = 0;
+			  for(Intersection i : unvisited) {
+				  System.out.println(i.getName() + " " + i.getDistance() + " " + i.getVisited());
+				  count++;
+				  if(count > 19) {
+					  break;
+				  }
+			  }
 			 
 			Intersection current = unvisited.poll();
-			if (!current.getVisited()) {
+			if (!current.getVisited() && (current.equals(start) || !current.getPrevious().equals(prevFiller))) { // don't investigate nodes that shouldn't be at the top of the priority queue.
 				// DEBUG output current node information
-//				System.out.println("checking node " + current.getName() + " current distance is " + current.getDistance());
+				System.out.println("checking node " + current.getName() + " current distance is " + current.getDistance());
 				for (Road edge : current.getRoads()) {
 					//DEBUG output adjacent node information
-//					 System.out.println("checking edge " + edge.getName() + " of length " + edge.getLength() + " to " + edge.getEnd().getName() + " whose distance is " + edge.getEnd().getDistance()); // //output the current node being inspected
-					if (!edge.getEnd().getVisited()
+					 System.out.println("checking edge " + edge.getName() + " of length " + edge.getLength() + " to " + edge.getEnd().getName() + " whose distance is " + edge.getEnd().getDistance()); // //output the current node being inspected
+					if (edge.getEnd().isOpen() && !edge.getEnd().getVisited()
 							&& (edge.getEnd().getDistance() > (current.getDistance() + edge.getLength()))) {
 						 //DEBUG output the old distance to the other node
-//						 System.out.println("old distance " + edge.getEnd().getDistance());
+						 System.out.println("old distance " + edge.getEnd().getDistance());
 						edge.getEnd().setDistance(current.getDistance() + edge.getLength());
-						//DEBUGoutput the new distance to the other node
-//						System.out.println("new distance " + edge.getEnd().getDistance());
+						//DEBUG output the new distance to the other node
+						System.out.println("new distance " + edge.getEnd().getDistance());
 						edge.getEnd().setPrevious(current);
 						unvisited.add(edge.getEnd()); // help get around priority queues not resorting all the time
 					}
@@ -127,8 +127,9 @@ public class Route implements Serializable {
 				current.setVisited(true);
 			}
 			//DEBUG put a line break between loops
-//			System.out.println();
+			System.out.println();
 		}
+		System.out.println("\n\n");
 
 		// build stack of steps to take
 		Intersection node = end;

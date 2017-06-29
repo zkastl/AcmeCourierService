@@ -135,7 +135,7 @@ public class DeliveryManagement extends Container {
 					try {
 						delivery.calculateRoutes();
 						String fileName = "Directions for delivery from " + delivery.pickupClient + " to "
-								+ delivery.deliveryClient + Integer.toString(LocalDateTime.now().hashCode());
+								+ delivery.deliveryClient + " " + Integer.toString(LocalDateTime.now().hashCode());
 						File directionsFile = Files.createTempFile(fileName, ".csv").toFile();
 						FileWriter directionsWriter = new FileWriter(directionsFile);
 						StringBuilder directions = new StringBuilder();
