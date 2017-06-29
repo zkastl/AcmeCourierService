@@ -122,16 +122,13 @@ public class DeliveryTableModel extends DefaultTableModel {
 	}
 
 	public void refresh() {
-		int lastRowIndex = deliveries.size() - 1;
-		deliveries.clear();
+
+		while (deliveries.size() > 0)
+			removeRow(0);
+
 		for (Delivery d : CourierSystem.Deliveries.values()) {
 			if (d.status != DeliveryStatus.Canceled)
-				deliveries.add(d);
-		}
-		fireTableRowsUpdated(0, lastRowIndex);
-		while (getRowCount() > deliveries.size()) {
-			removeRow(lastRowIndex);
-			lastRowIndex--;
+				addRow(d);
 		}
 	}
 }

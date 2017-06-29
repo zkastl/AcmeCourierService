@@ -98,12 +98,15 @@ public final class EmployeeTableModel extends DefaultTableModel {
 	}
 
 	public void refresh() {
-		employees.clear();
-		for (Employee e : CourierSystem.Employees.values()) {
-			if (!e.getIsArchived())
-				employees.add(e);
+		while (employees.size() > 0) {
+			removeRow(0);
 		}
-		fireTableRowsUpdated(0, employees.size() - 1);
+
+		for (Employee e : CourierSystem.Employees.values()) {
+			if (!e.getIsArchived()) {
+				addRow(e);
+			}
+		}
 	}
 
 }

@@ -95,13 +95,15 @@ public final class ClientTableModel extends DefaultTableModel {
 	}
 
 	public void refresh() {
-		clients.clear();
+		while (clients.size() > 0) {
+			removeRow(0);
+		}
+
 		for (Client c : CourierSystem.Clients.values()) {
 			if (!c.getIsArchived()) {
-				clients.add(c);
+				addRow(c);
 			}
 		}
-		fireTableRowsUpdated(0, clients.size() - 1);
 	}
 
 }
