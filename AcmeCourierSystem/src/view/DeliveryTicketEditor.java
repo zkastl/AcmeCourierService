@@ -55,7 +55,7 @@ public class DeliveryTicketEditor extends JDialog {
 	DateTimePicker pickupEditor;
 	JComboBox<Employee> cbCourier;
 	DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("h:mm a");
-	private boolean saved = true;
+	private boolean saved = false;
 
 	public DeliveryTicketEditor(Delivery delivery, DeliveryTableModel deliveryTable) {
 		super((JFrame) null, "ACME Delivery Ticket Editor", true);
@@ -191,9 +191,11 @@ public class DeliveryTicketEditor extends JDialog {
 
 	protected void save() {
 		try {
-			populateDeliveryInfo();
-			CourierSystem.SaveDelivery(delivery);
-			saved = true;
+			if (!saved) {
+				populateDeliveryInfo();
+				CourierSystem.SaveDelivery(delivery);
+				saved = true;
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
