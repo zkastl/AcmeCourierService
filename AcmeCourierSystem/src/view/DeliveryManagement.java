@@ -140,11 +140,13 @@ public class DeliveryManagement extends Container {
 						FileWriter directionsWriter = new FileWriter(directionsFile);
 						StringBuilder directions = new StringBuilder();
 						directions.append("Pickup\n");
+						directions.append("Time:," + delivery.requestedPickupTime.toLocalTime().toString() + "\n");
 						directions.append("From:,Acme Courier Service at " + CourierSystem.SystemSettings.courierStartAddress.getName() + "\n");
 						directions.append("To:," + delivery.pickupClient.name + " at " +delivery.pickupClient.address + "\n");
 						directions.append(delivery.getPickupRoute().print());
 						directions.append("\n " + delivery.pickupClient.dropoffInstructions + "\n\n");
 						directions.append("Delivery\n");
+						directions.append("Time:," + delivery.estimatedDeliveryTime.toLocalTime().toString() + "\n");
 						directions.append("From:," + delivery.pickupClient.name + " at " + delivery.pickupClient.address + "\n");
 						directions.append("To:," + delivery.deliveryClient.name + " at " +delivery.deliveryClient.address + "\n");
 						directions.append(delivery.getDeliveryRoute().print() + "\n");

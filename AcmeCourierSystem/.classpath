@@ -7,5 +7,6 @@
 	<classpathentry kind="lib" path="lib/sqlite-jdbc-3.18.0.jar"/>
 	<classpathentry kind="lib" path="lib/miglayout15-swing.jar"/>
 	<classpathentry kind="lib" path="lib/LGoodDatePicker-10.2.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/zkast/git/AcmeCourierService/AcmeCourierSystem/lib/mysql-connector-java-5.1.39-bin.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
