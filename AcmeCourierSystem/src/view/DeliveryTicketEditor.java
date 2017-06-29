@@ -19,15 +19,12 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import com.github.lgooddatepicker.components.DatePickerSettings;
 import com.github.lgooddatepicker.components.DateTimePicker;
 import com.github.lgooddatepicker.components.TimePicker;
 import com.github.lgooddatepicker.components.TimePickerSettings;
 import com.github.lgooddatepicker.components.TimePickerSettings.TimeIncrement;
-import com.github.lgooddatepicker.zinternaltools.DateTimeChangeEvent;
 
 import main.Application;
 import main.CourierSystem;
@@ -58,30 +55,14 @@ public class DeliveryTicketEditor extends JDialog {
 	DateTimePicker pickupEditor;
 	JComboBox<Employee> cbCourier;
 	DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("h:mm a");
-	private boolean saved = false;
-	
-	private ChangeListener windowHasChanges = new ChangeListener() {
-		@Override
-		public void stateChanged(ChangeEvent e) {
-			saved = false;
-		}
-	};
-	
-	private ActionListener windowHasChanges2 = new ActionListener() {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			saved = false;			
-		}
-		
-	};
+	private boolean newDelivery = false;
 
 	public DeliveryTicketEditor(Delivery delivery, DeliveryTableModel deliveryTable) {
 		super((JFrame) null, "ACME Delivery Ticket Editor", true);
 		this.delivery = delivery;
 		this.deliveryTable = deliveryTable;
 		if (delivery.packageID == 0) {
-			saved = false;
+			newDelivery = true;
 		}
 
 		setSize(650, 740);
@@ -94,9 +75,12 @@ public class DeliveryTicketEditor extends JDialog {
 		getContentPane().setLayout(new MigLayout("", "[10%][10%][10%][10%][10%][20%][20%][10%]",
 				"[][][][5:n][][][20:n][][][][][][20:n][][][][][20:n][][][][][][][20][]"));
 
-		pickupClient = new JComboBox<Client>(CourierSystem.Clients.values().toArray(new Client[0]));
+		pickupClient = new JComboBox<Client>();
+		for (Client c : CourierSystem.Clients.values()) {
+			if (!c.getIsArchived())
+				pickupClient.addItem(c);
+		}
 		pickupClient.setSelectedItem(delivery.pickupClient);
-		pickupClient.addActionListener(windowHasChanges2);
 		getContentPane().add(pickupClient, "cell 4 8 2 1,growx");
 
 		DatePickerSettings pickupDateSettings = new DatePickerSettings();
@@ -114,29 +98,27 @@ public class DeliveryTicketEditor extends JDialog {
 		} else {
 			pickupEditor.setDateTimePermissive(delivery.requestedPickupTime);
 		}
-		// TODO: ADD PROPER EVENT HERE
-		pickupEditor.addDateTimeChangeListener(null);
 
 		billToPickup = new JCheckBox("", delivery.billToSender);
-		billToPickup.addChangeListener(windowHasChanges);
 		getContentPane().add(billToPickup, "cell 4 11");
 
-		deliveryClient = new JComboBox<Client>(CourierSystem.Clients.values().toArray(new Client[0]));
+		deliveryClient = new JComboBox<Client>();
+		for (Client c : CourierSystem.Clients.values()) {
+			if (!c.getIsArchived())
+				deliveryClient.addItem(c);
+		}
 		deliveryClient.setSelectedItem(delivery.deliveryClient);
-		deliveryClient.addActionListener(windowHasChanges2);
 		getContentPane().add(deliveryClient, "cell 4 14 2 1,growx");
 
 		billToDeliver = new JCheckBox("", !delivery.billToSender);
-		billToDeliver.addChangeListener(windowHasChanges);
 		getContentPane().add(billToDeliver, "cell 4 16");
 
 		cbCourier = new JComboBox<Employee>();
 		for (Employee e : CourierSystem.Employees.values()) {
-			if (e.role == EmployeeRole.Courier)
+			if (e.role == EmployeeRole.Courier && !e.getIsArchived())
 				cbCourier.addItem(e);
 		}
 		cbCourier.setSelectedItem(delivery.assignedCourier);
-		cbCourier.addActionListener(windowHasChanges2);
 		getContentPane().add(cbCourier, "cell 6 19,growx");
 
 		estimatedDeliveryTime = new JLabel(
@@ -166,8 +148,8 @@ public class DeliveryTicketEditor extends JDialog {
 		deliveredTime.setTime(delivery.actualDeliveryTime != null ? delivery.actualDeliveryTime.toLocalTime() : null);
 		getContentPane().add(deliveredTime, "cell 6 22, alignx left");
 
-		bonusEarned = new JCheckBox("", delivery.bonusEarned);		
-		bonusEarned.setEnabled(false);		
+		bonusEarned = new JCheckBox("", delivery.bonusEarned);
+		bonusEarned.setEnabled(false);
 		getContentPane().add(bonusEarned, "cell 6 23");
 
 		JButton btnOk = new JButton("Ok");
@@ -219,7 +201,15 @@ public class DeliveryTicketEditor extends JDialog {
 		try {
 			populateDeliveryInfo();
 			CourierSystem.SaveDelivery(delivery);
-			saved = true;
+			if (newDelivery) {
+				int newestID = 0;
+				for (Delivery d : CourierSystem.Deliveries.values()) {
+					if (d.packageID > newestID)
+						newestID = d.packageID;
+				}
+				delivery = CourierSystem.Deliveries.get(String.valueOf(newestID));
+				newDelivery = false;
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -232,7 +222,6 @@ public class DeliveryTicketEditor extends JDialog {
 	}
 
 	private void populateDeliveryInfo() {
-		saved = false;
 		delivery.pickupClient = (Client) pickupClient.getSelectedItem();
 		delivery.deliveryClient = (Client) deliveryClient.getSelectedItem();
 		delivery.requestedPickupTime = pickupEditor.getDateTimeStrict();
@@ -259,7 +248,7 @@ public class DeliveryTicketEditor extends JDialog {
 
 	@Override
 	public void dispose() {
-		if (!saved) {
+		if (newDelivery) {
 			deliveryTable.removeRow(delivery);
 		}
 		super.dispose();

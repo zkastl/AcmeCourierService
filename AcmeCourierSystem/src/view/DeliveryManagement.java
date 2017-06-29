@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 import javax.swing.DefaultCellEditor;
@@ -28,7 +27,6 @@ import com.github.lgooddatepicker.tableeditors.TimeTableEditor;
 import controller.EnterKeyListenerForButtons;
 import controller.TableValidator;
 import main.CourierSystem;
-import model.CourierReport;
 import model.Delivery;
 import model.DeliveryStatus;
 import model.Employee;
@@ -50,7 +48,7 @@ public class DeliveryManagement extends Container {
 		add(lblDeliveryManagement, "cell 0 0 4 1,alignx center,aligny center");
 
 		JButton btnCreateDelivery = new JButton("Create Delivery");
-		add(btnCreateDelivery, "cell 0 1,alignx center,aligny bottom");
+		add(btnCreateDelivery, "cell 0 1,alignx center");
 		btnCreateDelivery.addKeyListener(new EnterKeyListenerForButtons(btnCreateDelivery));
 
 		JButton btnEditDelivery = new JButton("Edit Delivery");
@@ -64,7 +62,7 @@ public class DeliveryManagement extends Container {
 		JButton btnPrintDirections = new JButton("Print Directions");
 		add(btnPrintDirections, "cell 3 1");
 		btnPrintDirections.addKeyListener(new EnterKeyListenerForButtons(btnSaveChanges));
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		add(scrollPane, "cell 0 3 4 1,grow");
 		table = new JTable(deliveryTable);
@@ -126,16 +124,17 @@ public class DeliveryManagement extends Container {
 				}
 			}
 		});
-		
+
 		btnPrintDirections.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int selectedRow = table.getSelectedRow();
 				System.out.println("Selected Row: " + selectedRow);
 				Delivery delivery = deliveryTable.deliveries.get(selectedRow);
 
-				if (TableValidator.isValid(table)){
+				if (TableValidator.isValid(table)) {
 					try {
-						String fileName = "Directions for delivery from " + delivery.pickupClient + " to " + delivery.deliveryClient + Integer.toString(LocalDateTime.now().hashCode());
+						String fileName = "Directions for delivery from " + delivery.pickupClient + " to "
+								+ delivery.deliveryClient + Integer.toString(LocalDateTime.now().hashCode());
 						File directionsFile = Files.createTempFile(fileName, ".csv").toFile();
 						FileWriter directionsWriter = new FileWriter(directionsFile);
 						StringBuilder directions = new StringBuilder();
@@ -152,9 +151,8 @@ public class DeliveryManagement extends Container {
 						directionsWriter.close();
 						Desktop.getDesktop().open(directionsFile);
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
-					}	
+					}
 				}
 			}
 		});

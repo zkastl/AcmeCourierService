@@ -39,7 +39,7 @@ public class EmployeeManagement extends Container {
 		add(lblEmployeeManagement, "cell 0 0 3 1,alignx center,aligny center");
 
 		JButton btnAddEmployee = new JButton("Add Employee");
-		add(btnAddEmployee, "cell 0 1,alignx center,aligny bottom");
+		add(btnAddEmployee, "cell 0 1,alignx center");
 		btnAddEmployee.addKeyListener(new EnterKeyListenerForButtons(btnAddEmployee));
 
 		JButton btnRemoveEmployee = new JButton("Remove Employee");

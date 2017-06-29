@@ -36,7 +36,7 @@ public class ClientManagement extends Container {
 		add(lblEmployeeManagement, "cell 0 0 3 1,alignx center,aligny center");
 
 		JButton btnAddClient = new JButton("Add Client");
-		add(btnAddClient, "cell 0 1,alignx center,aligny bottom");
+		add(btnAddClient, "cell 0 1,alignx center");
 		btnAddClient.addKeyListener(new EnterKeyListenerForButtons(btnAddClient));
 
 		JButton btnRemoveClient = new JButton("Remove Client");
