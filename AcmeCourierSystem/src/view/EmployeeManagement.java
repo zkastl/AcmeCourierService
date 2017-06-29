@@ -5,7 +5,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
-import java.util.*;
+import java.util.UUID;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
@@ -98,7 +98,7 @@ public class EmployeeManagement extends Container {
 			}
 		});
 	}
-	
+
 	private void saveAction() {
 		if (!TableValidator.isValid(table))
 			return;
@@ -112,11 +112,9 @@ public class EmployeeManagement extends Container {
 				CourierSystem.Employees.put(emp.name, emp);
 			}
 			CourierSystem.UpdateEmployees();
-		} 
-		catch (Exception e1) {
+		} catch (Exception e1) {
 			e1.printStackTrace();
-		} 
-		finally {
+		} finally {
 			employeeTable.refresh();
 		}
 	}
