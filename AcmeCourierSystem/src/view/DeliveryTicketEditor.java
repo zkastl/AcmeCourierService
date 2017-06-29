@@ -191,11 +191,9 @@ public class DeliveryTicketEditor extends JDialog {
 
 	protected void save() {
 		try {
-			if (!saved) {
-				populateDeliveryInfo();
-				CourierSystem.SaveDelivery(delivery);
-				saved = true;
-			}
+			populateDeliveryInfo();
+			CourierSystem.SaveDelivery(delivery);
+			saved = true;
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
