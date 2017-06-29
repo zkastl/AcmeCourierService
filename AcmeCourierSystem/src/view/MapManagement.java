@@ -36,11 +36,16 @@ public class MapManagement  extends Container {
 		
 		JLayeredPane layeredPane = new JLayeredPane();
 		add(layeredPane);
-		layeredPane.setLayout(new MigLayout("", "[0][4.00px][34.00][24.00][41.00][24.00][46.00][24.00][46.00][24][39.00][24][45.00][24][38.00][24.00][49.00]", "[25.00][24.00px][55.00][24.00][56.00][24.00][55.00][24.00][57.00][24.00][59.00][24.00][56.00][24.00][17.00][50][]"));
+		layeredPane.setLayout(new MigLayout("", "[0][4.00px][34.00][24.00][41.00][24.00][46.00][24.00][][16.00][24][39.00][24][45.00][24][38.00][24.00][49.00]", "[25.00][24.00px][55.00][24.00][56.00][24.00][55.00][24.00][57.00][24.00][59.00][24.00][56.00][24.00][17.00][50][]"));
+		
+		lblClosureEnd = new JLabel("End:");
+		layeredPane.setLayer(lblClosureEnd, 1);
+		lblClosureEnd.setVisible(false);
+		layeredPane.add(lblClosureEnd, "flowy,cell 8 0,alignx right");
 		
 		JLabel backgroundMap = new JLabel("");
 		backgroundMap.setIcon(new ImageIcon(MapManagement.class.getResource("/view/MapLow.png")));
-		layeredPane.add(backgroundMap, "cell 0 0 17 15,alignx right,aligny center");
+		layeredPane.add(backgroundMap, "cell 0 0 18 15,alignx right,aligny center");
 		
 		lblIntersection = new JLabel("Z0 Closure");
 		layeredPane.setLayer(lblIntersection, 1);
@@ -54,17 +59,12 @@ public class MapManagement  extends Container {
 		
 		startSpinner = new DatePicker();
 		startSpinner.setVisible(false);
-		layeredPane.add(startSpinner, "cell 4 0 3 1,alignx left,aligny center");
+		layeredPane.add(startSpinner, "cell 4 0 4 1,alignx left,aligny center");
 		layeredPane.setLayer(startSpinner, 1);
-		
-		lblClosureEnd = new JLabel("End:");
-		layeredPane.setLayer(lblClosureEnd, 1);
-		lblClosureEnd.setVisible(false);
-		layeredPane.add(lblClosureEnd, "cell 7 0,alignx right");
 		
 		endSpinner = new DatePicker();
 		endSpinner.setVisible(false);
-		layeredPane.add(endSpinner, "cell 8 0 3 1,alignx left,aligny center");
+		layeredPane.add(endSpinner, "cell 9 0 4 1,alignx left,aligny center");
 		layeredPane.setLayer(endSpinner, 1);
 				
 		saveChanges = new JButton("Save Changes");
@@ -104,7 +104,7 @@ public class MapManagement  extends Container {
 			
 		});
 		saveChanges.setVisible(false);
-		layeredPane.add(saveChanges, "cell 12 0 3");
+		layeredPane.add(saveChanges, "cell 13 0 3 1");
 		
 		cancel = new JButton("Cancel");
 		layeredPane.setLayer(cancel, 1);
@@ -117,7 +117,7 @@ public class MapManagement  extends Container {
 			}
 		});
 		cancel.setVisible(false);
-		layeredPane.add(cancel, "cell 15 0 2 1,alignx left");
+		layeredPane.add(cancel, "cell 16 0 2 1,alignx left");
 		
 		JButton a1 = new JButton("A1");
 		layeredPane.setLayer(a1, 1);
@@ -426,7 +426,7 @@ public class MapManagement  extends Container {
 				showEditor("D1");
 			}
 		});
-		layeredPane.add(d1, "cell 9 1,grow");
+		layeredPane.add(d1, "cell 10 1,grow");
 		
 		JButton d2 = new JButton("D2");
 		layeredPane.setLayer(d2, 1);
@@ -440,7 +440,7 @@ public class MapManagement  extends Container {
 				showEditor("D2");
 			}
 		});
-		layeredPane.add(d2, "cell 9 3,grow");
+		layeredPane.add(d2, "cell 10 3,grow");
 
 		JButton d3 = new JButton("D3");
 		layeredPane.setLayer(d3, 1);
@@ -454,7 +454,7 @@ public class MapManagement  extends Container {
 				showEditor("D3");
 			}
 		});
-		layeredPane.add(d3, "cell 9 5,grow");
+		layeredPane.add(d3, "cell 10 5,grow");
 
 		JButton d4 = new JButton("D4");
 		layeredPane.setLayer(d4, 1);
@@ -468,7 +468,7 @@ public class MapManagement  extends Container {
 				showEditor("D4");
 			}
 		});
-		layeredPane.add(d4, "cell 9 7,grow");
+		layeredPane.add(d4, "cell 10 7,grow");
 
 		JButton d5 = new JButton("D5");
 		layeredPane.setLayer(d5, 1);
@@ -482,7 +482,7 @@ public class MapManagement  extends Container {
 				showEditor("D5");
 			}
 		});
-		layeredPane.add(d5, "cell 9 9,grow");
+		layeredPane.add(d5, "cell 10 9,grow");
 
 		JButton d6 = new JButton("D6");
 		layeredPane.setLayer(d6, 1);
@@ -496,7 +496,7 @@ public class MapManagement  extends Container {
 				showEditor("D6");
 			}
 		});
-		layeredPane.add(d6, "cell 9 11,grow");
+		layeredPane.add(d6, "cell 10 11,grow");
 
 		JButton d7 = new JButton("D7");
 		layeredPane.setLayer(d7, 1);
@@ -510,7 +510,7 @@ public class MapManagement  extends Container {
 				showEditor("D7");
 			}
 		});
-		layeredPane.add(d7, "cell 9 13,grow");
+		layeredPane.add(d7, "cell 10 13,grow");
 
 		JButton e1 = new JButton("E1");
 		layeredPane.setLayer(e1, 1);
@@ -524,7 +524,7 @@ public class MapManagement  extends Container {
 				showEditor("E1");
 			}
 		});
-		layeredPane.add(e1, "cell 11 1,grow");
+		layeredPane.add(e1, "cell 12 1,grow");
 		
 		JButton e2 = new JButton("E2");
 		layeredPane.setLayer(e2, 1);
@@ -538,7 +538,7 @@ public class MapManagement  extends Container {
 				showEditor("E2");
 			}
 		});
-		layeredPane.add(e2, "cell 11 3,grow");
+		layeredPane.add(e2, "cell 12 3,grow");
 
 		JButton e3 = new JButton("E3");
 		layeredPane.setLayer(e3, 1);
@@ -552,7 +552,7 @@ public class MapManagement  extends Container {
 				showEditor("E3");
 			}
 		});
-		layeredPane.add(e3, "cell 11 5,grow");
+		layeredPane.add(e3, "cell 12 5,grow");
 
 		JButton e4 = new JButton("E4");
 		layeredPane.setLayer(e4, 1);
@@ -566,7 +566,7 @@ public class MapManagement  extends Container {
 				showEditor("E4");
 			}
 		});
-		layeredPane.add(e4, "cell 11 7,grow");
+		layeredPane.add(e4, "cell 12 7,grow");
 
 		JButton e5 = new JButton("E5");
 		layeredPane.setLayer(e5, 1);
@@ -580,7 +580,7 @@ public class MapManagement  extends Container {
 				showEditor("E5");
 			}
 		});
-		layeredPane.add(e5, "cell 11 9,grow");
+		layeredPane.add(e5, "cell 12 9,grow");
 
 		JButton e6 = new JButton("E6");
 		layeredPane.setLayer(e6, 1);
@@ -594,7 +594,7 @@ public class MapManagement  extends Container {
 				showEditor("E6");
 			}
 		});
-		layeredPane.add(e6, "cell 11 11,grow");
+		layeredPane.add(e6, "cell 12 11,grow");
 
 		JButton e7 = new JButton("E7");
 		layeredPane.setLayer(e7, 1);
@@ -608,7 +608,7 @@ public class MapManagement  extends Container {
 				showEditor("E7");
 			}
 		});
-		layeredPane.add(e7, "cell 11 13,grow");
+		layeredPane.add(e7, "cell 12 13,grow");
 
 		JButton f1 = new JButton("F1");
 		layeredPane.setLayer(f1, 1);
@@ -622,7 +622,7 @@ public class MapManagement  extends Container {
 				showEditor("F1");
 			}
 		});
-		layeredPane.add(f1, "cell 13 1,grow");
+		layeredPane.add(f1, "cell 14 1,grow");
 		
 		JButton f2 = new JButton("F2");
 		layeredPane.setLayer(f2, 1);
@@ -636,7 +636,7 @@ public class MapManagement  extends Container {
 				showEditor("F2");
 			}
 		});
-		layeredPane.add(f2, "cell 13 3,grow");
+		layeredPane.add(f2, "cell 14 3,grow");
 
 		JButton f3 = new JButton("F3");
 		layeredPane.setLayer(f3, 1);
@@ -650,7 +650,7 @@ public class MapManagement  extends Container {
 				showEditor("F3");
 			}
 		});
-		layeredPane.add(f3, "cell 13 5,grow");
+		layeredPane.add(f3, "cell 14 5,grow");
 
 		JButton f4 = new JButton("F4");
 		layeredPane.setLayer(f4, 1);
@@ -664,7 +664,7 @@ public class MapManagement  extends Container {
 				showEditor("F4");
 			}
 		});
-		layeredPane.add(f4, "cell 13 7,grow");
+		layeredPane.add(f4, "cell 14 7,grow");
 
 		JButton f5 = new JButton("F5");
 		layeredPane.setLayer(f5, 1);
@@ -678,7 +678,7 @@ public class MapManagement  extends Container {
 				showEditor("F5");
 			}
 		});
-		layeredPane.add(f5, "cell 13 9,grow");
+		layeredPane.add(f5, "cell 14 9,grow");
 
 		JButton f6 = new JButton("F6");
 		layeredPane.setLayer(f6, 1);
@@ -692,7 +692,7 @@ public class MapManagement  extends Container {
 				showEditor("F6");
 			}
 		});
-		layeredPane.add(f6, "cell 13 11,grow");
+		layeredPane.add(f6, "cell 14 11,grow");
 
 		JButton f7 = new JButton("F7");
 		layeredPane.setLayer(f7, 1);
@@ -706,7 +706,7 @@ public class MapManagement  extends Container {
 				showEditor("F7");
 			}
 		});
-		layeredPane.add(f7, "cell 13 13,grow");
+		layeredPane.add(f7, "cell 14 13,grow");
 
 		JButton g1 = new JButton("G1");
 		layeredPane.setLayer(g1, 1);
@@ -720,7 +720,7 @@ public class MapManagement  extends Container {
 				showEditor("G1");
 			}
 		});
-		layeredPane.add(g1, "cell 15 1,grow");
+		layeredPane.add(g1, "cell 16 1,grow");
 		
 		JButton g2 = new JButton("G2");
 		layeredPane.setLayer(g2, 1);
@@ -734,7 +734,7 @@ public class MapManagement  extends Container {
 				showEditor("G2");
 			}
 		});
-		layeredPane.add(g2, "cell 15 3,grow");
+		layeredPane.add(g2, "cell 16 3,grow");
 
 		JButton g3 = new JButton("G3");
 		layeredPane.setLayer(g3, 1);
@@ -748,7 +748,7 @@ public class MapManagement  extends Container {
 				showEditor("G3");
 			}
 		});
-		layeredPane.add(g3, "cell 15 5,grow");
+		layeredPane.add(g3, "cell 16 5,grow");
 
 		JButton g4 = new JButton("G4");
 		layeredPane.setLayer(g4, 1);
@@ -762,7 +762,7 @@ public class MapManagement  extends Container {
 				showEditor("G4");
 			}
 		});
-		layeredPane.add(g4, "cell 15 7,grow");
+		layeredPane.add(g4, "cell 16 7,grow");
 
 		JButton g5 = new JButton("G5");
 		layeredPane.setLayer(g5, 1);
@@ -776,7 +776,7 @@ public class MapManagement  extends Container {
 				showEditor("G5");
 			}
 		});
-		layeredPane.add(g5, "cell 15 9,grow");
+		layeredPane.add(g5, "cell 16 9,grow");
 
 		JButton g6 = new JButton("G6");
 		layeredPane.setLayer(g6, 1);
@@ -790,7 +790,7 @@ public class MapManagement  extends Container {
 				showEditor("G6");
 			}
 		});
-		layeredPane.add(g6, "cell 15 11,grow");
+		layeredPane.add(g6, "cell 16 11,grow");
 
 		JButton g7 = new JButton("G7");
 		layeredPane.setLayer(g7, 1);
@@ -804,7 +804,7 @@ public class MapManagement  extends Container {
 				showEditor("G7");
 			}
 		});
-		layeredPane.add(g7, "cell 15 13,grow");
+		layeredPane.add(g7, "cell 16 13,grow");
 
 		setBounds(layeredPane.getBounds());
 		
