@@ -157,7 +157,7 @@ public class Delivery implements Serializable {
 	 * from the pickupClient to the deliveryClient, and from the deliveryClient
 	 * back to the courierStart
 	 */
-	private void calculateRoutes() {
+	public void calculateRoutes() {
 		Intersection home = CourierSystem.CityMap.getIntersection(CourierSystem.SystemSettings.courierStartAddress.getName());
 		pickupRoute = CourierSystem.CityMap.getRoute(home, pickupClient.trueAddress);
 		deliveryRoute = CourierSystem.CityMap.getRoute(pickupClient.trueAddress, deliveryClient.trueAddress);

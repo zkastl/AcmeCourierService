@@ -133,18 +133,25 @@ public class DeliveryManagement extends Container {
 
 				if (TableValidator.isValid(table)) {
 					try {
+						delivery.calculateRoutes();
 						String fileName = "Directions for delivery from " + delivery.pickupClient + " to "
 								+ delivery.deliveryClient + Integer.toString(LocalDateTime.now().hashCode());
 						File directionsFile = Files.createTempFile(fileName, ".csv").toFile();
 						FileWriter directionsWriter = new FileWriter(directionsFile);
 						StringBuilder directions = new StringBuilder();
-						directions.append("From:," + delivery.pickupClient.name + "\n");
-						directions.append("To:," + delivery.deliveryClient.name + "\n\n");
-						directions.append("Steps\n");
+						directions.append("Pickup\n");
+						directions.append("From:,Acme Courier Service at " + CourierSystem.SystemSettings.courierStartAddress.getName() + "\n");
+						directions.append("To:," + delivery.pickupClient.name + " at " +delivery.pickupClient.address + "\n");
 						directions.append(delivery.getPickupRoute().print());
-						directions.append("\n\n " + delivery.pickupClient.dropoffInstructions + "\n\n");
-						directions.append(delivery.getDeliveryRoute().print());
-						directions.append("\n\n " + delivery.deliveryClient.dropoffInstructions + "\n\n");
+						directions.append("\n " + delivery.pickupClient.dropoffInstructions + "\n\n");
+						directions.append("Delivery\n");
+						directions.append("From:," + delivery.pickupClient.name + " at " + delivery.pickupClient.address + "\n");
+						directions.append("To:," + delivery.deliveryClient.name + " at " +delivery.deliveryClient.address + "\n");
+						directions.append(delivery.getDeliveryRoute().print() + "\n");
+						directions.append(delivery.deliveryClient.dropoffInstructions + "\n\n");
+						directions.append("Return\n");
+						directions.append("From:," + delivery.deliveryClient.name + " at " + delivery.deliveryClient.address + "\n");
+						directions.append("To:,Acme Courier Service at " + CourierSystem.SystemSettings.courierStartAddress.getName() + "\n");
 						directions.append(delivery.getReturnRoute().print());
 						directionsWriter.write(directions.toString());
 						directionsFile.deleteOnExit();

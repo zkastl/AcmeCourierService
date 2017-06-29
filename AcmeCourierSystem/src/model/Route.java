@@ -70,6 +70,7 @@ public class Route implements Serializable {
 	}
 
 	public void calculateSteps() {
+		if(start.equals(end)) return;
 		PriorityQueue<Intersection> unvisited = new PriorityQueue<Intersection>();
 
 		// sanitize open nodes to make sure they are not affected by previous
@@ -175,7 +176,11 @@ public class Route implements Serializable {
 	public String print() {
 		String directions = "";
 		if (steps.isEmpty()) {
-			directions = "No path available";
+			if(start.equals(end)) {
+				directions = "Stay put\n";
+			} else {
+				directions = "No path available\n";
+			}
 			System.out.println(directions);
 		} else {
 			int distance = 0;
