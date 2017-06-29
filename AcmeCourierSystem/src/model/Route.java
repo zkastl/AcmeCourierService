@@ -172,11 +172,12 @@ public class Route implements Serializable {
 	 * outputs an easy to follow set of instructions on how to traverse the
 	 * route
 	 */
-	public void print() {
+	public String print() {
+		String directions = "";
 		if (steps.isEmpty()) {
-			System.out.println("No path available");
+			directions = "No path available";
+			System.out.println(directions);
 		} else {
-			String directions = "";
 			int distance = 0;
 			Road prevStep = steps.peek();
 			int stepNumber = 0;
@@ -210,5 +211,7 @@ public class Route implements Serializable {
 			}
 			System.out.println(directions);
 		}
+		
+		return directions;
 	}
 }

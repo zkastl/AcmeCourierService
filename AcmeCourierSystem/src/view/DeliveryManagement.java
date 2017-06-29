@@ -1,11 +1,17 @@
 package view;
 
 import java.awt.Container;
+import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 import javax.swing.DefaultCellEditor;
@@ -22,6 +28,7 @@ import com.github.lgooddatepicker.tableeditors.TimeTableEditor;
 import controller.EnterKeyListenerForButtons;
 import controller.TableValidator;
 import main.CourierSystem;
+import model.CourierReport;
 import model.Delivery;
 import model.DeliveryStatus;
 import model.Employee;
@@ -36,11 +43,11 @@ public class DeliveryManagement extends Container {
 
 	public DeliveryManagement() {
 		deliveryTable = new DeliveryTableModel();
-		setLayout(new MigLayout("", "[grow][50%][grow][10]", "[25][40][5][grow][][20]"));
+		setLayout(new MigLayout("", "[grow][25%][25%][grow][10]", "[25][40][5][grow][][20]"));
 
 		JLabel lblDeliveryManagement = new JLabel("Delivery Management");
 		lblDeliveryManagement.setFont(new Font("Tahoma", Font.BOLD, 16));
-		add(lblDeliveryManagement, "cell 0 0 3 1,alignx center,aligny center");
+		add(lblDeliveryManagement, "cell 0 0 4 1,alignx center,aligny center");
 
 		JButton btnCreateDelivery = new JButton("Create Delivery");
 		add(btnCreateDelivery, "cell 0 1,alignx center,aligny bottom");
@@ -54,8 +61,12 @@ public class DeliveryManagement extends Container {
 		add(btnSaveChanges, "cell 2 1");
 		btnSaveChanges.addKeyListener(new EnterKeyListenerForButtons(btnSaveChanges));
 
+		JButton btnPrintDirections = new JButton("Print Directions");
+		add(btnPrintDirections, "cell 3 1");
+		btnPrintDirections.addKeyListener(new EnterKeyListenerForButtons(btnSaveChanges));
+		
 		JScrollPane scrollPane = new JScrollPane();
-		add(scrollPane, "cell 0 3 3 1,grow");
+		add(scrollPane, "cell 0 3 4 1,grow");
 		table = new JTable(deliveryTable);
 		table.setCellSelectionEnabled(true);
 		scrollPane.setViewportView(table);
@@ -112,6 +123,38 @@ public class DeliveryManagement extends Container {
 					e1.printStackTrace();
 				} finally {
 					deliveryTable.refresh();
+				}
+			}
+		});
+		
+		btnPrintDirections.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int selectedRow = table.getSelectedRow();
+				System.out.println("Selected Row: " + selectedRow);
+				Delivery delivery = deliveryTable.deliveries.get(selectedRow);
+
+				if (TableValidator.isValid(table)){
+					try {
+						String fileName = "Directions for delivery from " + delivery.pickupClient + " to " + delivery.deliveryClient + Integer.toString(LocalDateTime.now().hashCode());
+						File directionsFile = Files.createTempFile(fileName, ".csv").toFile();
+						FileWriter directionsWriter = new FileWriter(directionsFile);
+						StringBuilder directions = new StringBuilder();
+						directions.append("From:," + delivery.pickupClient.name + "\n");
+						directions.append("To:," + delivery.deliveryClient.name + "\n\n");
+						directions.append("Steps\n");
+						directions.append(delivery.getPickupRoute().print());
+						directions.append("\n\n " + delivery.pickupClient.dropoffInstructions + "\n\n");
+						directions.append(delivery.getDeliveryRoute().print());
+						directions.append("\n\n " + delivery.deliveryClient.dropoffInstructions + "\n\n");
+						directions.append(delivery.getReturnRoute().print());
+						directionsWriter.write(directions.toString());
+						directionsFile.deleteOnExit();
+						directionsWriter.close();
+						Desktop.getDesktop().open(directionsFile);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}	
 				}
 			}
 		});
