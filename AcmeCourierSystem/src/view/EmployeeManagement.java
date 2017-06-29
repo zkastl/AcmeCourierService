@@ -11,6 +11,7 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -84,10 +85,16 @@ public class EmployeeManagement extends Container {
 				System.out.println("Selected Row: " + selectedRow);
 				Employee employee = employeeTable.employees.get(selectedRow);
 				if (employee.id != 0) {
-					employee.ArchiveEmployee();
+					if (!CourierSystem.currentUser.equals(employee)) {
+						employee.ArchiveEmployee();
+						saveAction();
+					}
+					else {
+						JOptionPane.showMessageDialog(btnRemoveEmployee, "You cannot delete yourself.");
+					}
 				}
 				employeeTable.removeRow(selectedRow);
-				saveAction();
+				btnAddEmployee.setEnabled(true);
 			}
 		});
 
