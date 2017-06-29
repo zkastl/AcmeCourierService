@@ -55,7 +55,7 @@ public class DeliveryTicketEditor extends JDialog {
 	DateTimePicker pickupEditor;
 	JComboBox<Employee> cbCourier;
 	DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("h:mm a");
-	private boolean saved = false;
+	private boolean saved = true;
 
 	public DeliveryTicketEditor(Delivery delivery, DeliveryTableModel deliveryTable) {
 		super((JFrame) null, "ACME Delivery Ticket Editor", true);
